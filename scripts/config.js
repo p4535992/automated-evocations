@@ -109,9 +109,9 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   }
 
   buttons.unshift({
-    icon: "fas fa-users",
+    icon: "fas fa-cat",
     class: "open-cm",
-    label: game.i18n.localize("AE.actorSheetBtn"),
+    label: "",// game.i18n.localize("AE.actorSheetBtn"),
     onclick: function openCM(event) {
       const actor = app.object;
       new CompanionManager(actor).render(true);

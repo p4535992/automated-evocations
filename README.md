@@ -1,7 +1,17 @@
-# Automated Evocations
+# Automated Evocations Variant fork
+
 A user interface to manage companions with summoning animations and automated summoning for spells
+## With theripper93's permission i implemented a variant (or custom patch) of his project, these are the differences:
+
+- [Add new module setting for show the companion list only to GM](https://github.com/theripper93/automated-evocations/pull/19)
+- Replace icon fas fa-users with fas fa-cat on the actor header sheet button and remove the label for incompatibility with some sheet and screen width (like table ecc.)
+- Add automatic github workflow for setup the releases with a gulpfile builder
+
+as always, I invite you to support theripper93 through his patreon.
 
 ![Latest Release Download Count](https://img.shields.io/github/downloads/theripper93/automated-evocations/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautomated-evocations&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=automated-evocations) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftheripper93%2Fautomated-evocations%2Fmain%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge) [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/theripper93) [![alt-text](https://img.shields.io/badge/-Discord-%235662f6?style=for-the-badge)](https://discord.gg/F53gBjR97G)
+
+
 
 # Attention:
 
