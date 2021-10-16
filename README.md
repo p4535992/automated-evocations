@@ -19,7 +19,7 @@ as always, I invite you to support theripper93 through his patreon.
 
 ## While not a Dependency, Advanced Macros is required for the custom summons
 
-## Currently compatible Warp Gate version 1.7.2 - please consider downgrading if you experience issues
+## Currently compatible Warp Gate version 1.8.1 - please consider downgrading if you experience issues
 
 # How to use
 
