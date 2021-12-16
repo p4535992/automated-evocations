@@ -13,10 +13,7 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/p4535992/automated-evocations-variant/total?style=for-the-badge) 
 
-
 A user interface to manage companions with summoning animations and automated summoning for spells
-
-[![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/theripper93) [![alt-text](https://img.shields.io/badge/-Discord-%235662f6?style=for-the-badge)](https://discord.gg/F53gBjR97G)
 
 **Note: This is module is inspired from the  wonderful work done by [theRipper93](https://github.com/theripper93) with its [automated-evocations](https://github.com/theripper93/automated-evocations) module.
 If you want to support more modules of this kind, I invite you to go and support his patreon**
