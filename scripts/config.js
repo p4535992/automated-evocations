@@ -71,6 +71,14 @@ Hooks.once("init", async function () {
     type: Boolean,
     default: false,
   });
+  game.settings.register(AECONSTS.MN, "removeLabelSheetHeader", {
+    name: game.i18n.localize(`AE.settings.removeLabelSheetHeader.title`),
+    hint: game.i18n.localize(`AE.settings.removeLabelSheetHeader.hint`),
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
 });
 
 Hooks.once("ready", async function () {
@@ -103,6 +111,7 @@ Hooks.once("ready", async function () {
 Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   if(game.settings.get(AECONSTS.MN, "hidebutton")) return;
 
+  const removeLabelSheetHeader = game.settings.get(AECONSTS.MN, 'removeLabelSheetHeader');
   const restrictedOnlyGM = game.settings.get(AECONSTS.MN, 'restrictOnlyGM');
   if (restrictedOnlyGM && !game.user?.isGM) {
     return;
@@ -111,7 +120,7 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   buttons.unshift({
     icon: "fas fa-cat",
     class: "open-cm",
-    label: "",// game.i18n.localize("AE.actorSheetBtn"),
+    label: removeLabelSheetHeader ? "" : game.i18n.localize("AE.actorSheetBtn"),
     onclick: function openCM(event) {
       const actor = app.object;
       new CompanionManager(actor).render(true);

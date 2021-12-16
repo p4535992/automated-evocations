@@ -1,17 +1,19 @@
-# Automated Evocations Variant fork
+# Automated Evocations
+## Before opening an issue read [THIS](https://github.com/theripper93/Levels/blob/v9/ISSUES.md)
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/automated-evocations-variant/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
+![Latest Release Download Count](https://img.shields.io/github/downloads/theripper93/automated-evocations-variant/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
 
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautomated-evocations-variant&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=automated-evocations-variant) 
 
-![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge)
+![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftheripper93%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge)
 
-![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
+![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftheripper93%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
 
 [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fautomated-evocations-variant%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/automated-evocations-variant/)
 
 A user interface to manage companions with summoning animations and automated summoning for spells
 
+![Latest Release Download Count](https://img.shields.io/github/downloads/theripper93/automated-evocations/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautomated-evocations&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=automated-evocations) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftheripper93%2Fautomated-evocations%2Fmain%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge) [![alt-text](https://img.shields.io/badge/-Patreon-%23ff424d?style=for-the-badge)](https://www.patreon.com/theripper93) [![alt-text](https://img.shields.io/badge/-Discord-%235662f6?style=for-the-badge)](https://discord.gg/F53gBjR97G)
 **Note: This is module is inspired from the  wonderful work done by [theRipper93](https://github.com/theripper93) with its [automated-evocations](https://github.com/theripper93/automated-evocations) module.
 If you want to support more modules of this kind, I invite you to go and support his patreon**
 
@@ -25,8 +27,6 @@ If you want to support more modules of this kind, I invite you to go and support
 
 as always, I invite you to support theripper93 through his patreon.
 
-
-
 ## Installation
 
 It's always easiest to install modules from the in game add-on browser.
@@ -35,7 +35,19 @@ To install this module manually:
 1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
 2.  Click "Install Module"
 3.  In the "Manifest URL" field, paste the following url:
-`https://raw.githubusercontent.com/p4535992/automated-evocations/master/module.json`
+`https://raw.githubusercontent.com/theripper93/automated-evocations/master/module.json`
+1.  Click 'Install' and wait for installation to complete
+2.  Don't forget to enable the module in game using the "Manage Module" button
+
+## Installation (Variant Fork)
+
+It's always easiest to install modules from the in game add-on browser.
+
+To install this module manually:
+1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
+2.  Click "Install Module"
+3.  In the "Manifest URL" field, paste the following url:
+`https://raw.githubusercontent.com/p4535992/automated-evocations/master/module-dev.json`
 1.  Click 'Install' and wait for installation to complete
 2.  Don't forget to enable the module in game using the "Manage Module" button
 
