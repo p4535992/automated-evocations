@@ -9,7 +9,7 @@ class CompanionManager extends FormApplication {
       ...super.defaultOptions,
       title: game.i18n.localize("AE.dialogs.companionManager.title"),
       id: "companionManager",
-      template: `modules/automated-evocations-variant/templates/companionmanager.hbs`,
+      template: `modules/automated-evocations/templates/companionmanager.hbs`,
       resizable: true,
       width: 300,
       height: window.innerHeight > 400 ? 400 : window.innerHeight - 100,

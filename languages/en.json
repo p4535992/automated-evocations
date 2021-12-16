@@ -59,7 +59,7 @@
             },
             "removeLabelSheetHeader": {
                 "title": "Remove label from sheet header button",
-                "hint": "Remove label from sheet header button sueful for small monitor, tablet"
+                "hint": "Remove label from sheet header button useful for small monitor, tablet"
             }
         }
     }

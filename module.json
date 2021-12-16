@@ -72,14 +72,14 @@
         "label": "Automated Evocations Macros",
         "path": "packs/macros.db",
         "entity": "Macro",
-        "module": "automated-evocations-variant"
+        "module": "automated-evocations"
     },
     {
         "name": "aeactors",
         "label": "Automated Evocations Summons",
         "path": "packs/actors.db",
         "entity": "Actor",
-        "module": "automated-evocations-variant"
+        "module": "automated-evocations"
     }
   ],
   "minimumCoreVersion": "0.8.6",

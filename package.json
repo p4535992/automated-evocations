@@ -9,7 +9,6 @@
     "build": "gulp clean && gulp build && gulp link",
     "build:watch": "gulp watch",
     "clean": "gulp clean && gulp link --clean",
-    "update": "npm install --save-dev @league-of-foundry-developers/foundry-vtt-types@fvtt-0.8.8",
     "lint": "eslint --ext .ts,.js,.vue .",
     "lintfix": "eslint --fix --ext .ts,.js,.vue ./src",
     "prettier-format": "prettier --config .prettierrc --write \"./src/**/*.(ts|js|json|scss|css)\""
@@ -17,11 +16,6 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@league-of-foundry-developers/foundry-vtt-types": "^0.8.8-9",
-    "@types/jquery": "^3.5.5",
-    "@typescript-eslint/eslint-plugin": "^4.31.2",
-    "@typescript-eslint/parser": "^4.31.2",
-    "@typhonjs-fvtt/eslint-config-foundry.js": "^0.8.0",
     "archiver": "^5.2.0",
     "chalk": "^4.1.2",
     "eslint": "^7.32.0",
