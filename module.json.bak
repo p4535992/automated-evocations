@@ -1,6 +1,6 @@
 {
-  "name": "automated-evocations-variant",
-  "title": "Automated Evocations - Companion Manager Variant",
+  "name": "automated-evocations",
+  "title": "Automated Evocations - Companion Manager",
   "description": "A user interface to manage companions with summoning animations and automated summoning for spells",
   "version": "1.4.7",
   "author": "theripper93, p4535992",
@@ -72,25 +72,25 @@
         "label": "Automated Evocations Macros",
         "path": "packs/macros.db",
         "entity": "Macro",
-        "module": "automated-evocations-variant"
+        "module": "automated-evocations"
     },
     {
         "name": "aeactors",
         "label": "Automated Evocations Summons",
         "path": "packs/actors.db",
         "entity": "Actor",
-        "module": "automated-evocations-variant"
+        "module": "automated-evocations"
     }
   ],
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.9",
   "manifestPlusVersion": "1.2.0",
-  "url": "https://github.com/p4535992/automated-evocations-variant",
-  "manifest": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.json",
-  "download": "https://github.com/p4535992/automated-evocations-variant/releases/download/v1.4.7/module.zip",
-  "readme": "https://github.com/p4535992/automated-evocations-variant/blob/v1.4.7/README.md",
-  "changelog": "https://github.com/p4535992/automated-evocations-variant/blob/v1.4.7/changelog.md",
-  "bugs": "https://github.com/p4535992/automated-evocations-variant/issues",
+  "url": "https://github.com/theripper93/automated-evocations",
+  "manifest": "https://github.com/theripper93/automated-evocations/releases/latest/download/module.json",
+  "download": "https://github.com/theripper93/automated-evocations/releases/download/v1.4.7/module.zip",
+  "readme": "https://github.com/theripper93/automated-evocations/blob/v1.4.7/README.md",
+  "changelog": "https://github.com/theripper93/automated-evocations/blob/v1.4.7/changelog.md",
+  "bugs": "https://github.com/theripper93/automated-evocations/issues",
   "allowBugReporter": true,
   "dependencies": [
     {
