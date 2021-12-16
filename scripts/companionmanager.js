@@ -9,7 +9,7 @@ class CompanionManager extends FormApplication {
       ...super.defaultOptions,
       title: game.i18n.localize("AE.dialogs.companionManager.title"),
       id: "companionManager",
-      template: `modules/automated-evocations/templates/companionmanager.hbs`,
+      template: `modules/automated-evocations-variant/templates/companionmanager.hbs`,
       resizable: true,
       width: 300,
       height: window.innerHeight > 400 ? 400 : window.innerHeight - 100,
@@ -88,7 +88,7 @@ class CompanionManager extends FormApplication {
     const tokenData = await actor.getTokenData();
     const posData = await warpgate.crosshairs.show({
       size: Math.max(tokenData.width,tokenData.height)*tokenData.scale,
-      icon: "modules/automated-evocations/assets/black-hole-bolas.webp",
+      icon: "modules/automated-evocations-variant/assets/black-hole-bolas.webp",
       label: "",
     });
     if (posData.cancelled) {

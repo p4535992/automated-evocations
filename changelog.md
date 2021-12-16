@@ -1,3 +1,7 @@
+## 1.4.8
+
+- Bug fix rename 'automated-evocations' to 'automated-evocations-variant'
+
 ## 1.4.7
 
 - Add a new module setting for show the header sheet button only to GM
