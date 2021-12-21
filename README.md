@@ -44,7 +44,12 @@ To install this module manually:
 
 # Attention:
 
+## The Companion Manager works on all Systems, while the automations only work on DnD5e, PF2E. To configure automations on other systems check `Manually invoking the companion manger on spell cast`
+
 ## For the summoning to work you need the actors imported in your world and your players need world level permission to create tokens. For the special spells\actor you can import eveything from both the actor and macro compendiums of Automated Evocations
+
+
+## Foundry V9 Users: Due to changes to core foundry, Warpgate is no longer able to create tokens if the player is not **OWNER** of the actor - until this changes (if it will change) you will need to give players ownership over actors you wish to have them summon!
 
 ## While not a Dependency, Advanced Macros is required for the custom summons
 
@@ -101,7 +106,7 @@ return {
       "data.attributes.hp.value":args[0].assignedActor?.data.data.attributes.hp.max || 1,
     },
     embedded: {
-        item: {
+        Item: {
             "Clenched Fist": {
                 "data.attackBonus": args[0].assignedActor?.data.data.attributes.spelldc-8+args[0].assignedActor?.data.data.bonuses.msak.attack,
                 "data.damage.parts":[[`${((args[0].spellLevel || 5)-5)*2+4}d8`,"force"]]
@@ -211,7 +216,28 @@ await new Sequence()
 .play()
 ```
 
+## Manually invoking the companion manger on spell cast
+### If you are on non DND5E systems you can trigger the companion manager for specific spells with a macro or the module Item Macro
+
+```js
+new SimpleCompanionManager([
+  {
+    id: "actorid", //id of the actor to summon, if you have the name use game.actors.getName(name).id
+    animation: "animationid",//id of the animation - set to undefined for default
+    number: 1,//number of creatures to spawn
+  },
+  {
+    id: "actorid",
+    animation: "animationid",
+    number: 1,
+  }
+], spellLevel, actor); //spell level is the spell level of the spell that summons the companions (will be passed to the companion macro), actor is the actor that summons the companions
+```
+
 # Credits \ License
+
+## PF2E Support
+TomChristoffer#6777
 
 ## Jack Kerouac's
 

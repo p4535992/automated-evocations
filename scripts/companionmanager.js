@@ -243,5 +243,3 @@ class SimpleCompanionManager extends CompanionManager {
     super.close(true);
   }
 }
-
-
