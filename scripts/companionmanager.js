@@ -1,4 +1,8 @@
-class CompanionManager extends FormApplication {
+import { EvocationsVariantData, EvocationsVariantFlags } from './automatedEvocationsVariantModels';
+import CONSTANTS from './constants';
+import { warn } from './lib/lib';
+import AECONSTS from './main.js';
+export class CompanionManager extends FormApplication {
   constructor(actor) {
     super();
     this.actor = actor;
@@ -18,7 +22,10 @@ class CompanionManager extends FormApplication {
   }
 
   getData() {
-    return {};
+    const data = super.getData();
+    data.random = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
+    data.ordered = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
+    return data;
   }
 
   async activateListeners(html) {
@@ -86,13 +93,14 @@ class CompanionManager extends FormApplication {
       .find("#companion-number-val")
       .val();
     const tokenData = await actor.getTokenData({elevation: _token?.data?.elevation ?? 0});
+    // eslint-disable-next-line no-undef
     const posData = await warpgate.crosshairs.show({
       size: Math.max(tokenData.width,tokenData.height)*tokenData.scale,
       icon: "modules/automated-evocations-variant/assets/black-hole-bolas.webp",
       label: "",
     });
     if (posData.cancelled) {
-      this.maximize();  
+      this.maximize();
       return;
     }
     if(typeof AECONSTS.animationFunctions[animation].fn == "string"){
@@ -100,11 +108,11 @@ class CompanionManager extends FormApplication {
     }else{
       AECONSTS.animationFunctions[animation].fn(posData, tokenData);
     }
-    
+
     await this.wait(AECONSTS.animationFunctions[animation].time);
     //get custom data macro
     const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({summon: actor,spellLevel: this.spellLevel || 0, duplicates: duplicates, assignedActor: this.caster || game.user.character || _token.actor});
-
+    // eslint-disable-next-line no-undef
     warpgate.spawnAt(
       { x: posData.x, y: posData.y },
       tokenData,
@@ -122,7 +130,7 @@ class CompanionManager extends FormApplication {
       posData: posData,
     })
     if(game.settings.get(AECONSTS.MN, "autoclose")) this.close();
-    else this.maximize();  
+    else this.maximize();
   }
 
   async _onRemoveCompanion(event) {
@@ -212,16 +220,73 @@ class CompanionManager extends FormApplication {
         number: $(companion).find("#companion-number-val").val(),
       });
     }
+
+    const isOrdered = this.element.parent().find('.companion-ordered').val() === 'true' ?? false;
+    const isRandom = this.element.parent().find('.companion-random').val() === 'true' ?? false;
+    if (isRandom && isOrdered) {
+        warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
+    }
     this.actor && (this.actor.getFlag(AECONSTS.MN,"isLocal") || game.settings.get(AECONSTS.MN, "storeonactor")) ? this.actor.setFlag(AECONSTS.MN,"companions", data) : game.user.setFlag(AECONSTS.MN, "companions", data);
+    this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM, isRandom);
+    this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED, isOrdered);
   }
 
   close(noSave = false) {
     if (!noSave) this.saveData();
     super.close();
   }
+
+  async fastSummonPolymorpher(companionData, animationExternal = { sequence: undefined, timeToWait: 0 }) {
+    this.minimize();
+    const actor = game.actors?.get(companionData.id);
+    const animation = companionData.animation;
+    if (!actor) {
+        warn(`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`, true);
+        return;
+    }
+    const duplicates = companionData.number;
+    const tokenData = await actor.getTokenData();
+    const posData = canvas.tokens?.placeables.find((t) => {
+        return t.actor?.id === this.actor.id;
+    }) || undefined;
+    // Get the target actor
+    const sourceActor = actor;
+    if (!sourceActor) {
+        return;
+    }
+
+    if(typeof AECONSTS.animationFunctions[animation].fn == "string"){
+      game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData,tokenData);
+    }else{
+      AECONSTS.animationFunctions[animation].fn(posData, tokenData);
+    }
+
+    await this.wait(AECONSTS.animationFunctions[animation].time);
+    //get custom data macro
+    const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({summon: actor,spellLevel: this.spellLevel || 0, duplicates: duplicates, assignedActor: this.caster || game.user.character || _token.actor});
+    // eslint-disable-next-line no-undef
+    warpgate.spawnAt(
+      { x: posData.x, y: posData.y },
+      tokenData,
+      customTokenData || {},
+      {},
+      { duplicates }
+    );
+    console.log("Automated Evocations Summoning:", {
+      assignedActor: this.caster || game?.user?.character || _token?.actor,
+      spellLevel: this.spellLevel || 0,
+      duplicates: duplicates,
+      warpgateData: customTokenData || {},
+      summon: actor,
+      tokenData: tokenData,
+      posData: posData,
+    })
+    if(game.settings.get(AECONSTS.MN, "autoclose")) this.close();
+    else this.maximize();
+  }
 }
 
-class SimpleCompanionManager extends CompanionManager {
+export class SimpleCompanionManager extends CompanionManager {
   constructor(summonData,spellLevel,actor) {
     super();
     this.caster = actor;

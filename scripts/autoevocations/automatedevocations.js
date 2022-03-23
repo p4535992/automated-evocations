@@ -1,3 +1,6 @@
+import { SimpleCompanionManager } from "../companionmanager";
+import AECONSTS from "../main";
+
 Hooks.on("createChatMessage", async (chatMessage) => {
   if(game.system.id != "dnd5e")return;
   if (chatMessage.data.user !== game.user.id || !game.settings.get(AECONSTS.MN, "enableautomations")) return;
@@ -9,6 +12,7 @@ Hooks.on("createChatMessage", async (chatMessage) => {
   if (system[spellName]) {
     //attempt to get spell level
     let spellLevel;
+    // eslint-disable-next-line no-undef
     const midiLevel = typeof MidiQOL !== "undefined" && chatMessage.data.flags["midi-qol"] ? MidiQOL.Workflow.getWorkflow(chatMessage.data.flags["midi-qol"].workflowId)?.itemLevel : undefined;
     const brLevel = chatMessage.data.flags?.betterrolls5e?.params?.slotLevel
     const coreLevel = $(chatMessage.data.content)?.data("spell-level")

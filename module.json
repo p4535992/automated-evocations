@@ -55,13 +55,8 @@
         "path": "languages/ja.json"
       }
   ],
-  "scripts": [
-      "./scripts/main.js",
-      "./scripts/config.js",
-      "./scripts/companionmanager.js",
-      "./scripts/autoevocations/dnd5e.js",
-      "./scripts/autoevocations/automatedevocations.js"
-  ],
+  "scripts": [],
+  "esmodules": ["./automated-evocations-variant.js"],
   "styles": [
       "./styles/comapnionmanager.css",
       "./styles/spellconfig.css"
@@ -82,8 +77,8 @@
         "module": "automated-evocations-variant"
     }
   ],
-  "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "0.8.9",
+  "minimumCoreVersion": "9",
+  "compatibleCoreVersion": "9",
   "manifestPlusVersion": "1.2.0",
   "url": "https://github.com/p4535992/automated-evocations-variant",
   "manifest": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.json",

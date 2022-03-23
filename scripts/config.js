@@ -1,4 +1,15 @@
-Hooks.once("init", async function () {
+import { setApi } from "../automated-evocations-variant";
+import API from "./api";
+import CompanionManager from "./companionmanager";
+import CONSTANTS from "./constants";
+import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib";
+import AECONSTS from "./main";
+import { registerSocket } from "./socket";
+
+// Hooks.once("init", async function () {
+export const initHooks = () => {
+  Hooks.once('socketlib.ready', registerSocket);
+
   game.settings.register(AECONSTS.MN, "companions", {
     name: "",
     hint: "",
@@ -79,9 +90,49 @@ Hooks.once("init", async function () {
     type: Boolean,
     default: true,
   });
-});
+  game.settings.register(CONSTANTS.MODULE_NAME, 'hudEnable', {
+    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudEnable.title`),
+    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudEnable.hint`),
+    scope: 'client',
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+  /** Which column should the button be placed on */
+  game.settings.register(CONSTANTS.MODULE_NAME, 'hudColumn', {
+      name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.title`),
+      hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.hint`),
+      scope: 'client',
+      config: true,
+      type: String,
+      default: 'Left',
+      choices: {
+          Left: 'Left',
+          Right: 'Right',
+      },
+  });
+  /** Whether the button should be placed on the top or bottom of the column */
+  game.settings.register(CONSTANTS.MODULE_NAME, 'hudTopBottom', {
+      name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.title`),
+      hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.hint`),
+      scope: 'client',
+      config: true,
+      type: String,
+      default: 'Top',
+      choices: {
+          Top: 'Top',
+          Bottom: 'Bottom',
+      },
+  });
+// });
+};
 
-Hooks.once("ready", async function () {
+export const setupHooks = () => {
+  setApi(API);
+};
+
+// Hooks.once("ready", async function () {
+export const readyHooks = async () => {
   AECONSTS.animationFunctions = mergeObject(
     AECONSTS.animationFunctions,
     game.settings.get(AECONSTS.MN, "customanimations")
@@ -106,7 +157,7 @@ Hooks.once("ready", async function () {
     {}
   );
   //new CompanionManager().render(true)
-});
+// });
 
 Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   if(game.settings.get(AECONSTS.MN, "hidebutton")) return;
@@ -127,3 +178,14 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
     },
   });
 });
+
+Hooks.on('renderTokenHUD', (app, html, data) => {
+  // const restrictedOnlyGM = game.settings.get(CONSTANTS.MODULE_NAME, 'restrictOnlyGM');
+  // if (restrictedOnlyGM && !game.user?.isGM) {
+  //   return;
+  // }
+  if (game.settings.get(CONSTANTS.MODULE_NAME, 'hudEnable')) {
+    renderAutomatedEvocationsVariantHud(app, html, data);
+  }
+});
+};

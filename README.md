@@ -27,6 +27,8 @@ If you want to support more modules of this kind, I invite you to go and support
 - Add a little color (i choose aquamarine) to the header sheet button so is more intuitive ?
 - Add module setting for remove the label from the sheet header button very useful for small monitor and mobile and for when there are several modules that fill the header sheet.
 - Add automatic github workflow for setup the releases with a gulp file builder (i think is best to have something like this ?)
+- Little css modification
+- Apply the ecmascript instead the classic script for use export import mechanism
 
 as always, I invite you to support theripper93 through his patreon.
 

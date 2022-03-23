@@ -4,6 +4,7 @@ const AECONSTS = {
     animationFunctions: {
         "fire": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/fire_spiral_CIRCLE_01.webm")
@@ -25,6 +26,7 @@ const AECONSTS = {
         },
         "air": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/air_infinity_RECTANGLE_01.webm")
@@ -52,6 +54,7 @@ const AECONSTS = {
         },
         "lightning": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/ring_CIRCLE_01.webm")
@@ -74,6 +77,7 @@ const AECONSTS = {
         },
         "lightning2": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/JB2A/LightningBall_01_Regular_Blue_400x400.webm")
@@ -102,6 +106,7 @@ const AECONSTS = {
         },
         "water": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/water_blast_RAY_01.webm")
@@ -124,6 +129,7 @@ const AECONSTS = {
         },
         "ice1": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/JB2A/SnowflakeBurst_01_Regular_BlueWhite_Burst_600x600.webm")
@@ -149,6 +155,7 @@ const AECONSTS = {
         },
         "darkness": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/JB2A/Whirlwind_01_BlueGrey_01_400x400.webm")
@@ -180,6 +187,7 @@ const AECONSTS = {
         },
         "energy1": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/energy_spark_CIRCLE_01.webm")
@@ -202,6 +210,7 @@ const AECONSTS = {
         },
         "magic1": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/magic_explosion_symbol_CIRCLE.webm")
@@ -215,6 +224,7 @@ const AECONSTS = {
         },
         "magic2": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/JB2A/Conjuration_01_Yellow_Circle_800x800.webm")
@@ -240,6 +250,7 @@ const AECONSTS = {
         },
         "heart": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/heart_red_SQUARE.webm")
@@ -251,6 +262,7 @@ const AECONSTS = {
         },
         "music": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/music_RECTANGLE.webm")
@@ -272,6 +284,7 @@ const AECONSTS = {
         },
         "music2": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/JB2A/OutPulse_01_Regular_BlueWhite_Burst_600x600.webm")
@@ -290,6 +303,7 @@ const AECONSTS = {
         },
         "fourelements": {
             fn: async (template,tokenData) => {
+                // eslint-disable-next-line no-undef
                 await new Sequence()
                     .effect()
                         .file("modules/automated-evocations-variant/assets/animations/four_element_strike_SQUARE_01.webm")
@@ -304,3 +318,4 @@ const AECONSTS = {
 
     }
 }
+export default AECONSTS;

@@ -7,8 +7,11 @@
 }
 
 #companionManager .form-group{
+    /*
     flex-direction: column;
     padding: 0px;
+    */
+    display: block;
 }
 
 #companion-list{
@@ -126,7 +129,8 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.6);
 }
 
-.open-cm .fa-cat{
-    color: aquamarine;
-    text-shadow: 0 0 8px aquamarine;
+.open-cm .fa-cat,
+.control-icon.evocations-variant .fa-cat {
+  color: aquamarine;
+  text-shadow: 0 0 8px aquamarine;
 }
