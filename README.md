@@ -29,6 +29,9 @@ If you want to support more modules of this kind, I invite you to go and support
 - Add automatic github workflow for setup the releases with a gulp file builder (i think is best to have something like this ?)
 - Little css modification
 - Apply the ecmascript instead the classic script for use export import mechanism
+- Added parseInt to the `duplicates` property
+- Add `name` to the data ot the element list
+- Implemented a dismiss companion on right click of the token hud button, but is work only for the same name
 
 as always, I invite you to support theripper93 through his patreon.
 

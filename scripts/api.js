@@ -1,8 +1,9 @@
-import { ANIMATIONS } from "./animations.js";
+// import { ANIMATIONS } from "./animations.js";
 import { EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
 import { error, wait, warn } from "./lib/lib.js";
 import { CompanionManager } from "./companionmanager.js";
+import AECONSTS from "./main.js";
 
 const API = {
     async invokeEvocationsVariantManagerArr(...inAttributes) {
@@ -26,13 +27,13 @@ const API = {
             warn(`No actor founded on canvas with token '${sourceTokenId}'`, true);
             return;
         }
-        const listEvocationsVariants =
-        // actor &&
-        // (<boolean>actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
-        //   game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR))
-        //   ? <EvocationsVariantData[]>actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || []
-        //   : <EvocationsVariantData[]>game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
-        actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+        const listEvocationsVariants = (
+            (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
+            game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR))
+            ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+            : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+        ) || [];
+        //actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
         let isOrdered = ordered;
         let isRandom = random;
         if (!ordered && actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED)) {
@@ -41,50 +42,50 @@ const API = {
         if (!random && actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM)) {
             isRandom = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
         }
-        let lastElement = '';
-        const matches = sourceToken.name.match(/(?<=\().+?(?=\))/g);
-        if (matches && matches.length > 0) {
-            lastElement = matches[matches.length - 1];
-        }
-        else {
-            lastElement = sourceToken.name;
-        }
+        let lastElement = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT) ?? actor.name;
+        // const matches = sourceToken.name.match(/(?<=\().+?(?=\))/g);
+        // if (matches && matches.length > 0) {
+        //     lastElement = matches[matches.length - 1];
+        // }
+        // else {
+        //     lastElement = sourceToken.name;
+        // }
         const tokenData = await actor.getTokenData();
         const posData = canvas.tokens?.placeables.find((t) => {
             return t.actor?.id === actor.id;
         }) || undefined;
         if (removeEvocationsVariant) {
-            const polyData = listEvocationsVariants.find((a) => {
-                return lastElement.toLowerCase().includes(a.name.toLowerCase());
-            });
-            const animation = polyData?.animation;
-            const polyDataIndex = listEvocationsVariants.findIndex((a) => {
-                return lastElement.toLowerCase().includes(a.name.toLowerCase());
-            });
-            if (animationExternal && animationExternal.sequence) {
-                //@ts-ignore
-                await animationExternal.sequence.play();
-                await wait(animationExternal.timeToWait);
-            }
-            else if (animation) {
-                if (typeof ANIMATIONS.animationFunctions[animation].fn == 'string') {
+            // implemented a dismiss companion but is work only for the same name
+            const evokeds = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+            for(const evoked of evokeds){
+                const polyData = listEvocationsVariants.find((a) => {
+                    return lastElement.toLowerCase().includes(a.name.toLowerCase());
+                });
+                const animation = polyData?.animation;
+                const polyDataIndex = listEvocationsVariants.findIndex((a) => {
+                    return lastElement.toLowerCase().includes(a.name.toLowerCase());
+                });
+                if (animationExternal && animationExternal.sequence) {
                     //@ts-ignore
-                    game.macros?.getName(ANIMATIONS.animationFunctions[animation].fn)?.execute(posData, tokenData);
+                    await animationExternal.sequence.play();
+                    await wait(animationExternal.timeToWait);
                 }
-                else {
-                    ANIMATIONS.animationFunctions[animation].fn(posData, tokenData);
+                else if (animation) {
+                    if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
+                        //@ts-ignore
+                        game.macros?.getName(AECONSTS.animationFunctions[animation].fn)?.execute(evoked, tokenData);
+                    }
+                    else {
+                        AECONSTS.animationFunctions[animation].fn(evoked, tokenData);
+                    }
+                    await wait(AECONSTS.animationFunctions[animation].time);
                 }
-                await wait(ANIMATIONS.animationFunctions[animation].time);
-            }
-            // Do something with left click
-            if (game.system.id === 'dnd5e') {
-                //@ts-ignore
-                actor?.revertOriginalForm();
-            }
-            else {
-                //@ts-ignore
-                // eslint-disable-next-line no-undef
-                warpgate.revert(sourceToken.document, (mutationName = actor.id));
+                const tokenToDismiss = canvas.tokens?.placeables.find((t) => {
+                    return t.actor?.id === evoked.id || t.actor?.name === evoked.name;
+                });
+                if(tokenToDismiss){
+                    tokenToDismiss.delete();
+                }
             }
         }
         else {

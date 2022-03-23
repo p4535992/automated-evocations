@@ -20,6 +20,8 @@ export var EvocationsVariantFlags;
     EvocationsVariantFlags["COMPANIONS"] = "companions";
     EvocationsVariantFlags["RANDOM"] = "random";
     EvocationsVariantFlags["ORDERED"] = "ordered";
+    EvocationsVariantFlags["LAST_ELEMENT"] = "lastelement";
+    EvocationsVariantFlags["EVOKEDS"] = "evokeds";
 })(EvocationsVariantFlags || (EvocationsVariantFlags = {}));
 export class EvocationsVariantData {
 }

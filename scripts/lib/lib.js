@@ -113,17 +113,17 @@ export async function renderAutomatedEvocationsVariantHud(app, html, hudToken) {
     }
     const actor = sourceToken.document.actor;
     if (!actor) {
-      warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
-      return;
+        warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
+        return;
     }
 
-    const listEvocationsVariants =
-    // actor &&
-    // (<boolean>actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
-    //   game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR))
-    //   ? <EvocationsVariantData[]>actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || []
-    //   : <EvocationsVariantData[]>game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
-    actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+    const listEvocationsVariants = (
+        (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
+        game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR))
+        ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+        : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+    ) || [];
+    //actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
     if (listEvocationsVariants.length > 0) {
         //addToRevertEvocationsVariantButton(html, sourceToken);
         addToEvocationsVariantButton(html, sourceToken);

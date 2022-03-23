@@ -1,7 +1,7 @@
 import CONSTANTS from "./constants.js";
 import API from "./api.js";
 import { debug } from "./lib/lib.js";
-import { setSocket } from "../automated-EvocationsVariant.js";
+import { setSocket } from "../automated-evocations-variant.js";
 export const SOCKET_HANDLERS = {
     /**
      * Generic sockets

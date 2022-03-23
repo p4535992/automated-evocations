@@ -1,10 +1,10 @@
-import { setApi } from "../automated-evocations-variant";
-import API from "./api";
-import CompanionManager from "./companionmanager";
-import CONSTANTS from "./constants";
-import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib";
-import AECONSTS from "./main";
-import { registerSocket } from "./socket";
+import { setApi } from "../automated-evocations-variant.js";
+import API from "./api.js";
+import { CompanionManager } from "./companionmanager.js";
+import CONSTANTS from "./constants.js";
+import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib.js";
+import AECONSTS from "./main.js";
+import { registerSocket } from "./socket.js";
 
 // Hooks.once("init", async function () {
 export const initHooks = () => {
@@ -56,7 +56,7 @@ export const initHooks = () => {
     scope: "world",
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
   });
   game.settings.register(AECONSTS.MN, "hidebutton", {
     name: game.i18n.localize(`AE.settings.hidebutton.title`),
@@ -91,17 +91,17 @@ export const initHooks = () => {
     default: true,
   });
   game.settings.register(CONSTANTS.MODULE_NAME, 'hudEnable', {
-    name: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudEnable.title`),
-    hint: i18n(`${CONSTANTS.MODULE_NAME}.settings.hudEnable.hint`),
+    name: game.i18n.localize(`AE.settings.hudEnable.title`),
+    hint: game.i18n.localize(`AE.settings.hudEnable.hint`),
     scope: 'client',
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
   });
   /** Which column should the button be placed on */
   game.settings.register(CONSTANTS.MODULE_NAME, 'hudColumn', {
-      name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.title`),
-      hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudColumn.hint`),
+      name: game.i18n.localize(`AE.settings.hudColumn.title`),
+      hint: game.i18n.localize(`AE.settings.hudColumn.hint`),
       scope: 'client',
       config: true,
       type: String,
@@ -113,8 +113,8 @@ export const initHooks = () => {
   });
   /** Whether the button should be placed on the top or bottom of the column */
   game.settings.register(CONSTANTS.MODULE_NAME, 'hudTopBottom', {
-      name: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.title`),
-      hint: i18n(`${CONSTANTS.MODULE_NAME}.setting.hudTopBottom.hint`),
+      name: game.i18n.localize(`AE.settings.hudTopBottom.title`),
+      hint: game.i18n.localize(`AE.settings.hudTopBottom.hint`),
       scope: 'client',
       config: true,
       type: String,

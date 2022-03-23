@@ -1,6 +1,6 @@
-import { EvocationsVariantData, EvocationsVariantFlags } from './automatedEvocationsVariantModels';
-import CONSTANTS from './constants';
-import { warn } from './lib/lib';
+import { EvocationsVariantData, EvocationsVariantFlags } from './automatedEvocationsVariantModels.js';
+import CONSTANTS from './constants.js';
+import { warn } from './lib/lib.js';
 import AECONSTS from './main.js';
 export class CompanionManager extends FormApplication {
   constructor(actor) {
@@ -87,11 +87,12 @@ export class CompanionManager extends FormApplication {
     const animation = $(event.currentTarget.parentElement.parentElement)
       .find(".anim-dropdown")
       .val();
+    const aName = event.currentTarget.dataset.aname;
     const aId = event.currentTarget.dataset.aid;
     const actor = game.actors.get(aId);
-    const duplicates = $(event.currentTarget.parentElement.parentElement)
+    const duplicates = parseInt($(event.currentTarget.parentElement.parentElement)
       .find("#companion-number-val")
-      .val();
+      .val());
     const tokenData = await actor.getTokenData({elevation: _token?.data?.elevation ?? 0});
     // eslint-disable-next-line no-undef
     const posData = await warpgate.crosshairs.show({
@@ -120,6 +121,14 @@ export class CompanionManager extends FormApplication {
       {},
       { duplicates }
     );
+    await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
+    if(this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)){
+      const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+      arr.push(actor.name);
+      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
+    }else{
+      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actor.name]);
+    }
     console.log("Automated Evocations Summoning:", {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
@@ -171,12 +180,10 @@ export class CompanionManager extends FormApplication {
     const restricted = game.settings.get(AECONSTS.MN, "restrictOwned")
     if(restricted && !actor.isOwner) return "";
     let $li = $(`
-	<li id="companion" class="companion-item" data-aid="${
-    actor.id
-  }" data-elid="${randomID()}" draggable="true">
+	<li id="companion" class="companion-item" data-aid="${actor.id}" data-aname="${actor.name}" data-elid="${randomID()}" draggable="true">
 		<div class="summon-btn">
 			<img class="actor-image" src="${actor.data.img}" alt="">
-			<div class="warpgate-btn" id="summon-companion" data-aid="${actor.id}"></div>
+			<div class="warpgate-btn" id="summon-companion" data-aid="${actor.id}" data-aname="${actor.name}"></div>
 		</div>
     	<span class="actor-name">${actor.data.name}</span>
 		<div class="companion-number"><input type="number" min="1" max="99" class="fancy-input" step="1" id="companion-number-val" value="${
@@ -216,6 +223,7 @@ export class CompanionManager extends FormApplication {
     for (let companion of this.element.find(".companion-item")) {
       data.push({
         id: companion.dataset.aid,
+        name: companion.dataset.aname,
         animation: $(companion).find(".anim-dropdown").val(),
         number: $(companion).find("#companion-number-val").val(),
       });
@@ -236,7 +244,7 @@ export class CompanionManager extends FormApplication {
     super.close();
   }
 
-  async fastSummonPolymorpher(companionData, animationExternal = { sequence: undefined, timeToWait: 0 }) {
+  async fastSummonEvocationsVariant(companionData, animationExternal = { sequence: undefined, timeToWait: 0 }) {
     this.minimize();
     const actor = game.actors?.get(companionData.id);
     const animation = companionData.animation;
@@ -246,9 +254,19 @@ export class CompanionManager extends FormApplication {
     }
     const duplicates = companionData.number;
     const tokenData = await actor.getTokenData();
-    const posData = canvas.tokens?.placeables.find((t) => {
-        return t.actor?.id === this.actor.id;
-    }) || undefined;
+    // eslint-disable-next-line no-undef
+    const posData = await warpgate.crosshairs.show({
+      size: Math.max(tokenData.width,tokenData.height)*tokenData.scale,
+      icon: "modules/automated-evocations-variant/assets/black-hole-bolas.webp",
+      label: "",
+    });
+    if (posData.cancelled) {
+      this.maximize();
+      return;
+    }
+    // const posData = canvas.tokens?.placeables.find((t) => {
+    //     return t.actor?.id === this.actor.id;
+    // }) || undefined;
     // Get the target actor
     const sourceActor = actor;
     if (!sourceActor) {
@@ -272,6 +290,14 @@ export class CompanionManager extends FormApplication {
       {},
       { duplicates }
     );
+    await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
+    if(this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)){
+      const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+      arr.push(actor.name);
+      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
+    }else{
+      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actor.name]);
+    }
     console.log("Automated Evocations Summoning:", {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
