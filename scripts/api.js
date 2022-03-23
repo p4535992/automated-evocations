@@ -14,17 +14,17 @@ const API = {
         const result = await this.invokeEvocationsVariantManager(sourceToken, removeEvocationsVariant, ordered, random, animationExternal);
         return result;
     },
-    async invokeEvocationsVariantManager(sourceTokenId, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
+    async invokeEvocationsVariantManager(sourceTokenIdOrName, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
         const sourceToken = canvas.tokens?.placeables.find((t) => {
-            return t.id === sourceTokenId;
+            return t.id === sourceTokenIdOrName;
         });
         if (!sourceToken) {
-            warn(`No token founded on canvas with id '${sourceTokenId}'`, true);
+            warn(`No token founded on canvas with id '${sourceTokenIdOrName}'`, true);
             return;
         }
         const actor = sourceToken.document.actor;
         if (!actor) {
-            warn(`No actor founded on canvas with token '${sourceTokenId}'`, true);
+            warn(`No actor founded on canvas with token '${sourceTokenIdOrName}'`, true);
             return;
         }
         const listEvocationsVariants = (
@@ -51,42 +51,52 @@ const API = {
         //     lastElement = sourceToken.name;
         // }
         const tokenData = await actor.getTokenData();
-        const posData = canvas.tokens?.placeables.find((t) => {
-            return t.actor?.id === actor.id;
-        }) || undefined;
+        // const posData = canvas.tokens?.placeables.find((t) => {
+        //     return t.actor?.id === actor.id;
+        // }) || undefined;
         if (removeEvocationsVariant) {
             // implemented a dismiss companion but is work only for the same name
             const evokeds = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+            const tokensToDelete = [];
             for(const evoked of evokeds){
-                const polyData = listEvocationsVariants.find((a) => {
-                    return lastElement.toLowerCase().includes(a.name.toLowerCase());
-                });
-                const animation = polyData?.animation;
-                const polyDataIndex = listEvocationsVariants.findIndex((a) => {
-                    return lastElement.toLowerCase().includes(a.name.toLowerCase());
-                });
-                if (animationExternal && animationExternal.sequence) {
-                    //@ts-ignore
-                    await animationExternal.sequence.play();
-                    await wait(animationExternal.timeToWait);
-                }
-                else if (animation) {
-                    if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
-                        //@ts-ignore
-                        game.macros?.getName(AECONSTS.animationFunctions[animation].fn)?.execute(evoked, tokenData);
+                const posDatas = canvas.tokens?.placeables.filter((t) => {
+                    return t.actor?.id === evoked  || t.actor?.name === evoked;
+                }) || undefined;
+                for(const posData of posDatas){
+                    if(posData && !tokensToDelete.includes(posData.id)){
+                        const polyData = listEvocationsVariants.find((a) => {
+                            return posData.name.toLowerCase().includes(a.name.toLowerCase());
+                        });
+                        const animation = polyData?.animation;
+                        const polyDataIndex = listEvocationsVariants.findIndex((a) => {
+                            return posData.name.toLowerCase().includes(a.name.toLowerCase());
+                        });
+                        if (animationExternal && animationExternal.sequence) {
+                            //@ts-ignore
+                            await animationExternal.sequence.play();
+                            await wait(animationExternal.timeToWait);
+                        }
+                        else if (animation) {
+                            if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
+                                //@ts-ignore
+                                game.macros?.getName(AECONSTS.animationFunctions[animation].fn)?.execute(posData, tokenData);
+                            }
+                            else {
+                                AECONSTS.animationFunctions[animation].fn(posData, tokenData);
+                            }
+                            await wait(AECONSTS.animationFunctions[animation].time);
+                        }
+                        //posData.delete();
+                        tokensToDelete.push(posData.id);
+                        // const scene = game.scenes.current;
+                        // scene.deleteEmbeddedDocuments('Token', tokensToDelete);
                     }
-                    else {
-                        AECONSTS.animationFunctions[animation].fn(evoked, tokenData);
-                    }
-                    await wait(AECONSTS.animationFunctions[animation].time);
-                }
-                const tokenToDismiss = canvas.tokens?.placeables.find((t) => {
-                    return t.actor?.id === evoked.id || t.actor?.name === evoked.name;
-                });
-                if(tokenToDismiss){
-                    tokenToDismiss.delete();
                 }
             }
+            await actor?.unsetFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT);
+            await actor?.unsetFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS);
+            const scene = game.scenes.current;
+            scene.deleteEmbeddedDocuments('Token', tokensToDelete);
         }
         else {
             if (isRandom && isOrdered) {

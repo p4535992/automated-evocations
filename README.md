@@ -15,6 +15,8 @@
 
 A user interface to manage companions with summoning animations and automated summoning for spells
 
+![hud](./wiki/feature_hud_ce_1.gif)
+
 **Note: This is module is inspired from the  wonderful work done by [theRipper93](https://github.com/theripper93) with its [automated-evocations](https://github.com/theripper93/automated-evocations) module.
 If you want to support more modules of this kind, I invite you to go and support his patreon**
 
@@ -32,6 +34,11 @@ If you want to support more modules of this kind, I invite you to go and support
 - Added parseInt to the `duplicates` property
 - Add `name` to the data ot the element list
 - Implemented a dismiss companion on right click of the token hud button, but is work only for the same name
+- Add check for show the hud button only if at least a polymorphing actor is present on the current actor
+- Add hud control
+- Add some new setting
+- Add a fast polymorphing mechanism for make the comabt more fluid
+- Add socketLib, API
 
 as always, I invite you to support theripper93 through his patreon.
 
@@ -234,6 +241,113 @@ new SimpleCompanionManager([
     number: 1,
   }
 ], spellLevel, actor); //spell level is the spell level of the spell that summons the companions (will be passed to the companion macro), actor is the actor that summons the companions
+```
+
+## Token HUD fast click
+
+An interface in the hud layer now allows you to speed up the summons during a fight in a very intuitive way to manage the summons there are three modes, at the level of the individual actor:
+
+- Random: the next summon is randomly taken from the list of summons associated with the actor
+- Ordered: the next summon is taken according to the order of the list of summons associated with the actor
+- No random, No orderder: the standard method shows the configuration panel that you would have by clicking on the header sheet button
+
+the actions on the hud button are of two types left click and right click. 
+
+- Left click activates the summon event
+- Right click delete the summoned creature.
+
+![hud](./wiki/feature_hud_ce_1.gif)
+
+**NOTE: you can't have both ordered and random**
+**NOTE: Remember you must own the token for see the HUD button**
+
+# API
+
+###  async game.modules.get('automated-evocations-variant').invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+
+Invoke the polymorpher manager feature from macro
+
+**Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
+
+| Param | Type | Description | Default |
+| --- | --- | --- | --- |
+| sourceTokenIdOrName | <code>string</code> | The id or the name of the token (not the actor) | <code>undefined</code> |
+| removeEvocationsVariant | <code>boolean</code> | This action should delete the evocated toen if the current token is present on the scene | <code>false</code> |
+| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this polymorphing | <code>false</code> |
+| random | <code>boolean</code> | The 'random' feature is enabled for this polymorphing | <code>0</code> |
+| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the polymorph action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
+
+**Examples**:
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain')`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', true)`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false)`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false)`
+
+```
+let sequence = new Sequence()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
+        .atLocation(tokenD)
+        .scale(0.35)
+    .wait(1000)
+        .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
+        .atLocation(tokenD)
+        .reachTowards({
+            x: tokenD.center.x + canvas.grid.size*5,
+            y: tokenD.center.y
+        })
+    .wait(100)
+    .animation()
+        .on(tokenD)
+        .teleportTo({
+            x: tokenD.x + canvas.grid.size*5,
+            y: tokenD.y
+        })
+        .waitUntilFinished()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
+        .atLocation(tokenD)
+        .scale(0.5)
+
+game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
+```
+
+## Integration with socketLib
+
+
+```
+let sequence = new Sequence()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
+        .atLocation(tokenD)
+        .scale(0.35)
+    .wait(1000)
+        .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
+        .atLocation(tokenD)
+        .reachTowards({
+            x: tokenD.center.x + canvas.grid.size*5,
+            y: tokenD.center.y
+        })
+    .wait(100)
+    .animation()
+        .on(tokenD)
+        .teleportTo({
+            x: tokenD.x + canvas.grid.size*5,
+            y: tokenD.y
+        })
+        .waitUntilFinished()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
+        .atLocation(tokenD)
+        .scale(0.5)
+
+game.modules.get('automated-evocations-variant').socket.executeAsGM('invokeEvocationsVariantManager',['Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100}]);
 ```
 
 # Credits \ License

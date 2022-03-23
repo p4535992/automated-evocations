@@ -33,7 +33,7 @@ export function registerSocket() {
     /**
      * Automated EvocationsVariant sockets
      */
-    automatedEvocationsVariantSocket.register('invokeEvocationsVariantManagerArr', (...args) => API.invokeEvocationsVariantManagerArr(...args));
+    automatedEvocationsVariantSocket.register('invokeEvocationsVariantManager', (...args) => API.invokeEvocationsVariantManagerArr(...args));
     /**
      * UI sockets
      */

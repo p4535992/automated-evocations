@@ -1,6 +1,14 @@
+## 1.5.5
+
+- Add check for show the hud button only if at least a polymorphing actor is present on the current actor
+- Converted the hud settings from 'world' to 'client'
+- Set module settings 'hudEnable' default to true
+- Add hud control
+- Add some new setting
+- Add a fast polymorphing mechanism for make the comabt more fluid
+- Add socketLib, API, new feature
+
 ## 1.5.4
-
-
 
 ## 1.4.8
 

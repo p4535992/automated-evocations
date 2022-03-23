@@ -128,7 +128,7 @@ const tsConfig = ts.createProject('tsconfig.json', {
 function buildTS() {
   return (
     gulp
-      .src(['./**/*.ts','!./node_modules/**','!gulpfile.js'])
+      .src(['./**/*.ts','!./node_modules/**','!gulpfile.js','!./wiki/**'])
       .pipe(tsConfig())
 
       // // eslint() attaches the lint output to the "eslint" property
@@ -151,7 +151,7 @@ function buildTS() {
 function buildJS() {
   return (
     gulp
-      .src(['./**/*.js','!./node_modules/**','!gulpfile.js'])
+      .src(['./**/*.js','!./node_modules/**','!gulpfile.js','!./wiki/**'])
 
       // // eslint() attaches the lint output to the "eslint" property
       // // of the file object so it can be used by other modules.
@@ -173,7 +173,7 @@ function buildJS() {
 function buildMJS() {
   return (
     gulp
-      .src(['./**/*.mjs','!./node_modules/**','!gulpfile.js'])
+    .src(['./**/*.mjs','!./node_modules/**','!gulpfile.js','!./wiki/**'])
 
       // // eslint() attaches the lint output to the "eslint" property
       // // of the file object so it can be used by other modules.
@@ -193,21 +193,21 @@ function buildMJS() {
  * Build Css
  */
 function buildCSS() {
-  return gulp.src(['./**/*.css','!./node_modules/**','!gulpfile.js']).pipe(gulp.dest('dist'));
+  return gulp.src(['./**/*.css','!./node_modules/**','!gulpfile.js','!./wiki/**']).pipe(gulp.dest('dist'));
 }
 
 /**
  * Build Less
  */
 function buildLess() {
-  return gulp.src(['./**/*.less','!./node_modules/**','!gulpfile.js']).pipe(less()).pipe(gulp.dest('dist'));
+  return gulp.src(['./**/*.less','!./node_modules/**','!gulpfile.js','!./wiki/**']).pipe(less()).pipe(gulp.dest('dist'));
 }
 
 /**
  * Build SASS
  */
 function buildSASS() {
-  return gulp.src(['./**/*.scss','!./node_modules/**','!gulpfile.js']).pipe(sass().on('error', sass.logError)).pipe(gulp.dest('dist'));
+  return gulp.src(['./**/*.scss','!./node_modules/**','!gulpfile.js','!./wiki/**']).pipe(sass().on('error', sass.logError)).pipe(gulp.dest('dist'));
 }
 
 /**
@@ -477,11 +477,11 @@ function updateManifest(cb) {
 }
 
 function gitAdd() {
-  return gulp.src(['package','!./node_modules/**','!gulpfile.js']).pipe(git.add({ args: '--no-all' }));
+  return gulp.src(['package','!./node_modules/**','!gulpfile.js','!./wiki/**']).pipe(git.add({ args: '--no-all' }));
 }
 
 function gitCommit() {
-  return gulp.src(['./*','!./node_modules/**','!gulpfile.js']).pipe(
+  return gulp.src(['./*','!./node_modules/**','!gulpfile.js','!./wiki/**']).pipe(
     git.commit(`v${getManifest().file.version}`, {
       args: '-a',
       disableAppendPaths: true,
