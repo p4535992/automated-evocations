@@ -34,10 +34,10 @@ If you want to support more modules of this kind, I invite you to go and support
 - Added parseInt to the `duplicates` property
 - Add `name` to the data ot the element list
 - Implemented a dismiss companion on right click of the token hud button, but is work only for the same name
-- Add check for show the hud button only if at least a polymorphing actor is present on the current actor
+- Add check for show the hud button only if at least a summoning actor is present on the current actor
 - Add hud control
 - Add some new setting
-- Add a fast polymorphing mechanism for make the comabt more fluid
+- Add a fast summoning mechanism for make the comabt more fluid
 - Add socketLib, API
 
 as always, I invite you to support theripper93 through his patreon.
@@ -265,7 +265,7 @@ the actions on the hud button are of two types left click and right click.
 
 ###  async game.modules.get('automated-evocations-variant').invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
 
-Invoke the polymorpher manager feature from macro
+Invoke the polymorphercompanion manager feature from macro
 
 **Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
 
@@ -273,9 +273,9 @@ Invoke the polymorpher manager feature from macro
 | --- | --- | --- | --- |
 | sourceTokenIdOrName | <code>string</code> | The id or the name of the token (not the actor) | <code>undefined</code> |
 | removeEvocationsVariant | <code>boolean</code> | This action should delete the evocated toen if the current token is present on the scene | <code>false</code> |
-| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this polymorphing | <code>false</code> |
-| random | <code>boolean</code> | The 'random' feature is enabled for this polymorphing | <code>0</code> |
-| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the polymorph action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
+| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this summon companion | <code>false</code> |
+| random | <code>boolean</code> | The 'random' feature is enabled for this summon companion | <code>false</code> |
+| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the summon companion action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
 
 **Examples**:
 

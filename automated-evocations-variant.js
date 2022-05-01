@@ -98,7 +98,7 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-    - TODO
+    - Synchornize with ripper main branch and add de.json language file
   `,
     'minor',
   );
