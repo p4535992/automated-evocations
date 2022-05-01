@@ -11,8 +11,8 @@ export class CompanionManager extends FormApplication {
   static get defaultOptions() {
     return {
       ...super.defaultOptions,
-      title: game.i18n.localize("AE.dialogs.companionManager.title"),
-      id: "companionManager",
+      title: game.i18n.localize('AE.dialogs.companionManager.title'),
+      id: 'companionManager',
       template: `modules/automated-evocations-variant/templates/companionmanager.hbs`,
       resizable: true,
       width: 300,
@@ -29,29 +29,27 @@ export class CompanionManager extends FormApplication {
   }
 
   async activateListeners(html) {
-    html.find("#companion-list").before(`<div class="searchbox"><input type="text" class="searchinput" placeholder="Drag and Drop an actor to add it to the list."></div>`)
+    html
+      .find('#companion-list')
+      .before(
+        `<div class="searchbox"><input type="text" class="searchinput" placeholder="Drag and Drop an actor to add it to the list."></div>`,
+      );
     this.loadCompanions();
-    html.on("input", ".searchinput", this._onSearch.bind(this));
-    html.on("click", "#remove-companion", this._onRemoveCompanion.bind(this));
-    html.on("click", "#summon-companion", this._onSummonCompanion.bind(this));
-    html.on("click", ".actor-name", this._onOpenSheet.bind(this));
-    html.on("dragstart", "#companion", async (event) => {
-      event.originalEvent.dataTransfer.setData(
-        "text/plain",
-        event.currentTarget.dataset.elid
-      );
+    html.on('input', '.searchinput', this._onSearch.bind(this));
+    html.on('click', '#remove-companion', this._onRemoveCompanion.bind(this));
+    html.on('click', '#summon-companion', this._onSummonCompanion.bind(this));
+    html.on('click', '.actor-name', this._onOpenSheet.bind(this));
+    html.on('dragstart', '#companion', async (event) => {
+      event.originalEvent.dataTransfer.setData('text/plain', event.currentTarget.dataset.elid);
     });
-    html.on("dragend", "#companion", async (event) => {
-      event.originalEvent.dataTransfer.setData(
-        "text/plain",
-        event.currentTarget.dataset.elid
-      );
+    html.on('dragend', '#companion', async (event) => {
+      event.originalEvent.dataTransfer.setData('text/plain', event.currentTarget.dataset.elid);
     });
   }
 
   _onSearch(event) {
     const search = $(event.currentTarget).val();
-    this.element.find(".actor-name").each(function() {
+    this.element.find('.actor-name').each(function () {
       if ($(this).text().toLowerCase().includes(search.toLowerCase())) {
         $(this).parent().slideDown(200);
       } else {
@@ -63,73 +61,68 @@ export class CompanionManager extends FormApplication {
   _onDrop(event) {
     let data;
     try {
-      data = JSON.parse(event.dataTransfer.getData("text/plain"));
+      data = JSON.parse(event.dataTransfer.getData('text/plain'));
     } catch {
-      data = event.dataTransfer.getData("text/plain");
+      data = event.dataTransfer.getData('text/plain');
     }
     const li = this.element.find(`[data-elid="${data}"]`);
-    if (li.length && !$(event.target).hasClass("nodrop")) {
-      let target = $(event.target).closest("li");
+    if (li.length && !$(event.target).hasClass('nodrop')) {
+      let target = $(event.target).closest('li');
       if (target.length && target[0].dataset.elid != data) {
         $(li).remove();
         target.before($(li));
       }
     }
-    if (!data.type === "Actor") return;
-    this.element
-      .find("#companion-list")
-      .append(this.generateLi({ id: data.id }));
+    if (!data.type === 'Actor') return;
+    this.element.find('#companion-list').append(this.generateLi({ id: data.id }));
     this.saveData();
   }
 
   async _onSummonCompanion(event) {
     this.minimize();
-    const animation = $(event.currentTarget.parentElement.parentElement)
-      .find(".anim-dropdown")
-      .val();
+    const animation = $(event.currentTarget.parentElement.parentElement).find('.anim-dropdown').val();
     const aName = event.currentTarget.dataset.aname;
     const aId = event.currentTarget.dataset.aid;
     const actor = game.actors.get(aId);
-    const duplicates = parseInt($(event.currentTarget.parentElement.parentElement)
-      .find("#companion-number-val")
-      .val());
-    const tokenData = await actor.getTokenData({elevation: _token?.data?.elevation ?? 0});
+    const duplicates = parseInt($(event.currentTarget.parentElement.parentElement).find('#companion-number-val').val());
+    const tokenData = await actor.getTokenData({ elevation: _token?.data?.elevation ?? 0 });
     // eslint-disable-next-line no-undef
     const posData = await warpgate.crosshairs.show({
-      size: Math.max(tokenData.width,tokenData.height)*tokenData.scale,
-      icon: "modules/automated-evocations-variant/assets/black-hole-bolas.webp",
-      label: "",
+      size: Math.max(tokenData.width, tokenData.height) * tokenData.scale,
+      icon: 'modules/automated-evocations-variant/assets/black-hole-bolas.webp',
+      label: '',
     });
     if (posData.cancelled) {
       this.maximize();
       return;
     }
-    if(typeof AECONSTS.animationFunctions[animation].fn == "string"){
-      game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData,tokenData);
-    }else{
+    if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
+      game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+    } else {
       AECONSTS.animationFunctions[animation].fn(posData, tokenData);
     }
 
     await this.wait(AECONSTS.animationFunctions[animation].time);
     //get custom data macro
-    const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({summon: actor,spellLevel: this.spellLevel || 0, duplicates: duplicates, assignedActor: this.caster || game.user.character || _token.actor});
+    const customTokenData = await game.macros
+      .getName(`AE_Companion_Macro(${actor.data.name})`)
+      ?.execute({
+        summon: actor,
+        spellLevel: this.spellLevel || 0,
+        duplicates: duplicates,
+        assignedActor: this.caster || game.user.character || _token.actor,
+      });
     // eslint-disable-next-line no-undef
-    warpgate.spawnAt(
-      { x: posData.x, y: posData.y },
-      tokenData,
-      customTokenData || {},
-      {},
-      { duplicates }
-    );
+    warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
-    if(this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)){
+    if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)) {
       const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
       arr.push(actor.name);
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
-    }else{
+    } else {
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actor.name]);
     }
-    console.log("Automated Evocations Summoning:", {
+    console.log('Automated Evocations Summoning:', {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
       duplicates: duplicates,
@@ -137,17 +130,15 @@ export class CompanionManager extends FormApplication {
       summon: actor,
       tokenData: tokenData,
       posData: posData,
-    })
-    if(game.settings.get(AECONSTS.MN, "autoclose")) this.close();
+    });
+    if (game.settings.get(AECONSTS.MN, 'autoclose')) this.close();
     else this.maximize();
   }
 
   async _onRemoveCompanion(event) {
     Dialog.confirm({
-      title: game.i18n.localize("AE.dialogs.companionManager.confirm.title"),
-      content: game.i18n.localize(
-        "AE.dialogs.companionManager.confirm.content"
-      ),
+      title: game.i18n.localize('AE.dialogs.companionManager.confirm.title'),
+      content: game.i18n.localize('AE.dialogs.companionManager.confirm.content'),
       yes: () => {
         event.currentTarget.parentElement.remove();
         this.saveData();
@@ -166,21 +157,26 @@ export class CompanionManager extends FormApplication {
   }
 
   async loadCompanions() {
-    let data = this.actor && (this.actor.getFlag(AECONSTS.MN,"isLocal") || game.settings.get(AECONSTS.MN, "storeonactor")) ? this.actor.getFlag(AECONSTS.MN,"companions") || [] : game.user.getFlag(AECONSTS.MN, "companions");
+    let data =
+      this.actor && (this.actor.getFlag(AECONSTS.MN, 'isLocal') || game.settings.get(AECONSTS.MN, 'storeonactor'))
+        ? this.actor.getFlag(AECONSTS.MN, 'companions') || []
+        : game.user.getFlag(AECONSTS.MN, 'companions');
     if (data) {
       for (let companion of data) {
-        this.element.find("#companion-list").append(this.generateLi(companion));
+        this.element.find('#companion-list').append(this.generateLi(companion));
       }
     }
   }
 
   generateLi(data) {
     const actor = game.actors.get(data.id) || game.actors.getName(data.id);
-    if (!actor) return "";
-    const restricted = game.settings.get(AECONSTS.MN, "restrictOwned")
-    if(restricted && !actor.isOwner) return "";
+    if (!actor) return '';
+    const restricted = game.settings.get(AECONSTS.MN, 'restrictOwned');
+    if (restricted && !actor.isOwner) return '';
     let $li = $(`
-	<li id="companion" class="companion-item" data-aid="${actor.id}" data-aname="${actor.name}" data-elid="${randomID()}" draggable="true">
+	<li id="companion" class="companion-item" data-aid="${actor.id}" data-aname="${
+      actor.name
+    }" data-elid="${randomID()}" draggable="true">
 		<div class="summon-btn">
 			<img class="actor-image" src="${actor.data.img}" alt="">
 			<div class="warpgate-btn" id="summon-companion" data-aid="${actor.id}" data-aname="${actor.name}"></div>
@@ -200,17 +196,14 @@ export class CompanionManager extends FormApplication {
   }
 
   getAnimations(anim) {
-
-    let animList = "";
+    let animList = '';
     for (let [group, animations] of Object.entries(AECONSTS.animations)) {
-      const localGroup = game.i18n.localize(`AE.groups.${group}`)
-      animList+=`<optgroup label="${localGroup == `AE.groups.${group}` ? group : localGroup}">`;
+      const localGroup = game.i18n.localize(`AE.groups.${group}`);
+      animList += `<optgroup label="${localGroup == `AE.groups.${group}` ? group : localGroup}">`;
       for (let a of animations) {
-      animList += `<option value="${a.key}" ${
-        a.key == anim ? "selected" : ""
-      }>${a.name}</option>`;
-    }
-    animList += "</optgroup>";
+        animList += `<option value="${a.key}" ${a.key == anim ? 'selected' : ''}>${a.name}</option>`;
+      }
+      animList += '</optgroup>';
     }
     return animList;
   }
@@ -220,21 +213,23 @@ export class CompanionManager extends FormApplication {
 
   async saveData() {
     let data = [];
-    for (let companion of this.element.find(".companion-item")) {
+    for (let companion of this.element.find('.companion-item')) {
       data.push({
         id: companion.dataset.aid,
         name: companion.dataset.aname,
-        animation: $(companion).find(".anim-dropdown").val(),
-        number: $(companion).find("#companion-number-val").val(),
+        animation: $(companion).find('.anim-dropdown').val(),
+        number: $(companion).find('#companion-number-val').val(),
       });
     }
 
     const isOrdered = this.element.parent().find('.companion-ordered').val() === 'true' ?? false;
     const isRandom = this.element.parent().find('.companion-random').val() === 'true' ?? false;
     if (isRandom && isOrdered) {
-        warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
+      warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
     }
-    this.actor && (this.actor.getFlag(AECONSTS.MN,"isLocal") || game.settings.get(AECONSTS.MN, "storeonactor")) ? this.actor.setFlag(AECONSTS.MN,"companions", data) : game.user.setFlag(AECONSTS.MN, "companions", data);
+    this.actor && (this.actor.getFlag(AECONSTS.MN, 'isLocal') || game.settings.get(AECONSTS.MN, 'storeonactor'))
+      ? this.actor.setFlag(AECONSTS.MN, 'companions', data)
+      : game.user.setFlag(AECONSTS.MN, 'companions', data);
     this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM, isRandom);
     this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED, isOrdered);
   }
@@ -249,16 +244,19 @@ export class CompanionManager extends FormApplication {
     const actor = game.actors?.get(companionData.id);
     const animation = companionData.animation;
     if (!actor) {
-        warn(`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`, true);
-        return;
+      warn(
+        `The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
+        true,
+      );
+      return;
     }
     const duplicates = companionData.number;
     const tokenData = await actor.getTokenData();
     // eslint-disable-next-line no-undef
     const posData = await warpgate.crosshairs.show({
-      size: Math.max(tokenData.width,tokenData.height)*tokenData.scale,
-      icon: "modules/automated-evocations-variant/assets/black-hole-bolas.webp",
-      label: "",
+      size: Math.max(tokenData.width, tokenData.height) * tokenData.scale,
+      icon: 'modules/automated-evocations-variant/assets/black-hole-bolas.webp',
+      label: '',
     });
     if (posData.cancelled) {
       this.maximize();
@@ -270,35 +268,36 @@ export class CompanionManager extends FormApplication {
     // Get the target actor
     const sourceActor = actor;
     if (!sourceActor) {
-        return;
+      return;
     }
 
-    if(typeof AECONSTS.animationFunctions[animation].fn == "string"){
-      game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData,tokenData);
-    }else{
+    if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
+      game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+    } else {
       AECONSTS.animationFunctions[animation].fn(posData, tokenData);
     }
 
     await this.wait(AECONSTS.animationFunctions[animation].time);
     //get custom data macro
-    const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({summon: actor,spellLevel: this.spellLevel || 0, duplicates: duplicates, assignedActor: this.caster || game.user.character || _token.actor});
+    const customTokenData = await game.macros
+      .getName(`AE_Companion_Macro(${actor.data.name})`)
+      ?.execute({
+        summon: actor,
+        spellLevel: this.spellLevel || 0,
+        duplicates: duplicates,
+        assignedActor: this.caster || game.user.character || _token.actor,
+      });
     // eslint-disable-next-line no-undef
-    warpgate.spawnAt(
-      { x: posData.x, y: posData.y },
-      tokenData,
-      customTokenData || {},
-      {},
-      { duplicates }
-    );
+    warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
-    if(this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)){
+    if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actor.name)) {
       const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
       arr.push(actor.name);
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
-    }else{
+    } else {
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actor.name]);
     }
-    console.log("Automated Evocations Summoning:", {
+    console.log('Automated Evocations Summoning:', {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
       duplicates: duplicates,
@@ -306,27 +305,27 @@ export class CompanionManager extends FormApplication {
       summon: actor,
       tokenData: tokenData,
       posData: posData,
-    })
-    if(game.settings.get(AECONSTS.MN, "autoclose")) this.close();
+    });
+    if (game.settings.get(AECONSTS.MN, 'autoclose')) this.close();
     else this.maximize();
   }
 }
 
 export class SimpleCompanionManager extends CompanionManager {
-  constructor(summonData,spellLevel,actor) {
+  constructor(summonData, spellLevel, actor) {
     super();
     this.caster = actor;
     this.summons = summonData;
-    this.spellLevel = spellLevel
+    this.spellLevel = spellLevel;
   }
 
   async activateListeners(html) {
     for (let summon of this.summons) {
-      this.element.find("#companion-list").append(this.generateLi(summon));
+      this.element.find('#companion-list').append(this.generateLi(summon));
     }
 
-    html.on("click", "#summon-companion", this._onSummonCompanion.bind(this));
-    html.on("click", ".actor-name", this._onOpenSheet.bind(this));
+    html.on('click', '#summon-companion', this._onSummonCompanion.bind(this));
+    html.on('click', '.actor-name', this._onOpenSheet.bind(this));
   }
 
   _onDrop(event) {}
