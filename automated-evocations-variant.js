@@ -98,8 +98,8 @@ Hooks.once('libChangelogsReady', function () {
   libChangelogs.register(
     CONSTANTS.MODULE_NAME,
     `
-    - Synchornize with ripper main branch and add de.json language file
-  `,
+    - Synchronize with ripper main branch
+    `,
     'minor',
   );
 });

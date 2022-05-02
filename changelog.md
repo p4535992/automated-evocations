@@ -1,6 +1,10 @@
+### 1.5.7
+
+- Synchronize with ripper main branch
+
 ### 1.5.6
 
-- Synchornize with ripper main branch and add de.json language file
+- Synchronize with ripper main branch and add de.json language file
 
 ### 1.5.5
 
