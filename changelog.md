@@ -1,3 +1,7 @@
+### 1.5.8
+
+- Synchronize with ripper main branch
+
 ### 1.5.7
 
 - Synchronize with ripper main branch
