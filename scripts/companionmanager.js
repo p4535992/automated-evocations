@@ -25,22 +25,23 @@ export class CompanionManager extends FormApplication {
     return {
       dnd5e: {
         getSummonInfo(args, spellLevel) {
-          const spellDC = (args[0].assignedActor?.data.data.attributes.spelldc) || 0;
+          const spellDC = args[0].assignedActor?.data.data.attributes.spelldc || 0;
           return {
             level: (args[0].spellLevel || spellLevel) - spellLevel,
             maxHP: args[0].assignedActor?.data.data.attributes.hp.max || 1,
-            modifier: args[0].assignedActor?.data.data.abilities[args[0].assignedActor?.data.data.attributes.spellcasting]?.mod,
+            modifier:
+              args[0].assignedActor?.data.data.abilities[args[0].assignedActor?.data.data.attributes.spellcasting]?.mod,
             dc: spellDC,
             attack: {
               ms: spellDC - 8 + args[0].assignedActor?.data.data.bonuses.msak.attack,
               rs: spellDC - 8 + args[0].assignedActor?.data.data.bonuses.rsak.attack,
               mw: args[0].assignedActor?.data.data.bonuses.mwak.attack,
               rw: args[0].assignedActor?.data.data.bonuses.rwak.attack,
-            }
-          }
-        }
-      }
-    }
+            },
+          };
+        },
+      },
+    };
   }
 
   getData() {
@@ -126,14 +127,12 @@ export class CompanionManager extends FormApplication {
 
     await this.wait(AECONSTS.animationFunctions[animation].time);
     //get custom data macro
-    const customTokenData = await game.macros
-      .getName(`AE_Companion_Macro(${actor.data.name})`)
-      ?.execute({
-        summon: actor,
-        spellLevel: this.spellLevel || 0,
-        duplicates: duplicates,
-        assignedActor: this.caster || game.user.character || _token.actor,
-      });
+    const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({
+      summon: actor,
+      spellLevel: this.spellLevel || 0,
+      duplicates: duplicates,
+      assignedActor: this.caster || game.user.character || _token.actor,
+    });
     // eslint-disable-next-line no-undef
     warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
@@ -301,14 +300,12 @@ export class CompanionManager extends FormApplication {
 
     await this.wait(AECONSTS.animationFunctions[animation].time);
     //get custom data macro
-    const customTokenData = await game.macros
-      .getName(`AE_Companion_Macro(${actor.data.name})`)
-      ?.execute({
-        summon: actor,
-        spellLevel: this.spellLevel || 0,
-        duplicates: duplicates,
-        assignedActor: this.caster || game.user.character || _token.actor,
-      });
+    const customTokenData = await game.macros.getName(`AE_Companion_Macro(${actor.data.name})`)?.execute({
+      summon: actor,
+      spellLevel: this.spellLevel || 0,
+      duplicates: duplicates,
+      assignedActor: this.caster || game.user.character || _token.actor,
+    });
     // eslint-disable-next-line no-undef
     warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actor.name);
