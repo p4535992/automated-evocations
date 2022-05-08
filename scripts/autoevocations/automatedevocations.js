@@ -6,13 +6,15 @@ Hooks.on('createChatMessage', async (chatMessage) => {
   if (chatMessage.data.user !== game.user.id || !game.settings.get(AECONSTS.MN, "enableautomations")) return;
 
   const messageContent = $(chatMessage.data.content);
+  if(!messageContent.length)return;
   const actorId = messageContent[0].dataset.actorId;
   const itemId = messageContent[0].dataset.itemId;
   const spellLevel = parseInt(messageContent[0].dataset.spellLevel);
   const tokenId = messageContent[0].dataset.tokenId;
   const token = tokenId ? await fromUuid(tokenId) : null;
   const actor = token?.actor ?? game.actors.get(actorId);
-  const spellName = actor.items.get(itemId)?.name;
+  if(!actor) return;
+  const spellName = actor?.items?.get(itemId)?.name;
 
   let system = game.automatedevocations[game.system.id];
   if (!system) return;
