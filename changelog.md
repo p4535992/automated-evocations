@@ -1,3 +1,7 @@
+### 1.5.10
+
+- Testing module management +
+
 ### 1.5.9
 
 - Updated module.json, abandoned "Changelog and Conflicts" in favor of "MM+"
