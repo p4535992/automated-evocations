@@ -1,3 +1,7 @@
+### 1.5.9
+
+- Updated module.json, abandoned "Changelog and Conflicts" in favor of "MM+"
+
 ### 1.5.8
 
 - Synchronize with ripper main branch
@@ -17,7 +21,7 @@
 - Set module settings 'hudEnable' default to true
 - Add hud control
 - Add some new setting
-- Add a fast polymorphing mechanism for make the comabt more fluid
+- Add a fast polymorphing mechanism for make the combat more fluid
 - Add socketLib, API, new feature
 
 ### 1.5.4

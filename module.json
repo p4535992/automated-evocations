@@ -2,13 +2,30 @@
   "name": "automated-evocations-variant",
   "title": "Automated Evocations - Companion Manager Variant",
   "description": "A user interface to manage companions with summoning animations and automated summoning for spells",
-  "version": "1.5.8",
-  "author": "theripper93",
+  "version": "1.5.9",
+  "author": "theripper93,p4535992",
   "authors": [
     {
       "name": "theripper93",
-      "email": "tsplab@gmail.com",
-      "url": "https://www.patreon.com/theripper93"
+      "url": "https://github.com/p4535992/automated-evocations-variant",
+      "discord": "theripper93#3276",
+      "twitter": "",
+      "patreon": "theripper93",
+      "github": "theripper93",
+      "ko-fi": "",
+      "reddit": "u/theripper93",
+      "email": "tsplab@gmail.com"
+    },
+    {
+      "name": "p4535992",
+      "url": "https://github.com/p4535992/automated-evocations-variant",
+      "discord": "",
+      "twitter": "",
+      "patreon": "p4535992",
+      "github": "p4535992",
+      "ko-fi": "",
+      "reddit": "u/4535992v2",
+      "email": ""
     }
   ],
   "type": "module",
@@ -86,9 +103,9 @@
   "manifestPlusVersion": "1.2.0",
   "url": "https://github.com/p4535992/automated-evocations-variant",
   "manifest": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.json",
-  "download": "https://github.com/p4535992/automated-evocations-variant/releases/download/v1.5.8/module.zip",
-  "readme": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.8/README.md",
-  "changelog": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.8/changelog.md",
+  "download": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.zip",
+  "readme": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.9/README.md",
+  "changelog": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.9/changelog.md",
   "bugs": "https://github.com/p4535992/automated-evocations-variant/issues",
   "allowBugReporter": true,
   "dependencies": [
@@ -98,5 +115,13 @@
     {
       "name": "warpgate"
     }
-  ]
+  ],
+  "flags": {
+    "conflicts": [
+      {
+        "name": "automated-evocations",
+        "description": "The module 'Automated Evocations (Variant Fork)' can be used together with 'Automated Evocations', it is only not recommended because they are two modules that do the exact same things, for more details see README"
+      }
+    ]
+  }
 }

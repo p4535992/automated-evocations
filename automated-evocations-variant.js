@@ -92,14 +92,3 @@ export function getSocket() {
   const data = game.modules.get(CONSTANTS.MODULE_NAME);
   return data.socket;
 }
-
-Hooks.once('libChangelogsReady', function () {
-  // eslint-disable-next-line no-undef
-  libChangelogs.register(
-    CONSTANTS.MODULE_NAME,
-    `
-    - Synchronize with ripper main branch
-    `,
-    'minor',
-  );
-});
