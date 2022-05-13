@@ -7,7 +7,7 @@
   "authors": [
     {
       "name": "theripper93",
-      "url": "https://github.com/p4535992/automated-evocations-variant",
+      "url": "https://github.com/theripper93",
       "discord": "theripper93#3276",
       "twitter": "",
       "patreon": "theripper93",
@@ -18,7 +18,7 @@
     },
     {
       "name": "p4535992",
-      "url": "https://github.com/p4535992/automated-evocations-variant",
+      "url": "https://github.com/p4535992",
       "discord": "",
       "twitter": "",
       "patreon": "p4535992",
@@ -117,6 +117,8 @@
     }
   ],
   "flags": {
+    "manifestPlusVersion": "1.2.0",
+    "allowBugReporter": true,
     "conflicts": [
       {
         "name": "automated-evocations",
