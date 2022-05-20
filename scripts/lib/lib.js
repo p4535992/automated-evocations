@@ -130,7 +130,7 @@ function addToEvocationsVariantButton(html, sourceToken) {
     return;
   }
 
-  const button = buildButton(html, `Transform ${sourceToken.name}`);
+  const button = buildButton(html, `Make summon with ${sourceToken.name}`);
 
   const actor = sourceToken.document.actor;
   if (!actor) {

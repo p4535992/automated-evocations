@@ -124,6 +124,14 @@ export const initHooks = () => {
       Bottom: 'Bottom',
     },
   });
+  game.settings.register(CONSTANTS.MODULE_NAME, 'hudColorButton', {
+    name: game.i18n.localize(`AE.settings.hudColorButton.title`),
+    hint: game.i18n.localize(`AE.settings.hudColorButton.hint`),
+    scope: 'client',
+    type: String,
+    default: '#7fffd4',
+    config: true,
+  });
   // });
 };
 
@@ -176,13 +184,38 @@ export const readyHooks = async () => {
     });
   });
 
-  Hooks.on('renderTokenHUD', (app, html, data) => {
-    // const restrictedOnlyGM = game.settings.get(CONSTANTS.MODULE_NAME, 'restrictOnlyGM');
-    // if (restrictedOnlyGM && !game.user?.isGM) {
-    //   return;
-    // }
-    if (game.settings.get(CONSTANTS.MODULE_NAME, 'hudEnable')) {
-      renderAutomatedEvocationsVariantHud(app, html, data);
-    }
+  Hooks.on('renderActorSheet', async function (actorSheet, htmlElement, actorObject) {
+      const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, 'hudColorButton') ?? '#7fffd4';
+      if (htmlElement.find('.open-cm').length > 0) {
+          htmlElement.find('.open-cm .fa-cat')[0].style.color = `${settingHudColorButton}`;
+          htmlElement.find('.open-cm .fa-cat')[0].style.textShadow = `0 0 8px ${settingHudColorButton}`;
+      }
   });
+
+  Hooks.on('renderTokenHUD', (app, html, data) => {
+      // const restrictedOnlyGM = game.settings.get(CONSTANTS.MODULE_NAME, 'restrictOnlyGM');
+      // if (restrictedOnlyGM && !game.user?.isGM) {
+      //   return;
+      // }
+      if (game.settings.get(CONSTANTS.MODULE_NAME, 'hudEnable')) {
+        renderAutomatedEvocationsVariantHud(app, html, data);
+        const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, 'hudColorButton') ?? '#7fffd4';
+        if (html.find('.control-icon.automated-evocations-variant .fa-cat').length > 0) {
+            html.find('.control-icon.automated-evocations-variant .fa-cat')[0].style.color = `${settingHudColorButton}`;
+            html.find('.control-icon.automated-evocations-variant .fa-cat')[0].style.textShadow = `0 0 8px ${settingHudColorButton}`;
+        }
+      }
+  });
+
+  Hooks.on('renderSettingsConfig', (app, html, data) => {
+      // Add colour pickers to the Configure Game Settings: Module Settings menu
+      const nameHudColorButton = `${CONSTANTS.MODULE_NAME}.hudColorButton`;
+      const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, 'hudColorButton') ?? '#7fffd4';
+      $('<input>')
+          .attr('type', 'color')
+          .attr('data-edit', nameHudColorButton)
+          .val(settingHudColorButton)
+          .insertAfter($(`input[name="${nameHudColorButton}"]`, html).addClass('color'));
+  });
+
 };
