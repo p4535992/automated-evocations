@@ -269,19 +269,21 @@ the actions on the hud button are of two types left click and right click.
 
 # API
 
-###  async game.modules.get('automated-evocations-variant').invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
 
-Invoke the polymorphercompanion manager feature from macro
+Invoke the polymorpher companion manager feature from macro
 
 **Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
 
 | Param | Type | Description | Default |
 | --- | --- | --- | --- |
 | sourceTokenIdOrName | <code>string</code> | The id or the name of the token (not the actor) | <code>undefined</code> |
-| removeEvocationsVariant | <code>boolean</code> | This action should delete the evocated toen if the current token is present on the scene | <code>false</code> |
+| removeEvocationsVariant | <code>boolean</code> | This action should delete the summoned token if the current token is present on the scene | <code>false</code> |
 | ordered | <code>boolean</code> | The 'ordered' feature is enabled for this summon companion | <code>false</code> |
 | random | <code>boolean</code> | The 'random' feature is enabled for this summon companion | <code>false</code> |
 | animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the summon companion action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
+
+**NOTE:** If both 'random' and 'ordered' are false the standard dialog will be rendered.
 
 **Examples**:
 
