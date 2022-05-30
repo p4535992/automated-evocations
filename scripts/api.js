@@ -28,15 +28,15 @@ const API = {
     animationExternal = undefined,
   ) {
     const sourceToken = canvas.tokens?.placeables.find((t) => {
-      return t.id === sourceTokenIdOrName;
+      return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
     });
     if (!sourceToken) {
-      warn(`No token founded on canvas with id '${sourceTokenIdOrName}'`, true);
+      warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
       return;
     }
     const actor = sourceToken.document.actor;
     if (!actor) {
-      warn(`No actor founded on canvas with token '${sourceTokenIdOrName}'`, true);
+      warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
       return;
     }
     const listEvocationsVariants =
@@ -141,6 +141,46 @@ const API = {
       } else {
         new CompanionManager(actor).render(true);
       }
+    }
+  },
+
+  async cleanUpTokenSelected() {
+    const tokens = canvas.tokens?.controlled;
+    if (!tokens || tokens.length === 0) {
+        warn(`No tokens are selected`, true);
+        return;
+    }
+    for (const token of tokens) {
+        if (token && token.document) {
+            if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+                const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+                for (const key in p) {
+                    const senseOrConditionIdKey = key;
+                    const senseOrConditionValue = p[key];
+                    await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+                }
+                info(`Cleaned up token '${token.name}'`, true);
+            }
+        }
+        else {
+            warn(`No token found on the canvas for id '${token.id}'`, true);
+        }
+    }
+    for (const token of tokens) {
+        if (token && token.actor) {
+            if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
+                const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+                for (const key in p) {
+                    const senseOrConditionIdKey = key;
+                    const senseOrConditionValue = p[key];
+                    await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+                }
+                info(`Cleaned up actor '${token.name}'`, true);
+            }
+        }
+        else {
+            warn(`No token found on the canvas for id '${token.id}'`, true);
+        }
     }
   },
 };

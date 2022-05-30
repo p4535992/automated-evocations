@@ -1,3 +1,7 @@
+### 1.5.12
+
+- Update API
+
 ### 1.5.11
 
 - Add module setting for apply a custom color to the hud button

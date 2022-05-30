@@ -2,7 +2,7 @@
   "name": "automated-evocations-variant",
   "title": "Automated Evocations - Companion Manager Variant",
   "description": "A user interface to manage companions with summoning animations and automated summoning for spells",
-  "version": "1.5.11",
+  "version": "1.5.12",
   "author": "theripper93,p4535992",
   "authors": [
     {
@@ -104,8 +104,8 @@
   "url": "https://github.com/p4535992/automated-evocations-variant",
   "manifest": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.json",
   "download": "https://github.com/p4535992/automated-evocations-variant/releases/latest/download/module.zip",
-  "readme": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.11/README.md",
-  "changelog": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.11/changelog.md",
+  "readme": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.12/README.md",
+  "changelog": "https://github.com/p4535992/automated-evocations-variant/blob/v1.5.12/changelog.md",
   "bugs": "https://github.com/p4535992/automated-evocations-variant/issues",
   "allowBugReporter": true,
   "dependencies": [

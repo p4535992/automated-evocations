@@ -325,6 +325,14 @@ let sequence = new Sequence()
 game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
 ```
 
+### Macro to clean up flags on token and actor
+
+####  async game.modules.get('automated-polymorpher').api.cleanUpTokenSelected() ⇒ <code>Promise.&lt;void&gt;</code>
+
+**Examples**:
+
+`game.modules.get('automated-evocations-variant').api.cleanUpTokenSelected()`
+
 ## Integration with socketLib
 
 
