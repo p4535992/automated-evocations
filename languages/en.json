@@ -12,7 +12,7 @@
       "ordered": "Ordered",
       "selectcompendium": "Select a copendium",
       "deleteall": "Delete All",
-      "storeonactor": "Store Evocations on Actor",
+      "storeonactor": "Store on Actor",
       "none": "None",
       "nonenodelete": "None but not delete the loaded actors"
     },

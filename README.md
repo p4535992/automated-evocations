@@ -39,9 +39,8 @@ If you want to support more modules of this kind, I invite you to go and support
 - NEW FEATURE: Add a fast summoning mechanism for make the comabt more fluid
 - NEW FEATURE: Add socketLib, API
 - NEW FEATURE: Integration for load actors directly from compendium
-- NEW FEATURE: Add module settings for enable Warpgate mutate function like a preference, ke sense only on systems with their own polymorph mcheanism like Dnd5e
 - NEW FEATURE: Integration for store actors directly on actor instead token on the dialog html
-- NEW FEATURE: Add api for call polymoprhing with actor reference instead token reference
+- NEW FEATURE: Add api for call summon with actor reference instead token reference
 
 as always, I invite you to support theripper93 through his patreon.
 

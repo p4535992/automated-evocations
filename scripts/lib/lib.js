@@ -77,7 +77,7 @@ export function cleanUpString(stringToCleanUp) {
     return stringToCleanUp;
   }
 }
-export function isStringEquals(stringToCheck1, stringToCheck2, startsWith = true) {
+export function isStringEquals(stringToCheck1, stringToCheck2, startsWith = false) {
   if (stringToCheck1 && stringToCheck2) {
     if (startsWith) {
       return cleanUpString(stringToCheck1).startsWith(cleanUpString(stringToCheck2));
@@ -112,11 +112,11 @@ export async function renderAutomatedEvocationsVariantHud(app, html, hudToken) {
   }
 
   const listEvocationsVariants =
-    (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
-    game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR)
-      ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
-      : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)) || [];
-  //actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+    // (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
+    // game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR)
+    //   ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+    //   : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)) || [];
+    actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
   if (listEvocationsVariants.length > 0) {
     //addToRevertEvocationsVariantButton(html, sourceToken);
     addToEvocationsVariantButton(html, sourceToken);

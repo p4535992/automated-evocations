@@ -64,11 +64,11 @@ const API = {
     //   return;
     // }
     const listEvocationsVariants =
-      (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
-      game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR)
-        ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
-        : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)) || [];
-    //actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+      // (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
+      // game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR)
+      //   ? actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)
+      //   : game.user?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS)) || [];
+      actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
     let isOrdered = ordered;
     let isRandom = random;
     if (!ordered && actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED)) {
@@ -101,11 +101,11 @@ const API = {
         for (const posData of posDatas) {
           if (posData && !tokensToDelete.includes(posData.id)) {
             const companionData = listEvocationsVariants.find((a) => {
-              return posData.name.toLowerCase().includes(a.name.toLowerCase());
+              return posData.name?.toLowerCase().includes(a.name?.toLowerCase());
             });
             const animation = companionData?.animation;
             const companionDataIndex = listEvocationsVariants.findIndex((a) => {
-              return posData.name.toLowerCase().includes(a.name.toLowerCase());
+              return posData.name?.toLowerCase().includes(a.name?.toLowerCase());
             });
             if (animationExternal && animationExternal.sequence) {
               //@ts-ignore
@@ -141,7 +141,7 @@ const API = {
           new CompanionManager(actor).fastSummonEvocationsVariant(listEvocationsVariants[0], animationExternal);
         } else {
           const companionDataIndex = listEvocationsVariants.findIndex((a) => {
-            return lastElement.toLowerCase().includes(a.name.toLowerCase());
+            return lastElement?.toLowerCase().includes(a.name?.toLowerCase());
           });
           let randomIndex = 0;
           while (randomIndex === companionDataIndex) {
@@ -154,7 +154,7 @@ const API = {
         }
       } else if (isOrdered) {
         const companionDataIndex = listEvocationsVariants.findIndex((a) => {
-          return lastElement.toLowerCase().includes(a.name.toLowerCase());
+          return lastElement?.toLowerCase().includes(a.name?.toLowerCase());
         });
         const nextIndex = companionDataIndex + 1;
         if (listEvocationsVariants?.length - 1 < nextIndex) {

@@ -1,4 +1,4 @@
-import CONSTANTS from "./constants";
+import CONSTANTS from "./constants.js";
 
 const AECONSTS = {
   MN: CONSTANTS.MODULE_NAME,

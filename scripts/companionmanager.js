@@ -1,6 +1,6 @@
 import { EvocationsVariantData, EvocationsVariantFlags } from './automatedEvocationsVariantModels.js';
 import CONSTANTS from './constants.js';
-import { log, warn } from './lib/lib.js';
+import { log, retrieveActorFromData, warn } from './lib/lib.js';
 import AECONSTS from './main.js';
 export class CompanionManager extends FormApplication {
   constructor(actor) {
@@ -58,12 +58,12 @@ export class CompanionManager extends FormApplication {
     const compendiumsData = [];
     const compDataNone = {
         id: '',
-        name: i18n(`${CONSTANTS.MODULE_NAME}.dialogs.none`),
+        name: game.i18n.localize(`AE.dialogs.none`),
         selected: currentCompendium ? false : true,
     };
     const compDataNoneNoDelete = {
         id: 'nonenodelete',
-        name: i18n(`${CONSTANTS.MODULE_NAME}.dialogs.nonenodelete`),
+        name: game.i18n.localize(`AE.dialogs.nonenodelete`),
         selected: currentCompendium ? false : true,
     };
     compendiumsData.push(compDataNone);
@@ -133,7 +133,7 @@ export class CompanionManager extends FormApplication {
   _onSearch(event) {
     const search = $(event.currentTarget).val();
     this.element.find('.actor-name').each(function () {
-      if ($(this).text().toLowerCase().includes(search.toLowerCase())) {
+      if ($(this).text()?.toLowerCase().includes(search?.toLowerCase())) {
         $(this).parent().slideDown(200);
       } else {
         $(this).parent().slideUp(200);
@@ -269,9 +269,10 @@ export class CompanionManager extends FormApplication {
 
   async loadCompanions() {
     let data =
-      this.actor && (this.actor.getFlag(AECONSTS.MN, 'isLocal') || game.settings.get(AECONSTS.MN, 'storeonactor'))
-        ? this.actor.getFlag(AECONSTS.MN, 'companions') || []
-        : game.user.getFlag(AECONSTS.MN, 'companions');
+      // this.actor && (this.actor.getFlag(AECONSTS.MN, 'isLocal') || game.settings.get(AECONSTS.MN, 'storeonactor'))
+      //   ? this.actor.getFlag(AECONSTS.MN, 'companions') || []
+      //   : game.user.getFlag(AECONSTS.MN, 'companions');
+      this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
     const namesAlreadyImportedFromCompendium = [];
     const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? '';
     if (currentCompendium && currentCompendium != 'none' && currentCompendium != 'nonenodelete') {
