@@ -17,7 +17,9 @@ export var EvocationsVariantFlags;
   EvocationsVariantFlags['COMPANIONS'] = 'companions';
   EvocationsVariantFlags['RANDOM'] = 'random';
   EvocationsVariantFlags['ORDERED'] = 'ordered';
+  EvocationsVariantFlags['COMPENDIUM'] = 'compendium';
   EvocationsVariantFlags['LAST_ELEMENT'] = 'lastelement';
   EvocationsVariantFlags['EVOKEDS'] = 'evokeds';
 })(EvocationsVariantFlags || (EvocationsVariantFlags = {}));
 export class EvocationsVariantData {}
+export class EvocationsVariantCompendiumData {}

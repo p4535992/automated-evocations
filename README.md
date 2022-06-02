@@ -24,21 +24,24 @@ If you want to support more modules of this kind, I invite you to go and support
 
 ## With theripper93's permission i implemented a variant (or custom patch) of his project, these are the differences:
 
-- Add a new module setting for show the header sheet button only to GM
-- Replace icon 'fas fa-users' with 'fas fa-cat' on the actor header sheet button, because the 'fas fa-users' icon is used  from other modules and can create confusion.
-- Add a little color (i choose aquamarine) to the header sheet button so is more intuitive ?
-- Add module setting for remove the label from the sheet header button very useful for small monitor and mobile and for when there are several modules that fill the header sheet.
-- Add automatic github workflow for setup the releases with a gulp file builder (i think is best to have something like this ?)
-- Little css modification
-- Apply the ecmascript instead the classic script for use export import mechanism
-- Added parseInt to the `duplicates` property
-- Add `name` to the data ot the element list
-- Implemented a dismiss companion on right click of the token hud button, but is work only for the same name
-- Add check for show the hud button only if at least a summoning actor is present on the current actor
-- Add hud control
-- Add some new setting
-- Add a fast summoning mechanism for make the comabt more fluid
-- Add socketLib, API
+- NEW FEATURE: Add a new module setting for show the header sheet button only to GM
+- NEW FEATURE: Replace icon 'fas fa-users' with 'fas fa-cat' on the actor header sheet button, because the 'fas fa-users' icon is used  from other modules and can create confusion.
+- NEW FEATURE: Add a little color (i choose aquamarine) to the header sheet button so is more intuitive ?
+- NEW FEATURE: Add module setting for remove the label from the sheet header button very useful for small monitor and mobile and for when there are several modules that fill the header sheet.
+- NEW FEATURE: Add automatic github workflow for setup the releases with a gulp file builder (i think is best to have something like this ?)
+- NEW FEATURE: Little css modification
+- NEW FEATURE: Apply the ecmascript instead the classic script for use export import mechanism
+- NEW FEATURE: Added parseInt to the `duplicates` property
+- NEW FEATURE: Add `name` to the data ot the element list
+- NEW FEATURE: Implemented a dismiss companion on right click of the token hud button, but is work only for the same name
+- NEW FEATURE: Add check for show the hud button only if at least a summoning actor is present on the current actor
+- NEW FEATURE: Add hud control
+- NEW FEATURE: Add a fast summoning mechanism for make the comabt more fluid
+- NEW FEATURE: Add socketLib, API
+- NEW FEATURE: Integration for load actors directly from compendium
+- NEW FEATURE: Add module settings for enable Warpgate mutate function like a preference, ke sense only on systems with their own polymorph mcheanism like Dnd5e
+- NEW FEATURE: Integration for store actors directly on actor instead token on the dialog html
+- NEW FEATURE: Add api for call polymoprhing with actor reference instead token reference
 
 as always, I invite you to support theripper93 through his patreon.
 
@@ -271,7 +274,7 @@ the actions on the hud button are of two types left click and right click.
 
 ###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
 
-Invoke the polymorpher companion manager feature from macro
+Invoke the summoned companion manager feature from macro
 
 **Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
 
@@ -325,9 +328,65 @@ let sequence = new Sequence()
 game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
 ```
 
+###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor(sourceActorIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+
+Invoke the summoned companion manager feature from macro
+
+**Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
+
+| Param | Type | Description | Default |
+| --- | --- | --- | --- |
+| sourceActorIdOrName | <code>string</code> | The id or the name of the actor (not the token) | <code>undefined</code> |
+| removeEvocationsVariant | <code>boolean</code> | This action should delete the summoned token if the current token is present on the scene | <code>false</code> |
+| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this summon companion | <code>false</code> |
+| random | <code>boolean</code> | The 'random' feature is enabled for this summon companion | <code>false</code> |
+| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the summon companion action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
+
+**NOTE:** If both 'random' and 'ordered' are false the standard dialog will be rendered.
+
+**Examples**:
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain')`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', true)`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false)`
+
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false)`
+
+```
+let sequence = new Sequence()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
+        .atLocation(tokenD)
+        .scale(0.35)
+    .wait(1000)
+        .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
+        .atLocation(tokenD)
+        .reachTowards({
+            x: tokenD.center.x + canvas.grid.size*5,
+            y: tokenD.center.y
+        })
+    .wait(100)
+    .animation()
+        .on(tokenD)
+        .teleportTo({
+            x: tokenD.x + canvas.grid.size*5,
+            y: tokenD.y
+        })
+        .waitUntilFinished()
+    .effect()
+        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
+        .atLocation(tokenD)
+        .scale(0.5)
+
+game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
+```
+
 ### Macro to clean up flags on token and actor
 
-####  async game.modules.get('automated-polymorpher').api.cleanUpTokenSelected() ⇒ <code>Promise.&lt;void&gt;</code>
+####  async game.modules.get('automated-evocations-variant').api.cleanUpTokenSelected() ⇒ <code>Promise.&lt;void&gt;</code>
 
 **Examples**:
 

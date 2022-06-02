@@ -9,7 +9,12 @@
         }
       },
       "random": "Random",
-      "ordered": "Order"
+      "ordered": "Ordered",
+      "selectcompendium": "Select a copendium",
+      "deleteall": "Delete All",
+      "storeonactor": "Store Evocations on Actor",
+      "none": "None",
+      "nonenodelete": "None but not delete the loaded actors"
     },
     "actorSheetBtn": "Companions",
     "animations": {
@@ -36,7 +41,7 @@
     "settings": {
       "storeonactor": {
         "title": "Store Companions on Actor",
-        "hint": "Store the companions on the actor instead of the user by default."
+        "hint": "Store the companions on the actor instead of the token by default."
       },
       "enableautomations": {
         "title": "Enable Automations",

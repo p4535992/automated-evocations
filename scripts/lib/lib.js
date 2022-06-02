@@ -105,9 +105,9 @@ export async function renderAutomatedEvocationsVariantHud(app, html, hudToken) {
   if (!sourceToken || !sourceToken.isOwner) {
     return;
   }
-  const actor = sourceToken.document.actor;
+  const actor = retrieveActorFromToken(sourceToken);
   if (!actor) {
-    warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
+    // warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
     return;
   }
 
@@ -132,22 +132,29 @@ function addToEvocationsVariantButton(html, sourceToken) {
 
   const button = buildButton(html, `Make summon with ${sourceToken.name}`);
 
-  const actor = sourceToken.document.actor;
+  const actor = retrieveActorFromToken(sourceToken);
   if (!actor) {
-    warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
+    // warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
     return;
   }
   const random = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
   const ordered = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
+  const storeonactor = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR) ?? false;
   button.find('i').on('click', async (ev) => {
     for (const targetToken of canvas.tokens?.controlled) {
-      API.invokeEvocationsVariantManager(targetToken.id, false, ordered, random);
+      const targetActor = retrieveActorFromToken(targetToken);
+      if(targetActor){
+        API._invokeEvocationsVariantManagerInner(targetActor, targetToken, false, ordered, random);
+      }
     }
   });
   button.find('i').on('contextmenu', async (ev) => {
     for (const targetToken of canvas.tokens?.controlled) {
       // Do somethign with right click
-      API.invokeEvocationsVariantManager(targetToken.id, true, ordered, random);
+      const targetActor = retrieveActorFromToken(targetToken);
+      if(targetActor){
+        API._invokeEvocationsVariantManagerInner(targetActor, targetToken, true, ordered, random);
+      }
     }
   });
 }
@@ -158,7 +165,7 @@ function addToEvocationsVariantButton(html, sourceToken) {
 //   let button = buildButton(html, `Revert transform ${sourceToken.name}`);
 //   button = addSlash(button);
 //   button.find('i').on('click', async (ev) => {
-//     API.invokeEvocationsVariantManager(sourceToken,true);
+//     API._invokeEvocationsVariantManagerInner(actor,sourceToken,true);
 //   });
 //   button.find('i').on('contextmenu', async (ev) => {
 //     // Do something with right click
@@ -225,4 +232,47 @@ function addSlash(button) {
 function removeSlash(button) {
   const slash = button.find('i')[1];
   slash.remove();
+}
+export function retrieveActorFromToken(sourceToken) {
+  if (!sourceToken.actor) {
+      return undefined;
+  }
+  const storeOnActorFlag = sourceToken.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
+  if (!storeOnActorFlag) {
+      return sourceToken.actor;
+  }
+  let actor = undefined;
+  if (sourceToken.data.actorLink) {
+      actor = game.actors?.get(sourceToken.data.actorId);
+  }
+  // DO NOT NEED THIS
+  // if(!actor){
+  //   actor = <Actor>game.actors?.get(<string>sourceToken.actor?.id);
+  // }
+  if (!actor) {
+      actor = sourceToken.actor;
+  }
+  return actor;
+}
+export async function retrieveActorFromData(aId, aName, currentCompendium) {
+  let actorToTransformLi = null;
+  if (currentCompendium && currentCompendium != 'none' && currentCompendium != 'nonenodelete') {
+      const pack = game.packs.get(currentCompendium);
+      if (pack) {
+          await pack.getIndex();
+          for (const entityComp of pack.index) {
+              const actorComp = await pack.getDocument(entityComp._id);
+              if (actorComp.id === aId || actorComp.name === aName) {
+                  actorToTransformLi = actorComp;
+                  break;
+              }
+          }
+      }
+  }
+  if (!actorToTransformLi) {
+      actorToTransformLi = game.actors?.contents.find((a) => {
+          return a.id === aId || a.name === aName;
+      });
+  }
+  return actorToTransformLi;
 }

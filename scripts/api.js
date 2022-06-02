@@ -6,39 +6,63 @@ import { CompanionManager } from './companionmanager.js';
 import AECONSTS from './main.js';
 
 const API = {
-  async invokeEvocationsVariantManagerArr(...inAttributes) {
+  async invokeEvocationsVariantArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-      throw error('invokeEvocationsVariantManager | inAttributes must be of type array');
+        throw error('invokeEvocationsVariant | inAttributes must be of type array');
     }
-    const [sourceToken, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-    const result = await this.invokeEvocationsVariantManager(
-      sourceToken,
-      removeEvocationsVariant,
-      ordered,
-      random,
-      animationExternal,
-    );
+    const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
+    const result = await this.invokeEvocationsVariant(sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
     return result;
   },
+  async invokeEvocationsVariantFromActorArr(...inAttributes) {
+    if (!Array.isArray(inAttributes)) {
+        throw error('invokeEvocationsVariantFromActor | inAttributes must be of type array');
+    }
+    const [sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
+    const result = await this.invokeEvocationsVariantFromActor(sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
+    return result;
+  },
+  async invokeEvocationsVariantFromActor(sourceActorIdOrName, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
+    for (const tokenOnCanvas of canvas.tokens?.placeables) {
+        const actor = retrieveActorFromToken(tokenOnCanvas);
+        if (actor && (actor.id === sourceActorIdOrName || actor.name === sourceActorIdOrName)) {
+            this._invokeEvocationsVariantInner(actor, tokenOnCanvas, removeEvocationsVariant, ordered, random, animationExternal);
+        }
+    }
+  },
   async invokeEvocationsVariantManager(
-    sourceTokenIdOrName,
-    removeEvocationsVariant = false,
-    ordered = false,
-    random = false,
-    animationExternal = undefined,
-  ) {
+    sourceTokenIdOrName, 
+    removeEvocationsVariant = false, 
+    ordered = false, 
+    random = false, 
+    animationExternal = undefined) {
     const sourceToken = canvas.tokens?.placeables.find((t) => {
-      return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
+        return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
     });
     if (!sourceToken) {
-      warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
-      return;
+        warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
+        return;
     }
-    const actor = sourceToken.document.actor;
+    const actor = retrieveActorFromToken(sourceToken);
     if (!actor) {
-      warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
-      return;
+        warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
+        return;
     }
+    this._invokeEvocationsVariantManagerInner(actor, sourceToken, removeEvocationsVariant, ordered, random, animationExternal);
+  },
+  async _invokeEvocationsVariantManagerInner(actor, sourceToken, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
+    // const sourceToken = canvas.tokens?.placeables.find((t) => {
+    //   return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
+    // });
+    // if (!sourceToken) {
+    //   // warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
+    //   return;
+    // }
+    // const actor = retrieveActorFromToken(sourceToken);
+    // if (!actor) {
+    //   // warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
+    //   return;
+    // }
     const listEvocationsVariants =
       (actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.IS_LOCAL) ||
       game.settings.get(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR)
@@ -61,7 +85,7 @@ const API = {
     // else {
     //     lastElement = sourceToken.name;
     // }
-    const tokenData = await actor.getTokenData();
+    const tokenDataToTransform = await actor.getTokenData();
     // const posData = canvas.tokens?.placeables.find((t) => {
     //     return t.actor?.id === actor.id;
     // }) || undefined;
@@ -76,11 +100,11 @@ const API = {
           }) || undefined;
         for (const posData of posDatas) {
           if (posData && !tokensToDelete.includes(posData.id)) {
-            const polyData = listEvocationsVariants.find((a) => {
+            const companionData = listEvocationsVariants.find((a) => {
               return posData.name.toLowerCase().includes(a.name.toLowerCase());
             });
-            const animation = polyData?.animation;
-            const polyDataIndex = listEvocationsVariants.findIndex((a) => {
+            const animation = companionData?.animation;
+            const companionDataIndex = listEvocationsVariants.findIndex((a) => {
               return posData.name.toLowerCase().includes(a.name.toLowerCase());
             });
             if (animationExternal && animationExternal.sequence) {
@@ -90,9 +114,9 @@ const API = {
             } else if (animation) {
               if (typeof AECONSTS.animationFunctions[animation].fn == 'string') {
                 //@ts-ignore
-                game.macros?.getName(AECONSTS.animationFunctions[animation].fn)?.execute(posData, tokenData);
+                game.macros?.getName(AECONSTS.animationFunctions[animation].fn)?.execute(posData, tokenDataToTransform);
               } else {
-                AECONSTS.animationFunctions[animation].fn(posData, tokenData);
+                AECONSTS.animationFunctions[animation].fn(posData, tokenDataToTransform);
               }
               await wait(AECONSTS.animationFunctions[animation].time);
             }
@@ -116,11 +140,11 @@ const API = {
         if (listEvocationsVariants?.length === 1) {
           new CompanionManager(actor).fastSummonEvocationsVariant(listEvocationsVariants[0], animationExternal);
         } else {
-          const polyDataIndex = listEvocationsVariants.findIndex((a) => {
+          const companionDataIndex = listEvocationsVariants.findIndex((a) => {
             return lastElement.toLowerCase().includes(a.name.toLowerCase());
           });
           let randomIndex = 0;
-          while (randomIndex === polyDataIndex) {
+          while (randomIndex === companionDataIndex) {
             randomIndex = Math.floor(Math.random() * listEvocationsVariants.length);
           }
           new CompanionManager(actor).fastSummonEvocationsVariant(
@@ -129,10 +153,10 @@ const API = {
           );
         }
       } else if (isOrdered) {
-        const polyDataIndex = listEvocationsVariants.findIndex((a) => {
+        const companionDataIndex = listEvocationsVariants.findIndex((a) => {
           return lastElement.toLowerCase().includes(a.name.toLowerCase());
         });
-        const nextIndex = polyDataIndex + 1;
+        const nextIndex = companionDataIndex + 1;
         if (listEvocationsVariants?.length - 1 < nextIndex) {
           new CompanionManager(actor).fastSummonEvocationsVariant(listEvocationsVariants[0], animationExternal);
         } else {

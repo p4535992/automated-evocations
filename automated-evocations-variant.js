@@ -13,14 +13,14 @@
 // Import TypeScript modules
 import { preloadTemplates } from './scripts/preloadTemplates.js';
 import { initHooks, readyHooks, setupHooks } from './scripts/config.js';
-// import { registerSettings } from "./scripts/settings.js";
+import { log } from "./module/lib/lib.js";
 
 import CONSTANTS from './scripts/constants.js';
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once('init', async () => {
-  console.log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+  log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
   // Register custom module settings
   // registerSettings();
   // Assign custom classes and constants here

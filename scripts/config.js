@@ -56,7 +56,7 @@ export const initHooks = () => {
     scope: 'world',
     config: true,
     type: Boolean,
-    default: true,
+    default: false,
   });
   game.settings.register(AECONSTS.MN, 'hidebutton', {
     name: game.i18n.localize(`AE.settings.hidebutton.title`),
