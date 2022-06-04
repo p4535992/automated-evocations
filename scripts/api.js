@@ -1,32 +1,33 @@
 // import { ANIMATIONS } from "./animations.js";
 import { EvocationsVariantFlags } from './automatedEvocationsVariantModels.js';
 import CONSTANTS from './constants.js';
-import { error, wait, warn } from './lib/lib.js';
+import { error, retrieveActorFromToken, wait, warn } from './lib/lib.js';
 import { CompanionManager } from './companionmanager.js';
 import AECONSTS from './main.js';
 
 const API = {
-  async invokeEvocationsVariantArr(...inAttributes) {
+  async invokeEvocationsVariantManagerArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-        throw error('invokeEvocationsVariant | inAttributes must be of type array');
+        throw error('invokeEvocationsVariantManagerArr | inAttributes must be of type array');
     }
     const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-    const result = await this.invokeEvocationsVariant(sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
+    const result = await this.invokeEvocationsVariantManager(sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
     return result;
   },
-  async invokeEvocationsVariantFromActorArr(...inAttributes) {
+  async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-        throw error('invokeEvocationsVariantFromActor | inAttributes must be of type array');
+        throw error('invokeEvocationsVariantManagerFromActor | inAttributes must be of type array');
     }
     const [sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-    const result = await this.invokeEvocationsVariantFromActor(sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
+    const result = await this.invokeEvocationsVariantManagerFromActor(sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal);
     return result;
   },
-  async invokeEvocationsVariantFromActor(sourceActorIdOrName, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
+  async invokeEvocationsVariantManagerFromActor(sourceActorIdOrName, removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined) {
     for (const tokenOnCanvas of canvas.tokens?.placeables) {
         const actor = retrieveActorFromToken(tokenOnCanvas);
         if (actor && (actor.id === sourceActorIdOrName || actor.name === sourceActorIdOrName)) {
-            this._invokeEvocationsVariantInner(actor, tokenOnCanvas, removeEvocationsVariant, ordered, random, animationExternal);
+          this._invokeEvocationsVariantManagerInner(actor, tokenOnCanvas, removeEvocationsVariant, ordered, random, animationExternal);
+          break;
         }
     }
   },

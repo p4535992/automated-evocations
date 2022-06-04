@@ -1,3 +1,7 @@
+### 1.5.14
+
+- Bug fix api methods
+
 ### 1.5.13
 
 - NEW FEATURE: Integration for load actors directly from compendium
