@@ -1,3 +1,7 @@
+### 1.5.15
+
+- Sync with master fork
+
 ### 1.5.14
 
 - Bug fix api methods
