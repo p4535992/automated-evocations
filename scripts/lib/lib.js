@@ -260,6 +260,7 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
       const pack = game.packs.get(currentCompendium);
       if (pack) {
           await pack.getIndex();
+          /*
           for (const entityComp of pack.index) {
               const actorComp = await pack.getDocument(entityComp._id);
               if (actorComp.id === aId || actorComp.name === aName) {
@@ -267,6 +268,20 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
                   break;
               }
           }
+          */
+          // Try to find the actor by exact ID
+          let actorFounded = pack.index.get(aId);
+          // If not found, search for the actor by name
+          if (!actorFounded) {
+              for (const entityComp of pack.index) {
+                  const actorComp = await pack.getDocument(entityComp._id);
+                  if (actorComp.id === aId || actorComp.name === aName) {
+                      actorFounded = actorComp;
+                      break;
+                  }
+              }
+          }
+          actorToTransformLi = actorFounded;
       }
   }
   if (!actorToTransformLi) {
