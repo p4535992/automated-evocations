@@ -1,3 +1,7 @@
+### 1.5.16
+
+- Little bug fix on retrive compendium data
+
 ### 1.5.15
 
 - Sync with master fork
