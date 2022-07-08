@@ -48,11 +48,11 @@ export class CompanionManager extends FormApplication {
     const data = super.getData();
     data.random = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
     data.ordered = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
-    const storeOnActorFlag = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
-    data.storeonactor =
-        storeOnActorFlag != null && storeOnActorFlag != undefined
-            ? storeOnActorFlag
-            : game.settings.get(CONSTANTS.MODULE_NAME, 'storeonactor');
+    // const storeOnActorFlag = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
+    // data.storeonactor =
+    //     storeOnActorFlag != null && storeOnActorFlag != undefined
+    //         ? storeOnActorFlag
+    //         : game.settings.get(CONSTANTS.MODULE_NAME, 'storeonactor');
     // Retrieve compendiums with actor
     const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? '';
     const compendiumsData = [];
@@ -168,6 +168,7 @@ export class CompanionManager extends FormApplication {
             number: 0,
             defaultsummontype: '',
             compendiumid: '',
+            explicitname: ''
         }, actorToTransformLi));
         this.saveData();
     }
@@ -182,6 +183,7 @@ export class CompanionManager extends FormApplication {
     const aName = event.currentTarget.dataset.aname;
     const aId = event.currentTarget.dataset.aid;
     const aCompendiumId = event.currentTarget.dataset.acompendiumid;
+    const aExplicitName = event.currentTarget.dataset.aexplicitname;
     // const actorToTransform = game.actors.get(aId);
     const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId);
     if (!actorToTransform) {
@@ -267,11 +269,16 @@ export class CompanionManager extends FormApplication {
     }
   }
 
+  async _onChangeExplicitName(event){
+    const explicitName = event.currentTarget.parentElement.dataset.aexplicitname;
+    // Tretrieve attribute data-aexplicitname on the warpgate button
+    $(event.currentTarget.parentElement.find('.warpgate-btn').each(function(){
+      $(this).attr('data-aexplicitname',explicitName);
+    }));
+  }
+
   async loadCompanions() {
     let data =
-      // this.actor && (this.actor.getFlag(AECONSTS.MN, 'isLocal') || game.settings.get(AECONSTS.MN, 'storeonactor'))
-      //   ? this.actor.getFlag(AECONSTS.MN, 'companions') || []
-      //   : game.user.getFlag(AECONSTS.MN, 'companions');
       this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
     const namesAlreadyImportedFromCompendium = [];
     const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? '';
@@ -309,8 +316,9 @@ export class CompanionManager extends FormApplication {
       for (let companion of data) {
         const aId = companion.id;
         const aName = companion.name;
-        const acompendiumid = companion.compendiumid;
-        const actorToTransformLi = await retrieveActorFromData(aId, aName, acompendiumid);
+        const aCompendiumId = companion.compendiumid;
+        const aExplicitName = companion.explicitname;
+        const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId);
         if (!actorToTransformLi) {
             warn(`No actor founded for the token with id/name '${companion.name}'`, true);
             continue;
@@ -330,34 +338,42 @@ export class CompanionManager extends FormApplication {
     const restricted = game.settings.get(AECONSTS.MN, 'restrictOwned');
     if (restricted && !actorToTransformLi.isOwner) return '';
     let $li = $(`
-	    <li id="companion" 
-        class="companion-item" 
-        data-aid="${actorToTransformLi.id}" 
+	    <li id="companion"
+        class="companion-item"
+        data-aid="${actorToTransformLi.id}"
         data-aname="${actorToTransformLi.name}"
-        data-acompendiumid="${data.compendiumid}" 
-        data-elid="${actorToTransformLi.id}" 
+        data-acompendiumid="${data.compendiumid}"
+        data-aexplicitname="${data.explicitname}"
+        data-elid="${actorToTransformLi.id}"
         draggable="true">
       <div class="summon-btn">
-        <img 
-        class="actor-image" 
+        <img
+        class="actor-image"
         src="${actorToTransformLi.data.img}" alt="">
-        <div 
-          class="warpgate-btn" 
-          id="summon-companion" 
-          data-aid="${actorToTransformLi.id}" 
+        <div
+          class="warpgate-btn"
+          id="summon-companion"
+          data-aid="${actorToTransformLi.id}"
           data-aname="${actorToTransformLi.name}"
           data-acompendiumid="${data.compendiumid}"
+          data-aexplicitname="${data.explicitname ?? actorToTransformLi.name}"
           data-elid="${actorToTransformLi.id}">
         </div>
       </div>
     	<span class="actor-name">${actorToTransformLi.data.name}</span>
+      <input
+        id="explicitname"
+        name="explicitname"
+        class="explicitname"
+        type="text"
+        value=">${data.explicitname ?? actorToTransformLi.data.name}"/>
       <div class="companion-number">
-        <input 
-          type="number" 
-          min="1" max="99" 
-          class="fancy-input" 
-          step="1" 
-          id="companion-number-val" 
+        <input
+          type="number"
+          min="1" max="99"
+          class="fancy-input"
+          step="1"
+          id="companion-number-val"
           value="${data.number || 1}">
         </div>
         <select class="anim-dropdown">
@@ -395,12 +411,13 @@ export class CompanionManager extends FormApplication {
         number: $(companion).find('#companion-number-val').val(),
         defaultsummontype: $(companion).find('.defaultSummonType').val(),
         compendiumid: companion.dataset.acompendiumid,
+        explicitname: $(companion).find('.explicitname').val(),
       });
     }
 
     const isOrdered = this.element.parent().find('.companion-ordered').val() === 'true' ?? false;
     const isRandom = this.element.parent().find('.companion-random').val() === 'true' ?? false;
-    const isStoreonactor = this.element.parent().find('.companion-storeonactor').val() === 'true' ?? false;
+    // const isStoreonactor = this.element.parent().find('.companion-storeonactor').val() === 'true' ?? false;
     const currentCompendium = this.element.parent().find('.companion-selectcompendium').val();
     if (isRandom && isOrdered) {
       warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
@@ -431,6 +448,7 @@ export class CompanionManager extends FormApplication {
                   number: $(companion).find('#companion-number-val').val(),
                   defaultsummontype: $(companion).find('.defaultSummonType').val(),
                   compendiumid: currentCompendium,
+                  explicitname: $(companion).find('.explicitname').val(),
               });
           }
       }
@@ -442,7 +460,7 @@ export class CompanionManager extends FormApplication {
     await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS, data);
     await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM, isRandom);
     await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED, isOrdered);
-    await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR, isStoreonactor);
+    // await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR, isStoreonactor);
 
   }
 
@@ -459,8 +477,9 @@ export class CompanionManager extends FormApplication {
     const aId = companionData.id;
     const aName = companionData.name;
     const aCompendiumId = companionData.compendiumid;
+    const aExplicitName = ompanionData.explicitname;
     const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId);
-    
+
     if (!actorToTransform) {
       warn(
         `The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -486,6 +505,7 @@ export class CompanionManager extends FormApplication {
     // Get the target actor
     const sourceActor = actorToTransform;
     if (!sourceActor) {
+      warn(`No target actor is been found`);
       return;
     }
 
@@ -541,6 +561,7 @@ export class SimpleCompanionManager extends CompanionManager {
       const aId = summon.id;
       const aName = summon.name;
       const aCompendiumId = summon.compendiumid;
+      const aExplicitName = summon.explicitname;
       const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId);
       if (actorToTransformLi) {
           this.element.find('#companion-list').append(this.generateLi(summon, actorToTransformLi));
@@ -552,6 +573,7 @@ export class SimpleCompanionManager extends CompanionManager {
 
     html.on('click', '#summon-companion', this._onSummonCompanion.bind(this));
     html.on('click', '.actor-name', this._onOpenSheet.bind(this));
+    html.on('change', '#explicitname', this._onChangeExplicitName.bind(this));
   }
 
   async _onDrop(event) {}

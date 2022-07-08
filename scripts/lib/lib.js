@@ -139,12 +139,12 @@ function addToEvocationsVariantButton(html, sourceToken) {
   }
   const random = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
   const ordered = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
-  const storeonactor = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR) ?? false;
+  // const storeonactor = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR) ?? false;
   button.find('i').on('click', async (ev) => {
     for (const targetToken of canvas.tokens?.controlled) {
       const targetActor = retrieveActorFromToken(targetToken);
       if(targetActor){
-        API._invokeEvocationsVariantManagerInner(targetActor, targetToken, false, ordered, random);
+        API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
       }
     }
   });
@@ -153,24 +153,12 @@ function addToEvocationsVariantButton(html, sourceToken) {
       // Do somethign with right click
       const targetActor = retrieveActorFromToken(targetToken);
       if(targetActor){
-        API._invokeEvocationsVariantManagerInner(targetActor, targetToken, true, ordered, random);
+        API._invokeEvocationsVariantManagerInner(targetToken, targetActor, true, ordered, random);
       }
     }
   });
 }
-// function addToRevertEvocationsVariantButton(html, sourceToken:Token) {
-//   if(!sourceToken || !sourceToken.isOwner){
-//     return;
-//   }
-//   let button = buildButton(html, `Revert transform ${sourceToken.name}`);
-//   button = addSlash(button);
-//   button.find('i').on('click', async (ev) => {
-//     API._invokeEvocationsVariantManagerInner(actor,sourceToken,true);
-//   });
-//   button.find('i').on('contextmenu', async (ev) => {
-//     // Do something with right click
-//   });
-// }
+
 function buildButton(html, tooltip) {
   const iconClass = 'fas fa-cat'; // TODO customize icon ???
   const button = $(
@@ -237,10 +225,10 @@ export function retrieveActorFromToken(sourceToken) {
   if (!sourceToken.actor) {
       return undefined;
   }
-  const storeOnActorFlag = sourceToken.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
-  if (!storeOnActorFlag) {
-      return sourceToken.actor;
-  }
+  // const storeOnActorFlag = sourceToken.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
+  // if (!storeOnActorFlag) {
+  //     return sourceToken.actor;
+  // }
   let actor = undefined;
   if (sourceToken.data.actorLink) {
       actor = game.actors?.get(sourceToken.data.actorId);
@@ -262,26 +250,27 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
           await pack.getIndex();
           /*
           for (const entityComp of pack.index) {
-              const actorComp = await pack.getDocument(entityComp._id);
-              if (actorComp.id === aId || actorComp.name === aName) {
-                  actorToTransformLi = actorComp;
-                  break;
-              }
+            const actorComp = <Actor>await pack.getDocument(entityComp._id);
+            if (actorComp.id === aId || actorComp.name === aName) {
+              actorToTransformLi = actorComp;
+              break;
+            }
           }
           */
-          // Try to find the actor by exact ID
-          let actorFounded = pack.index.get(aId);
+          // If the actor is found in the index, return it by exact ID
+          if (pack.index.get(aId)) {
+              actorToTransformLi = await pack.getDocument(aId);
+          }
           // If not found, search for the actor by name
-          if (!actorFounded) {
+          if (!actorToTransformLi) {
               for (const entityComp of pack.index) {
                   const actorComp = await pack.getDocument(entityComp._id);
                   if (actorComp.id === aId || actorComp.name === aName) {
-                      actorFounded = actorComp;
+                      actorToTransformLi = actorComp;
                       break;
                   }
               }
           }
-          actorToTransformLi = actorFounded;
       }
   }
   if (!actorToTransformLi) {

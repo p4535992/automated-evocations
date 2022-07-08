@@ -50,14 +50,14 @@ export const initHooks = () => {
     type: Boolean,
     default: true,
   });
-  game.settings.register(AECONSTS.MN, 'storeonactor', {
-    name: game.i18n.localize(`AE.settings.storeonactor.title`),
-    hint: game.i18n.localize(`AE.settings.storeonactor.hint`),
-    scope: 'world',
-    config: true,
-    type: Boolean,
-    default: false,
-  });
+  // game.settings.register(AECONSTS.MN, 'storeonactor', {
+  //   name: game.i18n.localize(`AE.settings.storeonactor.title`),
+  //   hint: game.i18n.localize(`AE.settings.storeonactor.hint`),
+  //   scope: 'world',
+  //   config: true,
+  //   type: Boolean,
+  //   default: false,
+  // });
   game.settings.register(AECONSTS.MN, 'hidebutton', {
     name: game.i18n.localize(`AE.settings.hidebutton.title`),
     hint: game.i18n.localize(`AE.settings.hidebutton.hint`),
