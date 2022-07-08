@@ -271,13 +271,6 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
                   }
               }
           }
-<<<<<<< HEAD
-=======
-          else {
-              actorFounded = await pack.getDocument(aId);
-          }
-          actorToTransformLi = actorFounded;
->>>>>>> 1a2b486795aad0c2c044eaadc0717b5b7b1fc9fb
       }
   }
   if (!actorToTransformLi) {
