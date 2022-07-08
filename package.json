@@ -3,7 +3,7 @@
   "name": "automated-evocations-variant",
   "title": "Automated Evocations - Companion Manager Variant",
   "description": "A user interface to manage companions with summoning animations and automated summoning for spells",
-  "version": "1.5.15",
+  "version": "1.5.16",
   "scripts": {
     "package": "gulp package",
     "build": "gulp clean && gulp build && gulp link",
