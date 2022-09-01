@@ -1,17 +1,16 @@
 # Automated Evocations (Variant Fork)
-## Before opening an issue read [THIS](https://github.com/theripper93/Levels/blob/v9/ISSUES.md)
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/automated-evocations-variant/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) 
+![Latest Release Download Count](https://img.shields.io/github/downloads/p4535992/foundryvtt-automated-evocations-variant/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge)
 
-[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautomated-evocations-variant&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=automated-evocations-variant) 
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fautomated-evocations-variant&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=automated-evocations-variant)
 
-![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge)
+![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Ffoundryvtt-automated-evocations-variant%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibleCoreVersion&colorB=orange&style=for-the-badge)
 
-![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Fautomated-evocations-variant%2Fmaster%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
+![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Fp4535992%2Ffoundryvtt-automated-evocations-variant%2Fmaster%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge)
 
 [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Fautomated-evocations-variant%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/automated-evocations-variant/)
 
-![GitHub all releases](https://img.shields.io/github/downloads/p4535992/automated-evocations-variant/total?style=for-the-badge) 
+![GitHub all releases](https://img.shields.io/github/downloads/p4535992/foundryvtt-automated-evocations-variant/total?style=for-the-badge)
 
 A user interface to manage companions with summoning animations and automated summoning for spells
 
@@ -52,7 +51,7 @@ To install this module manually:
 1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
 2.  Click "Install Module"
 3.  In the "Manifest URL" field, paste the following url:
-`https://raw.githubusercontent.com/p4535992/automated-evocations-variant/master/module.json`
+`https://raw.githubusercontent.com/p4535992/foundryvtt-automated-evocations-variant/master/module.json`
 1.  Click 'Install' and wait for installation to complete
 2.  Don't forget to enable the module in game using the "Manage Module" button
 
@@ -95,7 +94,7 @@ By default companions are stored per user (so each actor will have the same summ
 You can assign cusom macros to specific actors
 
 1. Create a macro with this exact name `AE_Companion_Macro(ActorName)` eg. `AE_Companion_Macro(Bat)`, this will get fired any time a creature with that name is summoned
-2. Add code for the custom data, in the context of the macro `args[0]` contains the following data: 
+2. Add code for the custom data, in the context of the macro `args[0]` contains the following data:
 
 `summon`: the actor that's getting summoned
 
@@ -190,7 +189,7 @@ Once you built the object you wanna merge, simply save it to the hidden game set
 
 WARNING: Setting this hidden setting will override any previous value, so you want to keep a file with all you custom setting and add to it every time you want to apply it!
 
-Example: 
+Example:
 
 Adding your animation to the list:
 
@@ -260,7 +259,7 @@ An interface in the hud layer now allows you to speed up the summons during a fi
 - Ordered: the next summon is taken according to the order of the list of summons associated with the actor
 - No random, No orderder: the standard method shows the configuration panel that you would have by clicking on the header sheet button
 
-the actions on the hud button are of two types left click and right click. 
+the actions on the hud button are of two types left click and right click.
 
 - Left click activates the summon event
 - Right click delete the summoned creature.
@@ -498,23 +497,10 @@ npm run-script build:watch
 ```bash
 npm run-script clean
 ```
-### lint and lintfix
-
-`lint` launch the eslint process based on the configuration [here](./.eslintrc)
-
-```bash
-npm run-script lint
-```
-
-`lintfix` launch the eslint process with the fix argument
-
-```bash
-npm run-script lintfix
-```
 
 ### prettier-format
 
-`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc)
+`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc.js)
 
 ```bash
 npm run-script prettier-format
@@ -532,7 +518,7 @@ npm run-script package
 
 ## Issues
 
-Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/theripper93/automated-evocations/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
 
 ## License
 
