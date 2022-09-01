@@ -25,18 +25,18 @@ export class CompanionManager extends FormApplication {
     return {
       dnd5e: {
         getSummonInfo(args, spellLevel) {
-          const spellDC = args[0].assignedActor?.data.data.attributes.spelldc || 0;
+          const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
           return {
             level: (args[0].spellLevel || spellLevel) - spellLevel,
-            maxHP: args[0].assignedActor?.data.data.attributes.hp.max || 1,
+            maxHP: args[0].assignedActor?.system.attributes.hp.max || 1,
             modifier:
-              args[0].assignedActor?.data.data.abilities[args[0].assignedActor?.data.data.attributes.spellcasting]?.mod,
+              args[0].assignedActor?.system.abilities[args[0].assignedActor?.system.attributes.spellcasting]?.mod,
             dc: spellDC,
             attack: {
-              ms: spellDC - 8 + args[0].assignedActor?.data.data.bonuses.msak.attack,
-              rs: spellDC - 8 + args[0].assignedActor?.data.data.bonuses.rsak.attack,
-              mw: args[0].assignedActor?.data.data.bonuses.mwak.attack,
-              rw: args[0].assignedActor?.data.data.bonuses.rwak.attack,
+              ms: spellDC - 8 + args[0].assignedActor?.system.bonuses.msak.attack,
+              rs: spellDC - 8 + args[0].assignedActor?.system.bonuses.rsak.attack,
+              mw: args[0].assignedActor?.system.bonuses.mwak.attack,
+              rw: args[0].assignedActor?.system.bonuses.rwak.attack,
             },
           };
         },
@@ -157,13 +157,13 @@ export class CompanionManager extends FormApplication {
       }
     }
     if (!data.type === 'Actor') return;
-    // this.element.find('#companion-list').append(this.generateLi({ id: data.id }));
+    // this.element.find('#companion-list').append(this.generateLi({ id: actor.id }));
     // this.saveData();
-    const actorToTransformLi = await retrieveActorFromData(data.id, data.name, '');
+    const actorToTransformLi = await retrieveActorFromData(actor.id, actor.name, '');
     if (actorToTransformLi) {
         this.element.find('#companion-list').append(this.generateLi({
-            id: data.id,
-            name: data.name,
+            id: actor.id,
+            name: actor.name,
             animation: '',
             number: 0,
             defaultsummontype: '',
