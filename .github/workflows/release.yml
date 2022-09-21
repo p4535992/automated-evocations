@@ -35,7 +35,7 @@ jobs:
         id: sub_manifest_link_version
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'module.json'
+          files: 'src/module.json'
         env:
           version: ${{steps.get_version.outputs.version-without-v}}
           manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
@@ -67,16 +67,16 @@ jobs:
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: './module.json,./package/module.zip'
+          artifacts: './src/module.json,./package/module.zip'
           tag: ${{ env.RELEASE_VERSION }}
 
 
       # Publish the release to FoundryVTT's package repository.
       #- name: FoundryVTT AutoPublish
-      #  uses: Varriount/fvtt-autopublish@v1.0.6
+      #  uses: Varriount/fvtt-autopublish@v1.0.9
       #  with:
       #    username: ${{ secrets.FOUNDRY_ADMIN_USER }}
       #    password: ${{ secrets.FOUNDRY_ADMIN_PW }}
       #    module-id: 288
       #    manifest-url: https://github.com/${{ github.repository }}/releases/download/${{ env.RELEASE_VERSION }}/module.json
-      #    manifest-file: ./module.json
+      #    manifest-file: ./src/module.json

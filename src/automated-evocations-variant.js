@@ -11,53 +11,53 @@
  */
 // Import JavaScript modules
 // Import TypeScript modules
-import { preloadTemplates } from './scripts/preloadTemplates.js';
-import { initHooks, readyHooks, setupHooks } from './scripts/config.js';
+import { preloadTemplates } from "./scripts/preloadTemplates.js";
+import { initHooks, readyHooks, setupHooks } from "./scripts/config.js";
 import { log } from "./scripts/lib/lib.js";
 
-import CONSTANTS from './scripts/constants.js';
+import CONSTANTS from "./scripts/constants.js";
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
-Hooks.once('init', async () => {
-  log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
-  // Register custom module settings
-  // registerSettings();
-  // Assign custom classes and constants here
-  initHooks();
-  // Preload Handlebars templates
-  await preloadTemplates();
-  // Register custom sheets (if any)
+Hooks.once("init", async () => {
+	log(`${CONSTANTS.MODULE_NAME} | Initializing ${CONSTANTS.MODULE_NAME}`);
+	// Register custom module settings
+	// registerSettings();
+	// Assign custom classes and constants here
+	initHooks();
+	// Preload Handlebars templates
+	await preloadTemplates();
+	// Register custom sheets (if any)
 });
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
-Hooks.once('setup', function () {
-  // Do anything after initialization but before ready
-  // setupModules();
-  //registerSettings();
-  setupHooks();
+Hooks.once("setup", function () {
+	// Do anything after initialization but before ready
+	// setupModules();
+	//registerSettings();
+	setupHooks();
 });
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
-Hooks.once('ready', () => {
-  // Do anything once the module is ready
-  if (!game.modules.get('sequencer')?.active && game.user?.isGM) {
-    ui.notifications?.error(
-      `The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'sequencer' module.`,
-    );
-    return;
-  }
-  if (game.system.id != 'dnd5e') {
-    if (!game.modules.get('warpgate')?.active && game.user?.isGM) {
-      ui.notifications?.error(
-        `The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'warpgate' module.`,
-      );
-      return;
-    }
-  }
-  readyHooks();
+Hooks.once("ready", () => {
+	// Do anything once the module is ready
+	if (!game.modules.get("sequencer")?.active && game.user?.isGM) {
+		ui.notifications?.error(
+			`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'sequencer' module.`
+		);
+		return;
+	}
+	if (game.system.id != "dnd5e") {
+		if (!game.modules.get("warpgate")?.active && game.user?.isGM) {
+			ui.notifications?.error(
+				`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'warpgate' module.`
+			);
+			return;
+		}
+	}
+	readyHooks();
 });
 
 /**
@@ -65,30 +65,30 @@ Hooks.once('ready', () => {
  * @param api to set to game module.
  */
 export function setApi(api) {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME);
-  data.api = api;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
+	data.api = api;
 }
 /**
  * Returns the set API.
  * @returns Api from games module.
  */
 export function getApi() {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME);
-  return data.api;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
+	return data.api;
 }
 /**
  * Initialization helper, to set Socket.
  * @param socket to set to game module.
  */
 export function setSocket(socket) {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME);
-  data.socket = socket;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
+	data.socket = socket;
 }
 /*
  * Returns the set socket.
  * @returns Socket from games module.
  */
 export function getSocket() {
-  const data = game.modules.get(CONSTANTS.MODULE_NAME);
-  return data.socket;
+	const data = game.modules.get(CONSTANTS.MODULE_NAME);
+	return data.socket;
 }
