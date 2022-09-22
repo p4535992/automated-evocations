@@ -236,14 +236,12 @@ export class CompanionManager extends FormApplication {
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
 		const customTokenData =
-			(await game.macros
-				.getName(`AE_Companion_Macro(${actor.name})`)
-				?.execute({
-					summon: actor,
-					spellLevel: this.spellLevel || 0,
-					duplicates: duplicates,
-					assignedActor: this.caster || game.user.character || _token.actor,
-				})) || {};
+			(await game.macros.getName(`AE_Companion_Macro(${actor.name})`)?.execute({
+				summon: actor,
+				spellLevel: this.spellLevel || 0,
+				duplicates: duplicates,
+				assignedActor: this.caster || game.user.character || _token.actor,
+			})) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
@@ -557,14 +555,12 @@ export class CompanionManager extends FormApplication {
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
 		const customTokenData =
-			(await game.macros
-				.getName(`AE_Companion_Macro(${actor.name})`)
-				?.execute({
-					summon: actor,
-					spellLevel: this.spellLevel || 0,
-					duplicates: duplicates,
-					assignedActor: this.caster || game.user.character || _token.actor,
-				})) || {};
+			(await game.macros.getName(`AE_Companion_Macro(${actor.name})`)?.execute({
+				summon: actor,
+				spellLevel: this.spellLevel || 0,
+				duplicates: duplicates,
+				assignedActor: this.caster || game.user.character || _token.actor,
+			})) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {

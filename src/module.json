@@ -84,7 +84,8 @@
 			"path": "packs/macros.db",
 			"entity": "Macro",
 			"type": "Macro",
-			"module": "automated-evocations-variant"
+			"module": "automated-evocations-variant",
+			"system": "dnd5e"
 		},
 		{
 			"name": "aeactors",
@@ -92,7 +93,8 @@
 			"path": "packs/actors.db",
 			"entity": "Actor",
 			"type": "Actor",
-			"module": "automated-evocations-variant"
+			"module": "automated-evocations-variant",
+			"system": "dnd5e"
 		}
 	],
 	"scripts": [],
