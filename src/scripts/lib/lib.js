@@ -244,19 +244,13 @@ export function retrieveActorFromToken(sourceToken) {
 }
 export async function retrieveActorFromData(aId, aName, currentCompendium) {
 	let actorToTransformLi = null;
+	if (!aId && !aName) {
+		return null;
+	}
 	if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
 		const pack = game.packs.get(currentCompendium);
 		if (pack) {
 			await pack.getIndex();
-			/*
-          for (const entityComp of pack.index) {
-            const actorComp = <Actor>await pack.getDocument(entityComp._id);
-            if (actorComp.id === aId || actorComp.name === aName) {
-              actorToTransformLi = actorComp;
-              break;
-            }
-          }
-          */
 			// If the actor is found in the index, return it by exact ID
 			if (pack.index.get(aId)) {
 				actorToTransformLi = await pack.getDocument(aId);

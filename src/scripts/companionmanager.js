@@ -170,13 +170,14 @@ export class CompanionManager extends FormApplication {
 		if (!data.type === "Actor") return;
 		// this.element.find('#companion-list').append(this.generateLi({ id: actor.id }));
 		// this.saveData();
-		const actorToTransformLi = await retrieveActorFromData(actor.id, actor.name, "");
+		const actorId = data.uuid ? data.uuid.replace("Actor.", "") : undefined;
+		const actorToTransformLi = await retrieveActorFromData(actorId, "", "");
 		if (actorToTransformLi) {
 			this.element.find("#companion-list").append(
 				this.generateLi(
 					{
-						id: actor.id,
-						name: actor.name,
+						id: actorToTransformLi.id,
+						name: actorToTransformLi.name,
 						animation: "",
 						number: 0,
 						defaultsummontype: "",
@@ -188,7 +189,7 @@ export class CompanionManager extends FormApplication {
 			);
 			this.saveData();
 		} else {
-			warn(`No actor founded for the token with id/name '${data.name}'`, true);
+			warn(`No actor founded for the token with id/name '${data}'`, true);
 		}
 	}
 
@@ -211,7 +212,7 @@ export class CompanionManager extends FormApplication {
 		const duplicates = parseInt(
 			$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
 		);
-		const tokenDataToTransform = await actorToTransform.getTokenData({ elevation: _token?.data?.elevation ?? 0 });
+		const tokenData = await actorToTransform.getTokenData({ elevation: _token?.data?.elevation ?? 0 });
 		// eslint-disable-next-line no-undef
 		const posData = game?.Levels3DPreview?._active
 			? await this.pickCanvasPosition3D()
@@ -220,7 +221,7 @@ export class CompanionManager extends FormApplication {
 						(Math.max(tokenData.width, tokenData.height) *
 							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
 						2,
-					icon: "modules/automated-evocations/assets/black-hole-bolas.webp",
+					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
 					label: "",
 			  });
 		if (!posData || posData.cancelled) {
@@ -228,16 +229,16 @@ export class CompanionManager extends FormApplication {
 			return;
 		}
 		if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
-			game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenDataToTransform);
+			game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
 		} else {
-			AECONSTS.animationFunctions[animation].fn(posData, tokenDataToTransform);
+			AECONSTS.animationFunctions[animation].fn(posData, tokenData);
 		}
 
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
 		const customTokenData =
-			(await game.macros.getName(`AE_Companion_Macro(${actor.name})`)?.execute({
-				summon: actor,
+			(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
+				summon: actorToTransform,
 				spellLevel: this.spellLevel || 0,
 				duplicates: duplicates,
 				assignedActor: this.caster || game.user.character || _token.actor,
@@ -248,13 +249,7 @@ export class CompanionManager extends FormApplication {
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
 		// eslint-disable-next-line no-undef
-		warpgate.spawnAt(
-			{ x: posData.x, y: posData.y },
-			tokenDataToTransform,
-			customTokenData || {},
-			{},
-			{ duplicates }
-		);
+		warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
 		await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
 		if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
 			const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
@@ -269,7 +264,7 @@ export class CompanionManager extends FormApplication {
 			duplicates: duplicates,
 			warpgateData: customTokenData || {},
 			summon: actorToTransform,
-			tokenData: tokenDataToTransform,
+			tokenData: tokenData,
 			posData: posData,
 		});
 		if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
@@ -403,7 +398,7 @@ export class CompanionManager extends FormApplication {
         name="explicitname"
         class="explicitname"
         type="text"
-        value=">${data.explicitname ?? actorToTransformLi.data.name}"/>
+        value="${data.explicitname ?? actorToTransformLi.data.name}"/>
       <div class="companion-number">
         <input
           type="number"
@@ -514,7 +509,7 @@ export class CompanionManager extends FormApplication {
 		const aId = companionData.id;
 		const aName = companionData.name;
 		const aCompendiumId = companionData.compendiumid;
-		const aExplicitName = ompanionData.explicitname;
+		const aExplicitName = companionData.explicitname;
 		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId);
 
 		if (!actorToTransform) {
@@ -527,11 +522,16 @@ export class CompanionManager extends FormApplication {
 		const duplicates = companionData.number;
 		const tokenData = await actorToTransform.getTokenData();
 		// eslint-disable-next-line no-undef
-		const posData = await warpgate.crosshairs.show({
-			size: Math.max(tokenData.width, tokenData.height) * tokenData.scale,
-			icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
-			label: "",
-		});
+		const posData = game?.Levels3DPreview?._active
+			? await this.pickCanvasPosition3D()
+			: await warpgate.crosshairs.show({
+					size:
+						(Math.max(tokenData.width, tokenData.height) *
+							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
+						2,
+					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
+					label: "",
+			  });
 		if (posData.cancelled) {
 			this.maximize();
 			return;
@@ -555,8 +555,8 @@ export class CompanionManager extends FormApplication {
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
 		const customTokenData =
-			(await game.macros.getName(`AE_Companion_Macro(${actor.name})`)?.execute({
-				summon: actor,
+			(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
+				summon: actorToTransform,
 				spellLevel: this.spellLevel || 0,
 				duplicates: duplicates,
 				assignedActor: this.caster || game.user.character || _token.actor,

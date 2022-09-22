@@ -1,6 +1,10 @@
+### 1.6.0-1
+
+- Update fvtt10
+
 ### 1.5.16
 
-- Little bug fix on retrive compendium data
+- Little bug fix on retrieve compendium data
 
 ### 1.5.15
 
