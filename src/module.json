@@ -84,7 +84,7 @@
 			"path": "packs/macros.db",
 			"type": "Macro",
 			"private": false,
-			"module": "automated-evocations-variant",
+			"module": "automated-evocations-variant"
 		},
 		{
 			"name": "aeactors",
