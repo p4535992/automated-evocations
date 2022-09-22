@@ -82,17 +82,16 @@
 			"name": "aemacros",
 			"label": "Automated Evocations Macros",
 			"path": "packs/macros.db",
-			"entity": "Macro",
 			"type": "Macro",
+			"private": false,
 			"module": "automated-evocations-variant",
-			"system": "dnd5e"
 		},
 		{
 			"name": "aeactors",
 			"label": "Automated Evocations Summons",
 			"path": "packs/actors.db",
-			"entity": "Actor",
 			"type": "Actor",
+			"private": false,
 			"module": "automated-evocations-variant",
 			"system": "dnd5e"
 		}
