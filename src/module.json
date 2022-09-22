@@ -136,7 +136,8 @@
 		],
 		"conflicts": [
 			{
-				"name": "automated-evocations",
+				"id": "automated-evocations",
+				"type": "module",
 				"description": "The module 'Automated Evocations (Variant Fork)' can be used together with 'Automated Evocations', it is only not recommended because they are two modules that do the exact same things, for more details see README"
 			}
 		]
