@@ -4,7 +4,7 @@
 /**
  * This is important for the bundle.js
  */
-const mainFilePath = `src/active-effect-manager-lib.ts`; // MOD 4535992
+const mainFilePath = `src/automated-evocations-variant.ts`; // MOD 4535992
 
 const gulp = require(`gulp`);
 const fs = require(`fs`);
