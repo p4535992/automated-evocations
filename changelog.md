@@ -1,3 +1,7 @@
+### 1.6.2
+
+- For the "duplicates" element now we accept formula string as input value
+
 ### 1.6.0-1
 
 - Update fvtt10

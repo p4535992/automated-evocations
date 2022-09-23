@@ -12,6 +12,8 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/p4535992/foundryvtt-automated-evocations-variant/total?style=for-the-badge)
 
+[![Translation status](https://weblate.foundryvtt-hub.com/widgets/automated-evocations-variant/-/287x66-black.png)](https://weblate.foundryvtt-hub.com/engage/automated-evocations-variant/)
+
 A user interface to manage companions with summoning animations and automated summoning for spells
 
 ![hud](./wiki/feature_hud_ce_1.gif)
@@ -40,6 +42,7 @@ If you want to support more modules of this kind, I invite you to go and support
 - NEW FEATURE: Integration for load actors directly from compendium
 - NEW FEATURE: Integration for store actors directly on actor instead token on the dialog html
 - NEW FEATURE: Add api for call summon with actor reference instead token reference
+- NEW FEATURE: For the "duplicates" element now we accept formula string as input value
 
 as always, I invite you to support theripper93 through his patreon.
 
@@ -106,7 +109,7 @@ You can assign cusom macros to specific actors
 
 The macro must return the custom data.
 
-You can use the `getSummonInfo` API call (`CompanionManager.api.getSummonInfo`), passing in `args` and the base spell level, to get the following information automatically calculated for you:
+You can use the `getSummonInfo` API call (`game.modules.get('automated-evocations-variant').api.getSummonInfo`), passing in `args` and the base spell level, to get the following information automatically calculated for you:
 * `level`: how many levels above the base spell level the spell as cast at
 * `maxHP`: the actor's max HP
 * `modifier`: the actor's spellcasting ability modifier
@@ -119,7 +122,7 @@ Example (Flaming Sphere auto scaling)
 Macro name: `AE_Companion_Macro(Flaming Sphere)`
 
 ```js
-const summon = CompanionManager.api.getSummonInfo(args, 2);
+const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 2);
 const flamingSphere = {
   sphere: [`${summon.level + 2}d6`, 'fire'],
 }
@@ -390,6 +393,10 @@ game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantMana
 **Examples**:
 
 `game.modules.get('automated-evocations-variant').api.cleanUpTokenSelected()`
+
+### Other macro on API
+
+`game.modules.get('automated-evocations-variant').api.getSummonInfo(args, spellLevel)`
 
 ## Integration with socketLib
 

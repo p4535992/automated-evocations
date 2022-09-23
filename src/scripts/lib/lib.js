@@ -230,8 +230,8 @@ export function retrieveActorFromToken(sourceToken) {
 	//     return sourceToken.actor;
 	// }
 	let actor = undefined;
-	if (sourceToken.data.actorLink) {
-		actor = game.actors?.get(sourceToken.data.actorId);
+	if (sourceToken.document.actorLink) {
+		actor = game.actors?.get(sourceToken.document.actorId);
 	}
 	// DO NOT NEED THIS
 	// if(!actor){
@@ -273,4 +273,70 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
 		});
 	}
 	return actorToTransformLi;
+}
+
+export async function rollFromString(rollString, actor) {
+	let myvalue = 0;
+	if (!rollString) {
+		// Ignore ???
+		if (rollString === "0") {
+			myvalue = 0;
+		} else {
+			myvalue = 1;
+		}
+	} else {
+		if (
+			String(rollString).toLowerCase().includes("data.") ||
+			String(rollString).toLowerCase().includes("system.")
+		) {
+			const formula = rollString.replace(/data\./g, "@").replace(/system\./g, "@");
+			const data = actor ? actor.getRollData() : {};
+			const roll = new Roll(formula, data);
+			// Roll the dice.
+			let myresult = 0;
+			//roll.roll();
+			try {
+				// TODO Roll#evaluate is becoming asynchronous. In the short term you may pass async=true or async=false
+				// to evaluation options to nominate your preferred behavior.
+				roll.evaluate({ async: false });
+				//await roll.evaluate({async: true});
+				myresult = roll.total ? roll.total : parseInt(roll.result);
+			} catch (e) {
+				myresult = parseInt(eval(roll.result));
+			}
+			if (!is_real_number(myresult)) {
+				warn(`The formula '${formula}' doesn't return a number we set the default 1`);
+				myvalue = 1;
+			} else {
+				myvalue = myresult;
+			}
+		} else if (!is_real_number(rollString)) {
+			const formula = rollString;
+			const data = actor ? actor.getRollData() : {};
+			const roll = new Roll(formula, data);
+			// Roll the dice.
+			let myresult = 0;
+			//roll.roll();
+			try {
+				// TODO Roll#evaluate is becoming asynchronous. In the short term you may pass async=true or async=false
+				// to evaluation options to nominate your preferred behavior.
+				roll.evaluate({ async: false });
+				//await roll.evaluate({async: true});
+				myresult = roll.total ? roll.total : parseInt(roll.result);
+			} catch (e) {
+				myresult = parseInt(eval(roll.result));
+			}
+			if (!is_real_number(myresult)) {
+				warn(`The formula '${formula}' doesn't return a number we set the default 1`);
+				myvalue = 1;
+			} else {
+				myvalue = myresult;
+			}
+		} else if (is_real_number(rollString)) {
+			myvalue = Number(rollString);
+		} else {
+			myvalue = 0;
+		}
+	}
+	return myvalue;
 }

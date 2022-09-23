@@ -21,15 +21,15 @@ Hooks.once("ready", async function () {
 			],
 			"Summon Animal": (data) => {
 				let multiplier = -1;
-				if (data.spellLevel >= 2) multiplier = 1;
-				if (data.spellLevel >= 3) multiplier = 2;
-				if (data.spellLevel >= 4) multiplier = 3;
-				if (data.spellLevel >= 5) multiplier = 5;
-				if (data.spellLevel >= 6) multiplier = 7;
-				if (data.spellLevel >= 7) multiplier = 9;
-				if (data.spellLevel >= 8) multiplier = 11;
-				if (data.spellLevel >= 9) multiplier = 13;
-				if (data.spellLevel >= 10) multiplier = 15;
+				if (system.spellLevel >= 2) multiplier = 1;
+				if (system.spellLevel >= 3) multiplier = 2;
+				if (system.spellLevel >= 4) multiplier = 3;
+				if (system.spellLevel >= 5) multiplier = 5;
+				if (system.spellLevel >= 6) multiplier = 7;
+				if (system.spellLevel >= 7) multiplier = 9;
+				if (system.spellLevel >= 8) multiplier = 11;
+				if (system.spellLevel >= 9) multiplier = 13;
+				if (system.spellLevel >= 10) multiplier = 15;
 				let animals = game.actors
 					.filter(
 						(a) =>
@@ -50,15 +50,15 @@ Hooks.once("ready", async function () {
 			},
 			"Animate Dead": (data) => {
 				let multiplier = -1;
-				if (data.spellLevel >= 2) multiplier = 1;
-				if (data.spellLevel >= 3) multiplier = 2;
-				if (data.spellLevel >= 4) multiplier = 3;
-				if (data.spellLevel >= 5) multiplier = 5;
-				if (data.spellLevel >= 6) multiplier = 7;
-				if (data.spellLevel >= 7) multiplier = 9;
-				if (data.spellLevel >= 8) multiplier = 11;
-				if (data.spellLevel >= 9) multiplier = 13;
-				if (data.spellLevel >= 10) multiplier = 15;
+				if (system.spellLevel >= 2) multiplier = 1;
+				if (system.spellLevel >= 3) multiplier = 2;
+				if (system.spellLevel >= 4) multiplier = 3;
+				if (system.spellLevel >= 5) multiplier = 5;
+				if (system.spellLevel >= 6) multiplier = 7;
+				if (system.spellLevel >= 7) multiplier = 9;
+				if (system.spellLevel >= 8) multiplier = 11;
+				if (system.spellLevel >= 9) multiplier = 13;
+				if (system.spellLevel >= 10) multiplier = 15;
 				let undeads = game.actors
 					.filter(
 						(a) =>
@@ -80,9 +80,9 @@ Hooks.once("ready", async function () {
 			},
 			"Summon Lesser Servitor": (data) => {
 				let servitormultiplier = -1;
-				if (data.spellLevel == 2) servitormultiplier = 1;
-				if (data.spellLevel == 3) servitormultiplier = 2;
-				if (data.spellLevel == 4) servitormultiplier = 3;
+				if (system.spellLevel == 2) servitormultiplier = 1;
+				if (system.spellLevel == 3) servitormultiplier = 2;
+				if (system.spellLevel == 4) servitormultiplier = 3;
 				let servitors = game.actors
 					.filter(
 						(a) =>
@@ -114,9 +114,9 @@ Hooks.once("ready", async function () {
 					"Tiger",
 				];
 				let arrayendpoint = 3;
-				if (data.spellLevel == 2) arrayendpoint = 3;
-				if (data.spellLevel == 3) arrayendpoint = 6;
-				if (data.spellLevel >= 4) arrayendpoint = 8;
+				if (system.spellLevel == 2) arrayendpoint = 3;
+				if (system.spellLevel == 3) arrayendpoint = 6;
+				if (system.spellLevel >= 4) arrayendpoint = 8;
 
 				for (let i = 0; i < arrayendpoint; i++) {
 					creatures.push({

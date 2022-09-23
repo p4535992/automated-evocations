@@ -1,6 +1,7 @@
+import API from "./api.js";
 import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import { log, retrieveActorFromData, warn } from "./lib/lib.js";
+import { log, retrieveActorFromData, rollFromString, warn } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 export class CompanionManager extends FormApplication {
 	constructor(actor) {
@@ -25,6 +26,7 @@ export class CompanionManager extends FormApplication {
 		return {
 			dnd5e: {
 				getSummonInfo(args, spellLevel) {
+					// return API.getSummonInfo(args, spellLevel);
 					const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
 					return {
 						level: (args[0].spellLevel || spellLevel) - spellLevel,
@@ -209,8 +211,12 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
-		const duplicates = parseInt(
-			$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
+		// const duplicates = parseInt(
+		// 	$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
+		// );
+		const duplicates = rollFromString(
+			$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val(),
+			this.actor
 		);
 		const tokenData = await actorToTransform.getTokenData({ elevation: _token?.data?.elevation ?? 0 });
 		// eslint-disable-next-line no-undef
@@ -519,7 +525,8 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
-		const duplicates = companionData.number;
+		// const duplicates = companionData.number;
+		const duplicates = rollFromString(companionData.number, this.actor);
 		const tokenData = await actorToTransform.getTokenData();
 		// eslint-disable-next-line no-undef
 		const posData = game?.Levels3DPreview?._active

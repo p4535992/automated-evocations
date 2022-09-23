@@ -200,8 +200,8 @@ const API = {
 		}
 		for (const token of tokens) {
 			if (token && token.document) {
-				if (getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-					const p = getProperty(token.document, `data.flags.${CONSTANTS.MODULE_NAME}`);
+				if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
+					const p = getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`);
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = p[key];
@@ -215,8 +215,8 @@ const API = {
 		}
 		for (const token of tokens) {
 			if (token && token.actor) {
-				if (getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`)) {
-					const p = getProperty(token.actor, `data.flags.${CONSTANTS.MODULE_NAME}`);
+				if (getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`)) {
+					const p = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`);
 					for (const key in p) {
 						const senseOrConditionIdKey = key;
 						const senseOrConditionValue = p[key];
@@ -227,6 +227,28 @@ const API = {
 			} else {
 				warn(`No token found on the canvas for id '${token.id}'`, true);
 			}
+		}
+	},
+
+	getSummonInfo(args, spellLevel) {
+		if (game.system.id === "dnd5e") {
+			const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
+			return {
+				level: (args[0].spellLevel || spellLevel) - spellLevel,
+				maxHP: args[0].assignedActor?.system.attributes.hp.max || 1,
+				modifier:
+					args[0].assignedActor?.system.abilities[args[0].assignedActor?.system.attributes.spellcasting]?.mod,
+				dc: spellDC,
+				attack: {
+					ms: spellDC - 8 + args[0].assignedActor?.system.bonuses.msak.attack,
+					rs: spellDC - 8 + args[0].assignedActor?.system.bonuses.rsak.attack,
+					mw: args[0].assignedActor?.system.bonuses.mwak.attack,
+					rw: args[0].assignedActor?.system.bonuses.rwak.attack,
+				},
+			};
+		} else {
+			warn(`The method 'getSummonInfo' is not supported for the system '${game.system.id}'`, true);
+			return undefined;
 		}
 	},
 };

@@ -83,8 +83,8 @@ Hooks.once("ready", async function () {
 			],
 			"Conjure Animals": (data) => {
 				let multiplier = 1;
-				if (data.level >= 5) multiplier = 2;
-				if (data.level >= 7) multiplier = 3;
+				if (system.level >= 5) multiplier = 2;
+				if (system.level >= 7) multiplier = 3;
 				let beasts = game.actors
 					.filter((a) => a.system.details.type?.value == "beast" && a.system.details.cr <= 2)
 					.sort((a, b) => {
@@ -122,7 +122,7 @@ Hooks.once("ready", async function () {
 			},
 			"Conjure Elemental": (data) => {
 				let elementals = game.actors
-					.filter((a) => a.system.details.type?.value == "elemental" && a.system.details.cr <= data.level)
+					.filter((a) => a.system.details.type?.value == "elemental" && a.system.details.cr <= system.level)
 					.sort((a, b) => {
 						return a.system.details.cr < b.system.details.cr ? 1 : -1;
 					});
@@ -137,7 +137,7 @@ Hooks.once("ready", async function () {
 			},
 			"Conjure Fey": (data) => {
 				let feys = game.actors
-					.filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= data.level)
+					.filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= system.level)
 					.sort((a, b) => {
 						return a.system.details.cr < b.system.details.cr ? 1 : -1;
 					});
@@ -152,8 +152,8 @@ Hooks.once("ready", async function () {
 			},
 			"Conjure Minor Elementals": (data) => {
 				let multiplier = 1;
-				if (data.level >= 6) multiplier = 2;
-				if (data.level >= 8) multiplier = 3;
+				if (system.level >= 6) multiplier = 2;
+				if (system.level >= 8) multiplier = 3;
 				let elementals = game.actors
 					.filter((a) => a.system.details.type?.value == "elemental" && a.system.details.cr <= 2)
 					.sort((a, b) => {
@@ -177,10 +177,10 @@ Hooks.once("ready", async function () {
 			},
 			"Conjure Woodland Beings": (data) => {
 				let multiplier = 1;
-				if (data.level >= 6) multiplier = 2;
-				if (data.level >= 8) multiplier = 3;
+				if (system.level >= 6) multiplier = 2;
+				if (system.level >= 8) multiplier = 3;
 				let feys = game.actors
-					.filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= data.level)
+					.filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= system.level)
 					.sort((a, b) => {
 						return a.system.details.cr < b.system.details.cr ? 1 : -1;
 					});
@@ -200,7 +200,7 @@ Hooks.once("ready", async function () {
 				return creatures;
 			},
 			"Animate Dead": (data) => {
-				let multiplier = 1 + (data.level - 3) * 2;
+				let multiplier = 1 + (system.level - 3) * 2;
 				return [
 					{
 						creature: "Skeleton",
@@ -213,8 +213,8 @@ Hooks.once("ready", async function () {
 				];
 			},
 			"Create Undead": (data) => {
-				let multiplier = data.level - 3;
-				if (data.level == 8) {
+				let multiplier = system.level - 3;
+				if (system.level == 8) {
 					return [
 						{
 							creature: "Ghoul",
@@ -230,7 +230,7 @@ Hooks.once("ready", async function () {
 						},
 					];
 				}
-				if (data.level == 9) {
+				if (system.level == 9) {
 					return [
 						{
 							creature: "Ghoul",

@@ -79,14 +79,6 @@
 	],
 	"packs": [
 		{
-			"name": "aemacros",
-			"label": "Automated Evocations Macros",
-			"path": "packs/macros.db",
-			"type": "Macro",
-			"private": false,
-			"module": "automated-evocations-variant"
-		},
-		{
 			"name": "aeactors",
 			"label": "Automated Evocations Summons",
 			"path": "packs/actors.db",
