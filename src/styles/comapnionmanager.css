@@ -1,5 +1,5 @@
 #companionManager {
-	min-width: 320px;
+	min-width: 500px;
 }
 
 #companionManager .window-content {
@@ -84,8 +84,8 @@
 }
 
 .companion-number {
-	width: 25px;
-	min-width: 25px;
+	width: 80px;
+	min-width: 80px;
 	text-align: center;
 	margin-left: auto;
 	margin-right: -13px;

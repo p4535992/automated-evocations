@@ -173,7 +173,7 @@ export class CompanionManager extends FormApplication {
 		// this.element.find('#companion-list').append(this.generateLi({ id: actor.id }));
 		// this.saveData();
 		const actorId = data.uuid ? data.uuid.replace("Actor.", "") : undefined;
-		const actorToTransformLi = await retrieveActorFromData(actorId, "", "");
+		const actorToTransformLi = await retrieveActorFromData(actorId, "", "", false);
 		if (actorToTransformLi) {
 			this.element.find("#companion-list").append(
 				this.generateLi(
@@ -203,7 +203,7 @@ export class CompanionManager extends FormApplication {
 		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
 		// const actorToTransform = game.actors.get(aId);
-		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId);
+		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -214,7 +214,7 @@ export class CompanionManager extends FormApplication {
 		// const duplicates = parseInt(
 		// 	$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
 		// );
-		const duplicates = rollFromString(
+		const duplicates = await rollFromString(
 			$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val(),
 			this.actor
 		);
@@ -356,7 +356,7 @@ export class CompanionManager extends FormApplication {
 				const aName = companion.name;
 				const aCompendiumId = companion.compendiumid;
 				const aExplicitName = companion.explicitname;
-				const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId);
+				const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId, false);
 				if (!actorToTransformLi) {
 					warn(`No actor founded for the token with id/name '${companion.name}'`, true);
 					continue;
@@ -407,7 +407,7 @@ export class CompanionManager extends FormApplication {
         value="${data.explicitname ?? actorToTransformLi.data.name}"/>
       <div class="companion-number">
         <input
-          type="number"
+          type="text"
           min="1" max="99"
           class="fancy-input"
           step="1"
@@ -516,7 +516,7 @@ export class CompanionManager extends FormApplication {
 		const aName = companionData.name;
 		const aCompendiumId = companionData.compendiumid;
 		const aExplicitName = companionData.explicitname;
-		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId);
+		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
 
 		if (!actorToTransform) {
 			warn(
@@ -526,7 +526,7 @@ export class CompanionManager extends FormApplication {
 			return;
 		}
 		// const duplicates = companionData.number;
-		const duplicates = rollFromString(companionData.number, this.actor);
+		const duplicates = await rollFromString(companionData.number, this.actor);
 		const tokenData = await actorToTransform.getTokenData();
 		// eslint-disable-next-line no-undef
 		const posData = game?.Levels3DPreview?._active
@@ -626,7 +626,7 @@ export class SimpleCompanionManager extends CompanionManager {
 			const aName = summon.name;
 			const aCompendiumId = summon.compendiumid;
 			const aExplicitName = summon.explicitname;
-			const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId);
+			const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId, false);
 			if (actorToTransformLi) {
 				this.element.find("#companion-list").append(this.generateLi(summon, actorToTransformLi));
 			} else {

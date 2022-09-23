@@ -5,6 +5,11 @@ import CONSTANTS from "../constants.js";
 // =============================
 // Module Generic function
 // =============================
+
+export function is_real_number(inNumber) {
+	return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
+}
+
 export function isGMConnected() {
 	return Array.from(game.users).find((user) => user.isGM && user.active) ? true : false;
 }
@@ -242,12 +247,20 @@ export function retrieveActorFromToken(sourceToken) {
 	}
 	return actor;
 }
-export async function retrieveActorFromData(aId, aName, currentCompendium) {
+export async function retrieveActorFromData(aId, aName, currentCompendium, createOnWorld = false) {
 	let actorToTransformLi = null;
 	if (!aId && !aName) {
 		return null;
 	}
-	if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
+	actorToTransformLi = game.actors?.contents.find((a) => {
+		return a.id === aId || a.name === aName;
+	});
+	if (
+		!actorToTransformLi &&
+		currentCompendium &&
+		currentCompendium != "none" &&
+		currentCompendium != "nonenodelete"
+	) {
 		const pack = game.packs.get(currentCompendium);
 		if (pack) {
 			await pack.getIndex();
@@ -265,6 +278,12 @@ export async function retrieveActorFromData(aId, aName, currentCompendium) {
 					}
 				}
 			}
+		}
+		if (actorToTransformLi && createOnWorld) {
+			// Create actor from compendium
+			const collection = game.collections.get(pack.documentName);
+			const id = actorToTransformLi.id; // li.data("document-id");
+			actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
 		}
 	}
 	if (!actorToTransformLi) {

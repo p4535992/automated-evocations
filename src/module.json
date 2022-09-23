@@ -79,6 +79,14 @@
 	],
 	"packs": [
 		{
+			"name": "aemacros",
+			"label": "Automated Evocations Macros",
+			"path": "packs/macros.db",
+			"type": "Macro",
+			"private": false,
+			"module": "automated-evocations-variant"
+		},
+		{
 			"name": "aeactors",
 			"label": "Automated Evocations Summons",
 			"path": "packs/actors.db",
@@ -122,6 +130,12 @@
 			{
 				"id": "sequencer",
 				"type": "module",
+				"compatibility": {}
+			},
+			{
+				"id": "warpgate",
+				"type": "module",
+				"manifest": "https://github.com/trioderegion/warpgate/releases/latest/download/module.json",
 				"compatibility": {}
 			}
 		],

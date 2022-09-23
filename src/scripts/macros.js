@@ -1,5 +1,5 @@
 // flaming sphere
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 2);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 2);
 const flamingSphere = {
 	sphere: [`${summon.level + 2}d6`, "fire"],
 };
@@ -16,7 +16,7 @@ return {
 };
 
 //spectral guardian
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 4);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 4);
 return {
 	embedded: {
 		Item: {
@@ -29,7 +29,7 @@ return {
 };
 
 //arcane  sword
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 7);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 7);
 return {
 	embedded: {
 		Item: {
@@ -42,7 +42,7 @@ return {
 };
 
 //phantom watchdog
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 4);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 4);
 return {
 	embedded: {
 		item: {
@@ -55,7 +55,7 @@ return {
 };
 
 //spiritual weapon
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 2);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 2);
 const spiritualWeapon = {
 	slash: [`${Math.floor(summon.level / 2) + 1}d8 + ${summon.modifier}`, "force"],
 };
@@ -73,7 +73,7 @@ return {
 };
 
 //arcane hand
-const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 5);
+const summon = game.modules.get("automated-evocations-variant").api.getSummonInfo(args, 5);
 const arcaneHand = {
 	clenchedFist: [`${summon.level * 2 + 4}d8`, "force"],
 	graspingHand: [`${summon.level * 2 + 2}d6 + ${summon.modifier}`, "bludgeoning"],
