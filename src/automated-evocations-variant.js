@@ -44,19 +44,18 @@ Hooks.once("setup", function () {
 Hooks.once("ready", () => {
 	// Do anything once the module is ready
 	if (!game.modules.get("sequencer")?.active && game.user?.isGM) {
-		ui.notifications?.error(
-			`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'sequencer' module.`
-		);
+		error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'sequencer' module.`, true);
 		return;
 	}
-	if (game.system.id != "dnd5e") {
-		if (!game.modules.get("warpgate")?.active && game.user?.isGM) {
-			ui.notifications?.error(
-				`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'warpgate' module.`
-			);
-			return;
-		}
+	if (!game.modules.get("warpgate")?.active && game.user?.isGM) {
+		error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'warpgate' module.`, true);
+		return;
 	}
+	if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
+		error(`The '${CONSTANTS.MODULE_NAME}' module requires to install and activate the 'socketlib' module.`, true);
+		return;
+	}
+
 	readyHooks();
 });
 

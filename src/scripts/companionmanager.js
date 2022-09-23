@@ -3,6 +3,7 @@ import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocat
 import CONSTANTS from "./constants.js";
 import { log, retrieveActorFromData, rollFromString, warn } from "./lib/lib.js";
 import AECONSTS from "./main.js";
+import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
 	constructor(actor) {
 		super();
@@ -26,23 +27,23 @@ export class CompanionManager extends FormApplication {
 		return {
 			dnd5e: {
 				getSummonInfo(args, spellLevel) {
-					// return API.getSummonInfo(args, spellLevel);
-					const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
-					return {
-						level: (args[0].spellLevel || spellLevel) - spellLevel,
-						maxHP: args[0].assignedActor?.system.attributes.hp.max || 1,
-						modifier:
-							args[0].assignedActor?.system.abilities[
-								args[0].assignedActor?.system.attributes.spellcasting
-							]?.mod,
-						dc: spellDC,
-						attack: {
-							ms: spellDC - 8 + args[0].assignedActor?.system.bonuses.msak.attack,
-							rs: spellDC - 8 + args[0].assignedActor?.system.bonuses.rsak.attack,
-							mw: args[0].assignedActor?.system.bonuses.mwak.attack,
-							rw: args[0].assignedActor?.system.bonuses.rwak.attack,
-						},
-					};
+					return API.getSummonInfo(args, spellLevel);
+					// const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
+					// return {
+					// 	level: (args[0].spellLevel || spellLevel) - spellLevel,
+					// 	maxHP: args[0].assignedActor?.system.attributes.hp.max || 1,
+					// 	modifier:
+					// 		args[0].assignedActor?.system.abilities[
+					// 			args[0].assignedActor?.system.attributes.spellcasting
+					// 		]?.mod,
+					// 	dc: spellDC,
+					// 	attack: {
+					// 		ms: spellDC - 8 + args[0].assignedActor?.system.bonuses.msak.attack,
+					// 		rs: spellDC - 8 + args[0].assignedActor?.system.bonuses.rsak.attack,
+					// 		mw: args[0].assignedActor?.system.bonuses.mwak.attack,
+					// 		rw: args[0].assignedActor?.system.bonuses.rwak.attack,
+					// 	},
+					// };
 				},
 			},
 		};
@@ -83,6 +84,8 @@ export class CompanionManager extends FormApplication {
 			}
 		}
 		data.compendiums = compendiumsData;
+		const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+		data.showoptionstogm = disable ? false : true;
 		return data;
 	}
 
@@ -155,6 +158,11 @@ export class CompanionManager extends FormApplication {
 	}
 
 	async _onDrop(event) {
+		const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+		if (disable) {
+			warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
+		}
+
 		let data;
 		try {
 			data = JSON.parse(event.dataTransfer.getData("text/plain"));
@@ -203,7 +211,14 @@ export class CompanionManager extends FormApplication {
 		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
 		// const actorToTransform = game.actors.get(aId);
-		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		const actorToTransform = await automatedEvocationsVariantSocket.executeAsGM(
+			"retrieveActor",
+			aId,
+			aName,
+			aCompendiumId,
+			true
+		);
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -211,6 +226,7 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
+		await automatedEvocationsVariantSocket.executeAsGM("transferPermissionsActor", this.actor, actorToTransform);
 		// const duplicates = parseInt(
 		// 	$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
 		// );
@@ -373,6 +389,7 @@ export class CompanionManager extends FormApplication {
 		if (!actorToTransformLi) {
 			return "";
 		}
+		const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
 		const restricted = game.settings.get(AECONSTS.MN, "restrictOwned");
 		if (restricted && !actorToTransformLi.isOwner) return "";
 		let $li = $(`
@@ -404,6 +421,7 @@ export class CompanionManager extends FormApplication {
         name="explicitname"
         class="explicitname"
         type="text"
+		${disable ? " readonly " : " "}
         value="${data.explicitname ?? actorToTransformLi.data.name}"/>
       <div class="companion-number">
         <input
@@ -412,12 +430,13 @@ export class CompanionManager extends FormApplication {
           class="fancy-input"
           step="1"
           id="companion-number-val"
+		  ${disable ? " readonly " : " "}
           value="${data.number || 1}">
         </div>
-        <select class="anim-dropdown">
+        <select class="anim-dropdown" ${disable ? " disabled " : " "}>
             ${this.getAnimations(data.animation)}
         </select>
-      <i id="remove-companion" class="fas fa-trash"></i>
+		${disable ? "" : '<i id="remove-companion" class="fas fa-trash"></i>'}
 	  </li>`);
 		//    <i id="advanced-params" class="fas fa-edit"></i>
 		return $li;
@@ -516,8 +535,14 @@ export class CompanionManager extends FormApplication {
 		const aName = companionData.name;
 		const aCompendiumId = companionData.compendiumid;
 		const aExplicitName = companionData.explicitname;
-		const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
-
+		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		const actorToTransform = await automatedEvocationsVariantSocket.executeAsGM(
+			"retrieveActor",
+			aId,
+			aName,
+			aCompendiumId,
+			true
+		);
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -525,6 +550,7 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
+		await automatedEvocationsVariantSocket.executeAsGM("transferPermissionsActor", this.actor, actorToTransform);
 		// const duplicates = companionData.number;
 		const duplicates = await rollFromString(companionData.number, this.actor);
 		const tokenData = await actorToTransform.getTokenData();
@@ -547,11 +573,11 @@ export class CompanionManager extends FormApplication {
 		//     return t.actor?.id === this.actor.id;
 		// }) || undefined;
 		// Get the target actor
-		const sourceActor = actorToTransform;
-		if (!sourceActor) {
-			warn(`No target actor is been found`);
-			return;
-		}
+		// const sourceActor = actorToTransform;
+		// if (!sourceActor) {
+		// 	warn(`No target actor is been found`);
+		// 	return;
+		// }
 
 		if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
 			game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
@@ -639,7 +665,12 @@ export class SimpleCompanionManager extends CompanionManager {
 		html.on("change", "#explicitname", this._onChangeExplicitName.bind(this));
 	}
 
-	async _onDrop(event) {}
+	async _onDrop(event) {
+		const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+		if (disable) {
+			warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
+		}
+	}
 
 	close() {
 		super.close(true);

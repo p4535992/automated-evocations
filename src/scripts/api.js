@@ -1,25 +1,18 @@
 // import { ANIMATIONS } from "./animations.js";
 import { EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import { error, retrieveActorFromToken, wait, warn } from "./lib/lib.js";
+import {
+	error,
+	retrieveActorFromData,
+	retrieveActorFromToken,
+	transferPermissionsActorInner,
+	wait,
+	warn,
+} from "./lib/lib.js";
 import { CompanionManager } from "./companionmanager.js";
 import AECONSTS from "./main.js";
 
 const API = {
-	async invokeEvocationsVariantManagerArr(...inAttributes) {
-		if (!Array.isArray(inAttributes)) {
-			throw error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
-		}
-		const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-		const result = await this.invokeEvocationsVariantManager(
-			sourceTokenIdOrName,
-			removeEvocationsVariant,
-			ordered,
-			random,
-			animationExternal
-		);
-		return result;
-	},
 	async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
@@ -55,6 +48,20 @@ const API = {
 				break;
 			}
 		}
+	},
+	async invokeEvocationsVariantManagerArr(...inAttributes) {
+		if (!Array.isArray(inAttributes)) {
+			throw error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
+		}
+		const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
+		const result = await this.invokeEvocationsVariantManager(
+			sourceTokenIdOrName,
+			removeEvocationsVariant,
+			ordered,
+			random,
+			animationExternal
+		);
+		return result;
 	},
 	async invokeEvocationsVariantManager(
 		sourceTokenIdOrName,
@@ -191,7 +198,10 @@ const API = {
 			}
 		}
 	},
-
+	async cleanUpTokenSelectedArr(...inAttributes) {
+		const result = await this.cleanUpTokenSelected();
+		return result;
+	},
 	async cleanUpTokenSelected() {
 		const tokens = canvas.tokens?.controlled;
 		if (!tokens || tokens.length === 0) {
@@ -229,7 +239,14 @@ const API = {
 			}
 		}
 	},
-
+	async getSummonInfoArr(...inAttributes) {
+		if (!Array.isArray(inAttributes)) {
+			throw error("getSummonInfoArr | inAttributes must be of type array");
+		}
+		const [args, spellLevel] = inAttributes;
+		const result = await this.getSummonInfo(args, spellLevel);
+		return result;
+	},
 	getSummonInfo(args, spellLevel) {
 		if (game.system.id === "dnd5e") {
 			const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
@@ -250,6 +267,28 @@ const API = {
 			warn(`The method 'getSummonInfo' is not supported for the system '${game.system.id}'`, true);
 			return undefined;
 		}
+	},
+	async transferPermissionsActorArr(...inAttributes) {
+		if (!Array.isArray(inAttributes)) {
+			throw error("transferPermissionsActorArr | inAttributes must be of type array");
+		}
+		const [sourceActor, targetActor] = inAttributes;
+		const result = await this.transferPermissionsActor(sourceActor, targetActor);
+		return result;
+	},
+	async transferPermissionsActor(sourceActor, targetActor) {
+		return await transferPermissionsActorInner(sourceActor, targetActor);
+	},
+	async retrieveActorArr(...inAttributes) {
+		if (!Array.isArray(inAttributes)) {
+			throw error("retrieveActorArr | inAttributes must be of type array");
+		}
+		const [aId, aName, currentCompendium, createOnWorld] = inAttributes;
+		const result = await this.retrieveActor(aId, aName, currentCompendium, createOnWorld);
+		return result;
+	},
+	async retrieveActor(aId, aName, currentCompendium, createOnWorld) {
+		return await retrieveActorFromData(aId, aName, currentCompendium, createOnWorld);
 	},
 };
 export default API;

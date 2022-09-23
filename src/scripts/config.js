@@ -6,10 +6,7 @@ import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { registerSocket } from "./socket.js";
 
-// Hooks.once("init", async function () {
 export const initHooks = () => {
-	Hooks.once("socketlib.ready", registerSocket);
-
 	game.settings.register(AECONSTS.MN, "companions", {
 		name: "",
 		hint: "",
@@ -65,6 +62,14 @@ export const initHooks = () => {
 		config: true,
 		type: Boolean,
 		default: false,
+	});
+	game.settings.register(AECONSTS.MN, "disableSettingsForNoGM", {
+		name: game.i18n.localize(`AE.settings.disableSettingsForNoGM.title`),
+		hint: game.i18n.localize(`AE.settings.disableSettingsForNoGM.hint`),
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
 	});
 	game.settings.register(AECONSTS.MN, "restrictOwned", {
 		name: game.i18n.localize(`AE.settings.restrictOwned.title`),
@@ -132,7 +137,21 @@ export const initHooks = () => {
 		default: "#7fffd4",
 		config: true,
 	});
-	// });
+
+	// ========================================================================
+
+	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
+		name: `${CONSTANTS.MODULE_NAME}.settings.debug.name`,
+		hint: `${CONSTANTS.MODULE_NAME}.settings.debug.hint`,
+		scope: "client",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
+
+	Hooks.once("socketlib.ready", registerSocket);
+	// TODO not enter on socketlib.ready
+	registerSocket();
 };
 
 export const setupHooks = () => {
@@ -193,10 +212,6 @@ export const readyHooks = async () => {
 	});
 
 	Hooks.on("renderTokenHUD", (app, html, data) => {
-		// const restrictedOnlyGM = game.settings.get(CONSTANTS.MODULE_NAME, 'restrictOnlyGM');
-		// if (restrictedOnlyGM && !game.user?.isGM) {
-		//   return;
-		// }
 		if (game.settings.get(CONSTANTS.MODULE_NAME, "hudEnable")) {
 			renderAutomatedEvocationsVariantHud(app, html, data);
 			const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, "hudColorButton") ?? "#7fffd4";

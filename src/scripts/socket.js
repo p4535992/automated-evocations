@@ -13,10 +13,6 @@ export function registerSocket() {
 	// eslint-disable-next-line no-undef
 	automatedEvocationsVariantSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
 	/**
-	 * Generic socket
-	 */
-	automatedEvocationsVariantSocket.register(SOCKET_HANDLERS.CALL_HOOK, (hook, ...args) => callHook(hook, ...args));
-	/**
 	 * Automated EvocationsVariant sockets
 	 */
 	automatedEvocationsVariantSocket.register("invokeEvocationsVariantManager", (...args) =>
@@ -25,15 +21,15 @@ export function registerSocket() {
 	automatedEvocationsVariantSocket.register("invokeEvocationsVariantManagerFromActor", (...args) =>
 		API.invokeEvocationsVariantManagerFromActorArr(...args)
 	);
-	/**
-	 * UI sockets
-	 */
-	/**
-	 * Item & attribute sockets
-	 */
-	/**
-	 * Effects
-	 */
+	automatedEvocationsVariantSocket.register("cleanUpTokenSelected", (...args) =>
+		API.cleanUpTokenSelectedArr(...args)
+	);
+	automatedEvocationsVariantSocket.register("getSummonInfo", (...args) => API.getSummonInfoArr(...args));
+	automatedEvocationsVariantSocket.register("transferPermissionsActor", (...args) =>
+		API.transferPermissionsActorArr(...args)
+	);
+	automatedEvocationsVariantSocket.register("retrieveActor", (...args) => API.retrieveActorArr(...args));
+
 	// Basic
 	setSocket(automatedEvocationsVariantSocket);
 	return automatedEvocationsVariantSocket;
