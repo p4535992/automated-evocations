@@ -89,7 +89,7 @@ By default companions are stored per user (so each actor will have the same summ
 
 ## Custom Macros (requires the Advanced Macro Module)
 
-~~For more advanced users you can set the flag with the following command : `actor.setFlag(AECONSTS.MN,"isLocal", false)` (set true\false to enable disable local storage)~~
+~~For more advanced users you can set the flag with the following command : `actor.setFlag("automated-evocations-variant","isLocal", false)` (set true\false to enable disable local storage)~~
 
 You can assign cusom macros to specific actors
 
@@ -127,9 +127,9 @@ return {
   embedded: {
     Item: {
       "Flaming Sphere": {
-        "data.description.value": `Any creature that ends its turn within 5 feet of the sphere, or has the sphere rammed into it, must make a Dexterity saving throw (DC ${summon.dc}). The creature takes ${flamingSphere.sphere[0]} ${flamingSphere.sphere[1]} damage on a failed save, or half as much damage on a successful one.`,
-        "data.save.dc": summon.dc,
-        "data.damage.parts":[flamingSphere.sphere]
+        "system.description.value": `Any creature that ends its turn within 5 feet of the sphere, or has the sphere rammed into it, must make a Dexterity saving throw (DC ${summon.dc}). The creature takes ${flamingSphere.sphere[0]} ${flamingSphere.sphere[1]} damage on a failed save, or half as much damage on a successful one.`,
+        "system.save.dc": summon.dc,
+        "system.damage.parts":[flamingSphere.sphere]
       }
     }
   }
