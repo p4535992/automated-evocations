@@ -272,23 +272,46 @@ const API = {
 		if (!Array.isArray(inAttributes)) {
 			throw error("transferPermissionsActorArr | inAttributes must be of type array");
 		}
-		const [sourceActor, targetActor] = inAttributes;
-		const result = await this.transferPermissionsActor(sourceActor, targetActor);
-		return result;
+		const [sourceActorId, targetActorId, userId] = inAttributes;
+		const sourceActor = game.actors.get(sourceActorId);
+		const targetActor = game.actors.get(targetActorId);
+		const user = game.users.get(userId);
+		const result = await this.transferPermissionsActor(sourceActor, targetActor, user);
+		return result.id;
 	},
-	async transferPermissionsActor(sourceActor, targetActor) {
-		return await transferPermissionsActorInner(sourceActor, targetActor);
+	async transferPermissionsActor(sourceActor, targetActor, user) {
+		return await transferPermissionsActorInner(sourceActor, targetActor, user);
 	},
-	async retrieveActorArr(...inAttributes) {
+	async retrieveAndPrepareActorArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
-			throw error("retrieveActorArr | inAttributes must be of type array");
+			throw error("retrieveAndPrepareActorArr | inAttributes must be of type array");
 		}
-		const [aId, aName, currentCompendium, createOnWorld] = inAttributes;
-		const result = await this.retrieveActor(aId, aName, currentCompendium, createOnWorld);
-		return result;
+		const [aId, aName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
+		const result = await this.retrieveAndPrepareActor(
+			aId,
+			aName,
+			currentCompendium,
+			createOnWorld,
+			sourceActorId,
+			userId
+		);
+		return result.id;
 	},
-	async retrieveActor(aId, aName, currentCompendium, createOnWorld) {
-		return await retrieveActorFromData(aId, aName, currentCompendium, createOnWorld);
+	async retrieveAndPrepareActor(aId, aName, currentCompendium, createOnWorld, sourceActorId, userId) {
+		const targetActor = await retrieveActorFromData(aId, aName, currentCompendium, createOnWorld);
+		const sourceActor = await retrieveActorFromData(sourceActorId, undefined, undefined, false);
+		const user = game.users.get(userId);
+		if (!user.isGM) {
+			if (sourceActor && targetActor) {
+				//this.transferPermissionsActor(sourceActor,targetActor);
+				// Set ownership
+				const ownershipLevels = {};
+				ownershipLevels[userId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
+				// Update a single Document
+				targetActor.update({ ownership: ownershipLevels }, { diff: false, recursive: false, noHook: true });
+			}
+		}
+		return targetActor;
 	},
 };
 export default API;

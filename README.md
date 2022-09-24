@@ -58,6 +58,10 @@ To install this module manually:
 1.  Click 'Install' and wait for installation to complete
 2.  Don't forget to enable the module in game using the "Manage Module" button
 
+## Known Issue
+
+- When you summon a actor from a compendium for a [limitation on the use of warpgate](https://github.com/trioderegion/warpgate/pull/64), i'm force to create the actor on the world
+
 # Attention:
 
 ## The Companion Manager works on all Systems, while the automations only work on DnD5e, PF2E. To configure automations on other systems check `Manually invoking the companion manger on spell cast`
@@ -152,14 +156,14 @@ All the SRD spells for dnd5e, if something is missing let me know
 
 To add your own settings, you can merge your own configs to the default one. For the data structure please check `game.automatedevocations.dnd5e` in the console (or equivalent for your system.
 
-Once you built the object you wanna merge, simply save it to the hidden game setting  `game.settings.set(AECONSTS.MN, "customautospells", yourData)`
+Once you built the object you wanna merge, simply save it to the hidden game setting  `game.settings.set("automated-evocations-variant", "customautospells", yourData)`
 
 WARNING: Completely replacing this hidden setting will override any previous value
 
 Example:
 
 ```js
-const data = game.settings.get(AECONSTS.MN, "customautospells")
+const data = game.settings.get("automated-evocations-variant", "customautospells")
 
 data["Summon Greater Demon"]=[
       {
@@ -180,7 +184,7 @@ data["Summon Greater Demon"]=[
         number: 1,
       },
     ]
-game.settings.set(AECONSTS.MN, "customautospells", data)
+game.settings.set("automated-evocations-variant", "customautospells", data)
 ```
 
 *contributions to this list are very welcome, contact me via discord or open a PR to add to the list*
@@ -188,7 +192,7 @@ game.settings.set(AECONSTS.MN, "customautospells", data)
 ## Custom Animations(ADVANCED)
 
 To add your own animations, you can merge your own configs to the default one.
-Once you built the object you wanna merge, simply save it to the hidden game setting  `game.settings.set(AECONSTS.MN, "customanimations", yourData)`
+Once you built the object you wanna merge, simply save it to the hidden game setting  `game.settings.set("automated-evocations-variant", "customanimations", yourData)`
 
 WARNING: Setting this hidden setting will override any previous value, so you want to keep a file with all you custom setting and add to it every time you want to apply it!
 
@@ -206,7 +210,7 @@ const customanims = {
   },
 };
 
-game.settings.set(AECONSTS.MN, "customanimations", customanims);
+game.settings.set("automated-evocations-variant", "customanimations", customanims);
 ```
 
 `fn`: name of the macro to fire

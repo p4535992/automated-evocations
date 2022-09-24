@@ -1,6 +1,9 @@
 ### 1.6.2
 
 - For the "duplicates" element now we accept formula string as input value
+- Add module settings for hide options to no GM player
+- Add workaround with socketlib for import set permission actor from compendium
+- Rewrite the API for better behaviour
 
 ### 1.6.0-1
 

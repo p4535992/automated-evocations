@@ -28,7 +28,9 @@ export function registerSocket() {
 	automatedEvocationsVariantSocket.register("transferPermissionsActor", (...args) =>
 		API.transferPermissionsActorArr(...args)
 	);
-	automatedEvocationsVariantSocket.register("retrieveActor", (...args) => API.retrieveActorArr(...args));
+	automatedEvocationsVariantSocket.register("retrieveAndPrepareActor", (...args) =>
+		API.retrieveAndPrepareActorArr(...args)
+	);
 
 	// Basic
 	setSocket(automatedEvocationsVariantSocket);

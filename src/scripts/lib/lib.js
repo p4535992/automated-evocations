@@ -360,13 +360,22 @@ export async function rollFromString(rollString, actor) {
 	return myvalue;
 }
 
-export async function transferPermissionsActorInner(sourceActor, targetActor) {
+export async function transferPermissionsActorInner(sourceActor, targetActor, user) {
+	// if (!game.user.isGM) throw new Error("You do not have the ability to configure permissions.");
+
 	// let sourceActor = //actor to copy the permissions from
 	// let targetActor = //actor to copy the permissions to
 
 	// The important part is the {diff:false, recursive: false},
 	// which ensures that any undefined parts of the permissions object
 	// are not filled in by the existing permissions on the target actor
+	// const user = game.users.get(userId);
+
+	// Set ownership
+	// const ownershipLevels = {};
+	// ownershipLevels[userId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
+	// // Update a single Document
+	// targetActor.update({ ownership: ownershipLevels }, { diff: false, recursive: false, noHook: true });
 
 	// For a straight duplicate of permissions, you should be able to just do:
 	return await targetActor.update({ permission: _getHandPermission(sourceActor) }, { diff: false, recursive: false });

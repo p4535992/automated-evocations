@@ -212,13 +212,16 @@ export class CompanionManager extends FormApplication {
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
 		// const actorToTransform = game.actors.get(aId);
 		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
-		const actorToTransform = await automatedEvocationsVariantSocket.executeAsGM(
-			"retrieveActor",
+		const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
+			"retrieveAndPrepareActor",
 			aId,
 			aName,
 			aCompendiumId,
-			true
+			true,
+			this.actor.id,
+			game.user.id
 		);
+		const actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -226,7 +229,6 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
-		await automatedEvocationsVariantSocket.executeAsGM("transferPermissionsActor", this.actor, actorToTransform);
 		// const duplicates = parseInt(
 		// 	$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
 		// );
@@ -536,13 +538,16 @@ export class CompanionManager extends FormApplication {
 		const aCompendiumId = companionData.compendiumid;
 		const aExplicitName = companionData.explicitname;
 		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
-		const actorToTransform = await automatedEvocationsVariantSocket.executeAsGM(
-			"retrieveActor",
+		const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
+			"retrieveAndPrepareActor",
 			aId,
 			aName,
 			aCompendiumId,
-			true
+			true,
+			this.actor.id,
+			game.user.id
 		);
+		const actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -550,7 +555,6 @@ export class CompanionManager extends FormApplication {
 			);
 			return;
 		}
-		await automatedEvocationsVariantSocket.executeAsGM("transferPermissionsActor", this.actor, actorToTransform);
 		// const duplicates = companionData.number;
 		const duplicates = await rollFromString(companionData.number, this.actor);
 		const tokenData = await actorToTransform.getTokenData();
