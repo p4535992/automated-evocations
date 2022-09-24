@@ -87,6 +87,18 @@
 			"hudColorButton": {
 				"title": "HUD feature color button",
 				"hint": "Choose what color to use for the HUD button"
+			},
+			"reset": {
+				"title": "Reset settings to default",
+				"name": "Reset settings to default",
+				"label": "Reset Settings To Default",
+				"hint": "This will reset all of the settings of back to the active game system's default."
+			},
+			"debug": {
+				"title": "Enable debugging",
+				"name": "Enable debugging",
+				"label": "Prints debug messages to the console",
+				"hint": " "
 			}
 		}
 	}

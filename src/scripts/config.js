@@ -141,8 +141,8 @@ export const initHooks = () => {
 	// ========================================================================
 
 	game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
-		name: `${CONSTANTS.MODULE_NAME}.settings.debug.name`,
-		hint: `${CONSTANTS.MODULE_NAME}.settings.debug.hint`,
+		name: `AE.settings.debug.name`,
+		hint: `AE.settings.debug.hint`,
 		scope: "client",
 		config: true,
 		default: false,
