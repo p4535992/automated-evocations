@@ -309,17 +309,11 @@ export class CompanionManager extends FormApplication {
 	}
 
 	async _onOpenSheet(event) {
-		// const actorId = event.currentTarget.parentElement.dataset.aid;
-		// const actor = game.actors.get(actorId);
-		// if (actor) {
-		//   actor.sheet.render(true);
-		// }
 		const actorId = event.currentTarget.parentElement.dataset.aid;
 		const actorName = event.currentTarget.parentElement.dataset.aname;
-		// TODO ADD SOME CHECK FOR NO LINKED ACTOR ?
-		const actorFromTransform = game.actors?.contents.find((a) => {
-			return a.id === actorId || a.name === actorName;
-		});
+		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
+		const aExplicitName = event.currentTarget.dataset.aexplicitname;
+		const actorFromTransform = await retrieveActorFromData(aId, aName, aCompendiumId, false);
 		if (actorFromTransform) {
 			actorFromTransform.sheet?.render(true);
 		}
