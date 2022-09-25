@@ -268,20 +268,6 @@ const API = {
 			return undefined;
 		}
 	},
-	async transferPermissionsActorArr(...inAttributes) {
-		if (!Array.isArray(inAttributes)) {
-			throw error("transferPermissionsActorArr | inAttributes must be of type array");
-		}
-		const [sourceActorId, targetActorId, userId] = inAttributes;
-		const sourceActor = game.actors.get(sourceActorId);
-		const targetActor = game.actors.get(targetActorId);
-		const user = game.users.get(userId);
-		const result = await this.transferPermissionsActor(sourceActor, targetActor, user);
-		return result.id;
-	},
-	async transferPermissionsActor(sourceActor, targetActor, user) {
-		return await transferPermissionsActorInner(sourceActor, targetActor, user);
-	},
 	async retrieveAndPrepareActorArr(...inAttributes) {
 		if (!Array.isArray(inAttributes)) {
 			throw error("retrieveAndPrepareActorArr | inAttributes must be of type array");
@@ -301,14 +287,9 @@ const API = {
 		const targetActor = await retrieveActorFromData(aId, aName, currentCompendium, createOnWorld);
 		const sourceActor = await retrieveActorFromData(sourceActorId, undefined, undefined, false);
 		const user = game.users.get(userId);
-		if (!user.isGM) {
+		if (!user.isGM && game.user?.isGM) {
 			if (sourceActor && targetActor) {
-				//this.transferPermissionsActor(sourceActor,targetActor);
-				// Set ownership
-				const ownershipLevels = {};
-				ownershipLevels[userId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
-				// Update a single Document
-				targetActor.update({ ownership: ownershipLevels }, { diff: false, recursive: false, noHook: true });
+				transferPermissionsActorInner(sourceActor, targetActor, user.id);
 			}
 		}
 		return targetActor;

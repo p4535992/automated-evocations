@@ -1,4 +1,4 @@
-### 1.6.2-3-4
+### 1.6.2-3-4-5
 
 - For the "duplicates" element now we accept formula string as input value
 - Add module settings for hide options to no GM player

@@ -360,7 +360,7 @@ export async function rollFromString(rollString, actor) {
 	return myvalue;
 }
 
-export async function transferPermissionsActorInner(sourceActor, targetActor, user) {
+export async function transferPermissionsActorInner(sourceActor, targetActor, externalUserId) {
 	// if (!game.user.isGM) throw new Error("You do not have the ability to configure permissions.");
 
 	// let sourceActor = //actor to copy the permissions from
@@ -370,20 +370,25 @@ export async function transferPermissionsActorInner(sourceActor, targetActor, us
 	// which ensures that any undefined parts of the permissions object
 	// are not filled in by the existing permissions on the target actor
 	// const user = game.users.get(userId);
-
-	// Set ownership
-	// const ownershipLevels = {};
-	// ownershipLevels[userId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
-	// // Update a single Document
-	// targetActor.update({ ownership: ownershipLevels }, { diff: false, recursive: false, noHook: true });
+	// if (externalUserId) {
+	// 	// Set ownership
+	// 	const ownershipLevels = {};
+	// 	ownershipLevels[externalUserId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
+	// 	// Update a single Document
+	// 	await targetActor.update({ ownership: ownershipLevels }, { diff: false, recursive: false, noHook: true });
+	// }
 
 	// For a straight duplicate of permissions, you should be able to just do:
-	return await targetActor.update({ permission: _getHandPermission(sourceActor) }, { diff: false, recursive: false });
+	// return await targetActor.update({ permission: _getHandPermission(sourceActor) }, { diff: false, recursive: false, noHook: true });
+	return await targetActor.update(
+		{ ownership: _getHandPermission(sourceActor, externalUserId) },
+		{ diff: false, recursive: false, noHook: true }
+	);
 }
 
 //this method is on the actor, so "this" is the actor document
-function _getHandPermission(actor) {
-	const handPermission = duplicate(actor.permission);
+function _getHandPermission(actor, externalUserId) {
+	const handPermission = duplicate(actor.ownership); // actor.permission
 	for (const key of Object.keys(handPermission)) {
 		//remove any permissions that are not owner
 		if (handPermission[key] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
@@ -391,6 +396,9 @@ function _getHandPermission(actor) {
 		}
 		//set default permission to none/limited/observer
 		handPermission.default = CONST.DOCUMENT_PERMISSION_LEVELS.NONE; // CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER
+	}
+	if (!handPermission[externalUserId] || handPermission[externalUserId] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
+		handPermission[externalUserId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
 	}
 	return handPermission;
 }
