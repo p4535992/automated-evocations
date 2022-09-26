@@ -1,7 +1,7 @@
 import API from "./api.js";
 import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import { log, retrieveActorFromData, rollFromString, warn } from "./lib/lib.js";
+import { log, retrieveActorFromData, rollFromString, should_I_run_this, warn } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
@@ -210,18 +210,21 @@ export class CompanionManager extends FormApplication {
 		const aId = event.currentTarget.dataset.aid;
 		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
-		// const actorToTransform = game.actors.get(aId);
-		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
-		const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
-			"retrieveAndPrepareActor",
-			aId,
-			aName,
-			aCompendiumId,
-			true,
-			this.actor.id,
-			game.user.id
-		);
-		const actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+		let actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		if (actorToTransform && should_I_run_this(actorToTransform)) {
+			// DO NOTHING
+		} else {
+			const actorToTransformId = await automatedPolymorpherSocket.executeAsGM(
+				"retrieveAndPrepareActor",
+				aId,
+				aName,
+				aCompendiumId,
+				true,
+				this.actor.id,
+				game.user?.id
+			);
+			actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+		}
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
@@ -531,17 +534,21 @@ export class CompanionManager extends FormApplication {
 		const aName = companionData.name;
 		const aCompendiumId = companionData.compendiumid;
 		const aExplicitName = companionData.explicitname;
-		// const actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
-		const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
-			"retrieveAndPrepareActor",
-			aId,
-			aName,
-			aCompendiumId,
-			true,
-			this.actor.id,
-			game.user.id
-		);
-		const actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+		let actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		if (actorToTransform && should_I_run_this(actorToTransform)) {
+			// DO NOTHING
+		} else {
+			const actorToTransformId = await automatedPolymorpherSocket.executeAsGM(
+				"retrieveAndPrepareActor",
+				aId,
+				aName,
+				aCompendiumId,
+				true,
+				this.actor.id,
+				game.user?.id
+			);
+			actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+		}
 		if (!actorToTransform) {
 			warn(
 				`The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
