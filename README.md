@@ -42,7 +42,8 @@ If you want to support more modules of this kind, I invite you to go and support
 - NEW FEATURE: Integration for load actors directly from compendium
 - NEW FEATURE: Integration for store actors directly on actor instead token on the dialog html
 - NEW FEATURE: Add api for call summon with actor reference instead token reference
-- NEW FEATURE: For the "duplicates" element now we accept formula string as input value
+- NEW FEATURE: For the "duplicates" element now we accept formula string as input value e.g. "1d20"
+- NEW FEATURE: Automatic set of ownership permissions when you summon a companion with a non GM user, this will save some time on the GM side, and made the module wokring with actor not owned form the players by default
 
 as always, I invite you to support theripper93 through his patreon.
 
