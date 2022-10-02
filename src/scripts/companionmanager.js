@@ -214,7 +214,7 @@ export class CompanionManager extends FormApplication {
 		if (actorToTransform && should_I_run_this(actorToTransform)) {
 			// DO NOTHING
 		} else {
-			const actorToTransformId = await automatedPolymorpherSocket.executeAsGM(
+			const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
 				"retrieveAndPrepareActor",
 				aId,
 				aName,
@@ -538,7 +538,7 @@ export class CompanionManager extends FormApplication {
 		if (actorToTransform && should_I_run_this(actorToTransform)) {
 			// DO NOTHING
 		} else {
-			const actorToTransformId = await automatedPolymorpherSocket.executeAsGM(
+			const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
 				"retrieveAndPrepareActor",
 				aId,
 				aName,

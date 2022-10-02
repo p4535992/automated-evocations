@@ -198,6 +198,19 @@ export const readyHooks = async () => {
 			label: removeLabelSheetHeader ? "" : game.i18n.localize("AE.actorSheetBtn"),
 			onclick: function openCM(event) {
 				const actor = app.object;
+				let token = app.token ? app.token : app.object.token;
+				if(!token) {
+					const tokens = actor.getActiveTokens() || [];
+					if(tokens.length > 0){
+						token = tokens[0];
+					}
+				}
+				if(!token){
+					token = canvas.tokens?.placeables.find((t) => {
+						//@ts-ignore
+						return t.document.actorId === actor.id;
+					});
+				}
 				new CompanionManager(actor).render(true);
 			},
 		});

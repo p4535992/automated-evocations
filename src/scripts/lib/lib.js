@@ -174,7 +174,13 @@ function addToEvocationsVariantButton(html, sourceToken) {
 		for (const targetToken of canvas.tokens?.controlled) {
 			const targetActor = retrieveActorFromToken(targetToken);
 			if (targetActor) {
-				API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
+				if(targetToken) {
+					API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
+				} else {
+					warn(`No token is founded checkout the logs`, true);
+				}
+			} else {
+				warn(`No actor is founded checkout the logs`, true);
 			}
 		}
 	});
@@ -255,17 +261,19 @@ export function retrieveActorFromToken(sourceToken) {
 	if (!sourceToken.actor) {
 		return undefined;
 	}
-	// const storeOnActorFlag = sourceToken.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
+	// const storeOnActorFlag = <boolean>sourceToken.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
 	// if (!storeOnActorFlag) {
-	//     return sourceToken.actor;
+	//   return sourceToken.actor;
 	// }
 	let actor = undefined;
+	//@ts-ignore
 	if (sourceToken.document.actorLink) {
+		//@ts-ignore
 		actor = game.actors?.get(sourceToken.document.actorId);
 	}
 	// DO NOT NEED THIS
 	// if(!actor){
-	//   actor = <Actor>game.actors?.get(<string>sourceToken.actor?.id);
+	//   actor = <Actor>game.actors?.get(sourceToken.actor?.id);
 	// }
 	if (!actor) {
 		actor = sourceToken.actor;
