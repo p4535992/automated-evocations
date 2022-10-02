@@ -1,3 +1,7 @@
+### 1.6.7
+
+- Bug fix template form hidden not remove...
+
 ### 1.6.2-3-4-5-6
 
 - For the "duplicates" element now we accept formula string as input value
