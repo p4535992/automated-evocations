@@ -1,7 +1,11 @@
 import { setApi } from "../automated-evocations-variant.js";
 import API from "./api.js";
+import { dnd5eCreateChatMessage, pf2eCreateChatMessage } from "./autoevocations/automatedevocations.js";
+import { dnd5eCustomautospells } from "./autoevocations/dnd5e.js";
+import { pf2eCustomautospells } from "./autoevocations/pf2e.js";
 import { CompanionManager } from "./companionmanager.js";
 import CONSTANTS from "./constants.js";
+import { AutomatedEvocationsCustomBindings } from "./custombindings.js";
 import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { registerSocket } from "./socket.js";
@@ -22,6 +26,23 @@ export const initHooks = () => {
 		config: false,
 		type: Object,
 		default: {},
+		onChange: (obj) => {
+			// MOD 4535992
+			if (!game.automatedevocations) {
+				game.automatedevocations = {};
+				game.automatedevocations[game.system.id] = {};
+			}
+			if (!game.automatedevocations.originalBindings) {
+				game.automatedevocations.originalBindings = {};
+				game.automatedevocations.originalBindings = deepClone(game.automatedevocations[game.system.id]);
+			}
+			// END MOD 4535992
+			game.automatedevocations[game.system.id] = deepClone(game.automatedevocations.originalBindings);
+			game.automatedevocations[game.system.id] = mergeObject(
+				game.automatedevocations[game.system.id],
+				game.settings.get(AECONSTS.MN, "customautospells")
+			);
+		},
 	});
 	game.settings.register(AECONSTS.MN, "customanimations", {
 		name: "",
@@ -31,6 +52,17 @@ export const initHooks = () => {
 		type: Object,
 		default: {},
 	});
+	if (game.system.id === "dnd5e") {
+		game.settings.registerMenu(AECONSTS.MN, "configBindings", {
+			name: game.i18n.localize("AE.custombindings.sett.name"),
+			label: game.i18n.localize("AE.custombindings.sett.label"),
+			hint: game.i18n.localize("AE.custombindings.sett.hint"),
+			icon: "fas fa-cogs",
+			scope: "world",
+			restricted: true,
+			type: AutomatedEvocationsCustomBindings,
+		});
+	}
 	game.settings.register(AECONSTS.MN, "autoclose", {
 		name: game.i18n.localize(`AE.settings.autoclose.title`),
 		hint: game.i18n.localize(`AE.settings.autoclose.hint`),
@@ -183,6 +215,19 @@ export const readyHooks = async () => {
 	//new CompanionManager().render(true)
 	// });
 
+	if (game.system.id === "pf2e") {
+		await pf2eCustomautospells();
+		// Hooks.on("createChatMessage", async (chatMessage) => {
+		// 	await pf2eCreateChatMessage();
+		// });
+	}
+	if (game.system.id === "dnd5e") {
+		await dnd5eCustomautospells();
+		// Hooks.on("createChatMessage", async (chatMessage) => {
+		// 	await dnd5eCreateChatMessage();
+		// });
+	}
+
 	Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
 		if (game.settings.get(AECONSTS.MN, "hidebutton")) return;
 
@@ -250,3 +295,12 @@ export const readyHooks = async () => {
 			.insertAfter($(`input[name="${nameHudColorButton}"]`, html).addClass("color"));
 	});
 };
+
+Hooks.on("createChatMessage", async (chatMessage) => {
+	if (game.system.id === "dnd5e") {
+		await dnd5eCreateChatMessage(chatMessage);
+	}
+	if (game.system.id === "pf2e") {
+		await pf2eCreateChatMessage(chatMessage);
+	}
+});

@@ -1,4 +1,7 @@
-Hooks.once("ready", async function () {
+import AECONSTS from "../main.js";
+
+// Hooks.once("ready", async function () {
+export const dnd5eCustomautospells = async function () {
 	if (!game.automatedevocations) {
 		game.automatedevocations = {};
 		game.automatedevocations[game.system.id] = {};
@@ -321,8 +324,10 @@ Hooks.once("ready", async function () {
 			],
 		};
 	}
+	game.automatedevocations.originalBindings = deepClone(game.automatedevocations[game.system.id]);
 	game.automatedevocations[game.system.id] = mergeObject(
 		game.automatedevocations[game.system.id],
 		game.settings.get(AECONSTS.MN, "customautospells")
 	);
-});
+	// });
+};

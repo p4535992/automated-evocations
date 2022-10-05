@@ -1,10 +1,11 @@
-import { SimpleCompanionManager } from "../companionmanager";
-import AECONSTS from "../main";
+import { SimpleCompanionManager } from "../companionmanager.js";
+import AECONSTS from "../main.js";
 
-Hooks.on("createChatMessage", async (chatMessage) => {
+// Hooks.on("createChatMessage", async (chatMessage) => {
+export const dnd5eCreateChatMessage = async function (chatMessage) {
 	try {
 		if (game.system.id != "dnd5e") return;
-		if (chatMessage.author.id !== game.user.id || !game.settings.get(AECONSTS.MN, "enableautomations")) return;
+		if (!chatMessage.isAuthor || !game.settings.get(AECONSTS.MN, "enableautomations")) return;
 
 		const messageContent = $(chatMessage.content);
 		if (!messageContent.length) return;
@@ -44,9 +45,11 @@ Hooks.on("createChatMessage", async (chatMessage) => {
 	} catch (e) {
 		// Ignore random errors on message parsing
 	}
-});
+	// });
+};
 
-Hooks.on("createChatMessage", async (chatMessage) => {
+// Hooks.on("createChatMessage", async (chatMessage) => {
+export const pf2eCreateChatMessage = async function (chatMessage) {
 	try {
 		if (game.system.id != "pf2e") return;
 		if (chatMessage.user !== game.user.id || !game.settings.get(AECONSTS.MN, "enableautomations")) return;
@@ -80,4 +83,5 @@ Hooks.on("createChatMessage", async (chatMessage) => {
 	} catch (e) {
 		// Ignore random errors on message parsing
 	}
-});
+	// });
+};

@@ -1,4 +1,7 @@
-Hooks.once("ready", async function () {
+import AECONSTS from "../main.js";
+
+// Hooks.once("ready", async function () {
+export const pf2eCustomautospells = async function () {
 	if (!game.automatedevocations) {
 		game.automatedevocations = {};
 		game.automatedevocations[game.system.id] = {};
@@ -133,4 +136,5 @@ Hooks.once("ready", async function () {
 		game.automatedevocations[game.system.id],
 		game.settings.get(AECONSTS.MN, "customautospells")
 	);
-});
+	// });
+};
