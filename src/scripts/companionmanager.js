@@ -458,6 +458,9 @@ export class CompanionManager extends FormApplication {
 	}
 
 	async saveData() {
+		if (this.element.parent().length === 0) {
+			return;
+		}
 		let data = [];
 		for (let companion of this.element.find(".companion-item")) {
 			data.push({

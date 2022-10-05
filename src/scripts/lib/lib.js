@@ -174,7 +174,7 @@ function addToEvocationsVariantButton(html, sourceToken) {
 		for (const targetToken of canvas.tokens?.controlled) {
 			const targetActor = retrieveActorFromToken(targetToken);
 			if (targetActor) {
-				if(targetToken) {
+				if (targetToken) {
 					API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
 				} else {
 					warn(`No token is founded checkout the logs`, true);

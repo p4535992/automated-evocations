@@ -199,13 +199,13 @@ export const readyHooks = async () => {
 			onclick: function openCM(event) {
 				const actor = app.object;
 				let token = app.token ? app.token : app.object.token;
-				if(!token) {
+				if (!token) {
 					const tokens = actor.getActiveTokens() || [];
-					if(tokens.length > 0){
+					if (tokens.length > 0) {
 						token = tokens[0];
 					}
 				}
-				if(!token){
+				if (!token) {
 					token = canvas.tokens?.placeables.find((t) => {
 						//@ts-ignore
 						return t.document.actorId === actor.id;
