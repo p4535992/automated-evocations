@@ -280,10 +280,17 @@ export function retrieveActorFromToken(sourceToken) {
 	}
 	return actor;
 }
-export async function retrieveActorFromData(aId, aName, currentCompendium, createOnWorld = false) {
+export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
 	let actorToTransformLi = null;
-	if (!aId && !aName) {
+	if (!aId && !aName && !aUuid) {
 		return null;
+	}
+	if (aUuid) {
+		//@ts-ignore
+		actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
+		if (actorToTransformLi) {
+			return actorToTransformLi;
+		}
 	}
 	actorToTransformLi = game.actors?.contents.find((a) => {
 		return a.id === aId || a.name === aName;

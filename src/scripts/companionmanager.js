@@ -180,12 +180,13 @@ export class CompanionManager extends FormApplication {
 		if (!data.type === "Actor") return;
 		// this.element.find('#companion-list').append(this.generateLi({ id: actor.id }));
 		// this.saveData();
-		const actorId = data.uuid ? data.uuid.replace("Actor.", "") : undefined;
-		const actorToTransformLi = await retrieveActorFromData(actorId, "", "", false);
+		const actorId = data.id;
+		const actorToTransformLi = await retrieveActorFromData(data.uuid, actorId, "", "", false);
 		if (actorToTransformLi) {
 			this.element.find("#companion-list").append(
 				this.generateLi(
 					{
+						uuid: actorToTransformLi.uuid,
 						id: actorToTransformLi.id,
 						name: actorToTransformLi.name,
 						animation: "",
@@ -207,15 +208,17 @@ export class CompanionManager extends FormApplication {
 		this.minimize();
 		const animation = $(event.currentTarget.parentElement.parentElement).find(".anim-dropdown").val();
 		const aName = event.currentTarget.dataset.aname;
+		const aUuid = event.currentTarget.dataset.auuid;
 		const aId = event.currentTarget.dataset.aid;
 		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
-		let actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
 		if (actorToTransform && should_I_run_this(actorToTransform)) {
 			// DO NOTHING
 		} else {
 			const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
 				"retrieveAndPrepareActor",
+				aUuid,
 				aId,
 				aName,
 				aCompendiumId,
@@ -223,7 +226,7 @@ export class CompanionManager extends FormApplication {
 				this.actor.id,
 				game.user?.id
 			);
-			actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+			actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
 		}
 		if (!actorToTransform) {
 			warn(
@@ -312,11 +315,12 @@ export class CompanionManager extends FormApplication {
 	}
 
 	async _onOpenSheet(event) {
+		const actorUuid = event.currentTarget.parentElement.dataset.auuid;
 		const actorId = event.currentTarget.parentElement.dataset.aid;
 		const actorName = event.currentTarget.parentElement.dataset.aname;
 		const aCompendiumId = event.currentTarget.dataset.acompendiumid;
 		const aExplicitName = event.currentTarget.dataset.aexplicitname;
-		const actorFromTransform = await retrieveActorFromData(aId, aName, aCompendiumId, false);
+		const actorFromTransform = await retrieveActorFromData(actorUuid, actorId, actorName, aCompendiumId, false);
 		if (actorFromTransform) {
 			actorFromTransform.sheet?.render(true);
 		}
@@ -367,11 +371,12 @@ export class CompanionManager extends FormApplication {
 		}
 		if (data) {
 			for (let companion of data) {
+				const aUuid = companion.uuid;
 				const aId = companion.id;
 				const aName = companion.name;
 				const aCompendiumId = companion.compendiumid;
 				const aExplicitName = companion.explicitname;
-				const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId, false);
+				const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
 				if (!actorToTransformLi) {
 					warn(`No actor founded for the token with id/name '${companion.name}'`, true);
 					continue;
@@ -394,6 +399,7 @@ export class CompanionManager extends FormApplication {
 		let $li = $(`
 	    <li id="companion"
         class="companion-item"
+		data-auuid="${actorToTransformLi.uuid}"
         data-aid="${actorToTransformLi.id}"
         data-aname="${actorToTransformLi.name}"
         data-acompendiumid="${data.compendiumid}"
@@ -407,6 +413,7 @@ export class CompanionManager extends FormApplication {
         <div
           class="warpgate-btn"
           id="summon-companion"
+		  data-auuid="${actorToTransformLi.uuid}"
           data-aid="${actorToTransformLi.id}"
           data-aname="${actorToTransformLi.name}"
           data-acompendiumid="${data.compendiumid}"
@@ -464,6 +471,7 @@ export class CompanionManager extends FormApplication {
 		let data = [];
 		for (let companion of this.element.find(".companion-item")) {
 			data.push({
+				uuid: companion.dataset.auuid,
 				id: companion.dataset.aid,
 				name: companion.dataset.aname,
 				animation: $(companion).find(".anim-dropdown").val(),
@@ -533,16 +541,18 @@ export class CompanionManager extends FormApplication {
 	async fastSummonEvocationsVariant(companionData, animationExternal = { sequence: undefined, timeToWait: 0 }) {
 		this.minimize();
 		const animation = companionData.animation;
+		const aUuid = companionData.uuid;
 		const aId = companionData.id;
 		const aName = companionData.name;
 		const aCompendiumId = companionData.compendiumid;
 		const aExplicitName = companionData.explicitname;
-		let actorToTransform = await retrieveActorFromData(aId, aName, aCompendiumId, true);
+		let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
 		if (actorToTransform && should_I_run_this(actorToTransform)) {
 			// DO NOTHING
 		} else {
 			const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
 				"retrieveAndPrepareActor",
+				aUuid,
 				aId,
 				aName,
 				aCompendiumId,
@@ -550,7 +560,7 @@ export class CompanionManager extends FormApplication {
 				this.actor.id,
 				game.user?.id
 			);
-			actorToTransform = await retrieveActorFromData(actorToTransformId, undefined, undefined, false);
+			actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
 		}
 		if (!actorToTransform) {
 			warn(
@@ -656,11 +666,12 @@ export class SimpleCompanionManager extends CompanionManager {
 	async activateListeners(html) {
 		for (let summon of this.summons) {
 			// this.element.find('#companion-list').append(this.generateLi(summon));
+			const aUuid = summon.uuid;
 			const aId = summon.id;
 			const aName = summon.name;
 			const aCompendiumId = summon.compendiumid;
 			const aExplicitName = summon.explicitname;
-			const actorToTransformLi = await retrieveActorFromData(aId, aName, aCompendiumId, false);
+			const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
 			if (actorToTransformLi) {
 				this.element.find("#companion-list").append(this.generateLi(summon, actorToTransformLi));
 			} else {
