@@ -275,6 +275,7 @@ export class CompanionManager extends FormApplication {
 			})) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
+		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
@@ -614,6 +615,7 @@ export class CompanionManager extends FormApplication {
 			})) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
+		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});

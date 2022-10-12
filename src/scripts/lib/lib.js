@@ -288,6 +288,33 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
 	if (aUuid) {
 		//@ts-ignore
 		actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
+		if(aUuid.toLowerCase().includes("compendium")){
+			if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
+				const packId = aUuid.replace("Compendium.","").replace("."+aId,"");
+				const pack = game.packs.get(packId);
+				if (pack) {
+					await pack.getIndex();
+					// If the actor is found in the index, return it by exact ID
+					if (pack.index.get(aId)) {
+						actorToTransformLi = await pack.getDocument(aId);
+					}
+					// If not found, search for the actor by name
+					if (!actorToTransformLi) {
+						for (const entityComp of pack.index) {
+							const actorComp = await pack.getDocument(entityComp._id);
+							if (actorComp.id === aId || actorComp.name === aName) {
+								actorToTransformLi = actorComp;
+								break;
+							}
+						}
+					}
+				}
+				// Create actor from compendium
+				const collection = game.collections.get(pack.documentName);
+				const id = actorToTransformLi.id; // li.data("document-id");
+				actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
+			}
+		}
 		if (actorToTransformLi) {
 			return actorToTransformLi;
 		}
