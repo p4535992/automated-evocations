@@ -1,1 +1,113 @@
-{}
+{
+	"AE": {
+		"custombindings": {
+			"tt": {
+				"spellname": "Nome Feitiço",
+				"edit": "Editar",
+				"delete": "Excluir",
+				"creaturename": "Nome da criatura"
+			}
+		},
+		"pick3d": "Clique num ponto na Tela 3D para Invocar.",
+		"dialogs": {
+			"companionManager": {
+				"title": "Gerenciador de Companheiros",
+				"confirm": {
+					"title": "Excluir Companheiro",
+					"content": "<p>Tem a certeza de que quer excluir este companheiro?</p>"
+				}
+			},
+			"random": "Aleatório",
+			"selectcompendium": "Seleccione um compêndio",
+			"deleteall": "Excluir tudo",
+			"storeonactor": "Armazenar no ator",
+			"none": "Nenhum",
+			"nonenodelete": "Nenhum, mas não exclui os atores carregados",
+			"ordered": "Encomendado"
+		},
+		"actorSheetBtn": "Companheiros",
+		"animations": {
+			"fire": "Fogo",
+			"air": "Ar",
+			"lightning": "Relâmpago",
+			"water": "Água",
+			"energy1": "Energia",
+			"magic1": "Magia",
+			"heart": "Doki-Doki",
+			"music": "Crescendo",
+			"fourelements": "Quatro Elementos",
+			"music2": "Acorde",
+			"darkness": "Escuridão",
+			"ice1": "Gelo",
+			"magic2": "Conjuração",
+			"lightning2": "Tempestade"
+		},
+		"groups": {
+			"elemental": "Elemental",
+			"magical": "Mágico",
+			"z-none": "Outro"
+		},
+		"settings": {
+			"storeonactor": {
+				"hint": "Armazene os companheiros no ator em vez do token por padrão.",
+				"title": "Armazenar os companheiros no ator"
+			},
+			"autoclose": {
+				"title": "Fechamento automático",
+				"hint": "Fechar automaticamente a janela do companheiro após a convocação."
+			},
+			"hidebutton": {
+				"title": "Ocultar o botão companheiro",
+				"hint": "Oculta o botão companheiro na ficha de personagem."
+			},
+			"disableSettingsForNoGM": {
+				"title": "Desativar configurações de convocação de diálogo para nenhum GM",
+				"hint": "Desative as configurações (como a opção de compêndio, armazenar no ator, excluir todos os botões, tipo de animação e número de criaturas) do diálogo de convocação e bloquear a queda de atores para nenhum jogador GM."
+			},
+			"restrictOwned": {
+				"title": "Apenas atores próprios",
+				"hint": "Restrinja a lista de companheiros para mostrar apenas atores de companheiros próprios."
+			},
+			"removeLabelSheetHeader": {
+				"title": "Botão Remover etiqueta do cabeçalho da ficha",
+				"hint": "Remover etiqueta do botão de cabeçalho da ficha, útil para monitor pequeno, tablet"
+			},
+			"hudColumn": {
+				"title": "Coluna HUD",
+				"hint": "Em qual coluna do HUD colocar o botão"
+			},
+			"hudTopBottom": {
+				"title": "HUD Superior/Inferior",
+				"hint": "Onde colocar o botão na coluna"
+			},
+			"hudEnable": {
+				"title": "Ativar o recurso HUD de token",
+				"hint": "Evite a renderização do gerenciador de companheiro para evocação rápida ao clicar no botão hud. Todas as entidades com um 'tipo de convocação padrão' definido na configuração do token/ator, permitirão que você evite a renderização do gerenciador de companheiros, pode ser realmente útil para combate rápido, existem duas opções 'aleatório' e 'ordenado' você pode' t habilitar ambos. Lembre-se que você deve possuir o token para ver o botão HUD"
+			},
+			"hudColorButton": {
+				"title": "Cor do Botão do recurso HUD",
+				"hint": "Escolha qual cor usar para o botão HUD"
+			},
+			"reset": {
+				"title": "Redefinir as configurações para o padrão",
+				"name": "Redefinir as configurações para o padrão",
+				"hint": "Isso redefinirá todas as configurações de volta ao padrão do sistema de jogo ativo.",
+				"label": "Redefinir as configurações para o padrão"
+			},
+			"debug": {
+				"title": "Ativar depuração",
+				"name": "Ativar depuração",
+				"hint": " . ",
+				"label": "Imprime mensagens de depuração no console"
+			},
+			"enableautomations": {
+				"title": "Ativar automações",
+				"hint": "Ative o sistema de automação complementar no lançamento de feitiços."
+			},
+			"restrictOnlyGM": {
+				"title": "Apenas GM pode ver o botão Companheiros",
+				"hint": "Restringir a lista de companheiros apenas para GMs"
+			}
+		}
+	}
+}
