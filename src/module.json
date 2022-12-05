@@ -75,6 +75,11 @@
 			"lang": "ja",
 			"name": "日本語",
 			"path": "languages/ja.json"
+		},
+		{
+			"lang": "pt-BR",
+			"name": "Português (Brasil)",
+			"path": "languages/pt-BR.json"
 		}
 	],
 	"packs": [
@@ -97,8 +102,13 @@
 		}
 	],
 	"scripts": [],
-	"esmodules": ["automated-evocations-variant.js"],
-	"styles": ["styles/comapnionmanager.css", "styles/spellconfig.css"],
+	"esmodules": [
+		"automated-evocations-variant.js"
+	],
+	"styles": [
+		"styles/comapnionmanager.css",
+		"styles/spellconfig.css"
+	],
 	"compatibility": {
 		"minimum": 10,
 		"verified": 10,
