@@ -1,7 +1,7 @@
 import API from "./api.js";
 import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import { log, retrieveActorFromData, rollFromString, should_I_run_this, warn } from "./lib/lib.js";
+import { error, log, retrieveActorFromData, rollFromString, should_I_run_this, warn } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
@@ -247,10 +247,7 @@ export class CompanionManager extends FormApplication {
 		const posData = game?.Levels3DPreview?._active
 			? await this.pickCanvasPosition3D()
 			: await warpgate.crosshairs.show({
-					size:
-						(Math.max(tokenData.width, tokenData.height) *
-							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
-						2,
+					size: Math.max(Math.max(tokenData.width,tokenData.height)*(tokenData.texture.scaleX + tokenData.texture.scaleY)/2, 0.5),
 					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
 					label: "",
 			  });
@@ -266,17 +263,29 @@ export class CompanionManager extends FormApplication {
 
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
-		const customTokenData =
-			(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
-				summon: actorToTransform,
-				spellLevel: this.spellLevel || 0,
-				duplicates: duplicates,
-				assignedActor: this.caster || game.user.character || _token.actor,
-			})) || {};
+		// const customTokenData =
+		// 	(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
+		// 		summon: actorToTransform,
+		// 		spellLevel: this.spellLevel || 0,
+		// 		duplicates: duplicates,
+		// 		assignedActor: this.caster || game.user.character || _token.actor,
+		// 	})) || {};
+        const customTokenData = await this.evaluateExpression(
+            game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
+            {
+                summon: actorToTransform,
+                spellLevel: this.spellLevel || 0,
+                duplicates: duplicates,
+                assignedActor: this.caster || game.user.character || _token.actor
+            }
+        ) || {};
+
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
+            td ??= {};
+            td.elevation = customTokenData.elevation;
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
 		// eslint-disable-next-line no-undef
@@ -301,6 +310,19 @@ export class CompanionManager extends FormApplication {
 		if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
 		else this.maximize();
 	}
+
+    async evaluateExpression(expression, ...args) {
+        if (!expression) return null;
+        const AsyncFunction = (async function () {}).constructor;
+        const fn = new AsyncFunction("args" ,$("<span />", { html: expression }).text());
+        try {
+            return await fn(args);
+        } catch(e) {
+            error("There was an error in your macro syntax. See the console (F12) for details", true);
+            error(e);
+            return undefined;
+        }
+    }
 
 	async _onRemoveCompanion(event) {
 		Dialog.confirm({
@@ -577,10 +599,7 @@ export class CompanionManager extends FormApplication {
 		const posData = game?.Levels3DPreview?._active
 			? await this.pickCanvasPosition3D()
 			: await warpgate.crosshairs.show({
-					size:
-						(Math.max(tokenData.width, tokenData.height) *
-							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
-						2,
+					size: Math.max(Math.max(tokenData.width,tokenData.height)*(tokenData.texture.scaleX + tokenData.texture.scaleY)/2, 0.5),
 					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
 					label: "",
 			  });
@@ -606,17 +625,28 @@ export class CompanionManager extends FormApplication {
 
 		await this.wait(AECONSTS.animationFunctions[animation].time);
 		//get custom data macro
-		const customTokenData =
-			(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
-				summon: actorToTransform,
-				spellLevel: this.spellLevel || 0,
-				duplicates: duplicates,
-				assignedActor: this.caster || game.user.character || _token.actor,
-			})) || {};
+		// const customTokenData =
+		// 	(await game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.execute({
+		// 		summon: actorToTransform,
+		// 		spellLevel: this.spellLevel || 0,
+		// 		duplicates: duplicates,
+		// 		assignedActor: this.caster || game.user.character || _token.actor,
+		// 	})) || {};
+        const customTokenData = await this.evaluateExpression(
+            game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
+            {
+                summon: actorToTransform,
+                spellLevel: this.spellLevel || 0,
+                duplicates: duplicates,
+                assignedActor: this.caster || game.user.character || _token.actor
+            }
+        ) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
+            td ??= {};
+            td.elevation = customTokenData.elevation;
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
 		// eslint-disable-next-line no-undef
