@@ -1,0 +1,121 @@
+{
+	"AE": {
+		"custombindings": {
+			"add": "Add Binding",
+			"bindingstitle": "Edit Custom Bindings",
+			"bindingtitle": "Edit Binding",
+			"tt": {
+				"spellname": "Spell Name",
+				"edit": "Edit",
+				"delete": "Delete",
+				"creaturename": "Creature Name"
+			},
+			"sett": {
+				"label": "Configure Custom Bindings",
+				"name": "Custom Bindings",
+				"hint": "Configure Custom Spell Bindings"
+			}
+		},
+		"pick3d": "Click a point in the 3D Canvas to Summon.",
+		"dialogs": {
+			"companionManager": {
+				"title": "Companion Manager",
+				"confirm": {
+					"title": "Delete Companion",
+					"content": "<p>Are you sure you want to delete this companion?</p>"
+				}
+			},
+			"random": "Random",
+			"ordered": "Ordered",
+			"selectcompendium": "Select a compendium",
+			"deleteall": "Delete All",
+			"storeonactor": "Store on Actor",
+			"none": "None",
+			"nonenodelete": "None but not delete the loaded actors"
+		},
+		"actorSheetBtn": "Companions",
+		"animations": {
+			"fire": "Fire",
+			"air": "Air",
+			"lightning": "Lightning",
+			"water": "Water",
+			"energy1": "Energy",
+			"magic1": "Magic",
+			"heart": "Doki-Doki",
+			"music": "Crescendo",
+			"fourelements": "Four Elements",
+			"music2": "Chord",
+			"darkness": "Darkness",
+			"ice1": "Ice",
+			"magic2": "Conjuration",
+			"lightning2": "Storm"
+		},
+		"groups": {
+			"elemental": "Elemental",
+			"magical": "Magical",
+			"z-none": "Other"
+		},
+		"settings": {
+			"storeonactor": {
+				"title": "Store Companions on Actor",
+				"hint": "Store the companions on the actor instead of the token by default."
+			},
+			"enableautomations": {
+				"title": "Enable Automations",
+				"hint": "Enable the companion automation system on spellcast."
+			},
+			"autoclose": {
+				"title": "Auto-Close",
+				"hint": "Automatically close the companion window after summoning."
+			},
+			"hidebutton": {
+				"title": "Hide Companion Button",
+				"hint": "Hide the companion button on the character sheet."
+			},
+			"disableSettingsForNoGM": {
+				"title": "Disable dialog summon settings for no GM",
+				"hint": "Disable the settings (such as the compendium option, store in actor, delete all button, animation type and number of creatures) from summon dialog and block drop of actors for no GM player."
+			},
+			"restrictOwned": {
+				"title": "Only Owned Actors",
+				"hint": "Restrict the companion list to only show owned companions actors."
+			},
+			"restrictOnlyGM": {
+				"title": "Only GM can see Companion button",
+				"hint": "Restrict the companion list to GMs only"
+			},
+			"removeLabelSheetHeader": {
+				"title": "Remove label from sheet header button",
+				"hint": "Remove label from sheet header button useful for small monitor, tablet"
+			},
+			"hudColumn": {
+				"title": "HUD Column",
+				"hint": "Which HUD column to place the button in"
+			},
+			"hudTopBottom": {
+				"title": "HUD Top/Bottom",
+				"hint": "Where to place the button in the column"
+			},
+			"hudEnable": {
+				"title": "Enable token HUD feature",
+				"hint": "Avoid the rendering of the companion manager for fast evocation when click on the hud button. All the entities with a 'default summon type' setted on the token/actor configuration, will let you avoid the rendering of the companion manager, can be really useful for fast combat, there two options 'random' and 'ordered' you can't enable both. Remember you must own the token for see the HUD button"
+			},
+			"hudColorButton": {
+				"title": "HUD feature color button",
+				"hint": "Choose what color to use for the HUD button"
+			},
+			"reset": {
+				"title": "Reset settings to default",
+				"name": "Reset settings to default",
+				"label": "Reset Settings To Default",
+				"hint": "This will reset all of the settings of back to the active game system's default."
+			},
+			"debug": {
+				"title": "Enable debugging",
+				"name": "Enable debugging",
+				"label": "Prints debug messages to the console",
+				"hint": " "
+			}
+		}
+	}
+}
