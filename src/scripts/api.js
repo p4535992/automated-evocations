@@ -137,9 +137,14 @@ const API = {
 						} else if (animation) {
 							if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
 								//@ts-ignore
-								game.macros
-									?.getName(AECONSTS.animationFunctions[animation].fn)
-									?.execute(posData, tokenDataToTransform);
+								// game.macros
+								// 	?.getName(AECONSTS.animationFunctions[animation].fn)
+								// 	?.execute(posData, tokenDataToTransform);
+								this.evaluateExpression(
+									game.macros?.getName(AECONSTS.animationFunctions[animation].fn).command,
+									posData,
+									tokenDataToTransform
+								);
 							} else {
 								AECONSTS.animationFunctions[animation].fn(posData, tokenDataToTransform);
 							}
@@ -294,6 +299,18 @@ const API = {
 			}
 		}
 		return targetActor;
+	},
+	async evaluateExpression(expression, ...args) {
+		if (!expression) return null;
+		const AsyncFunction = async function () {}.constructor;
+		const fn = new AsyncFunction("args", $("<span />", { html: expression }).text());
+		try {
+			return await fn(args);
+		} catch (e) {
+			error("There was an error in your macro syntax. See the console (F12) for details", true);
+			error(e);
+			return undefined;
+		}
 	},
 };
 export default API;

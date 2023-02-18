@@ -247,7 +247,12 @@ export class CompanionManager extends FormApplication {
 		const posData = game?.Levels3DPreview?._active
 			? await this.pickCanvasPosition3D()
 			: await warpgate.crosshairs.show({
-					size: Math.max(Math.max(tokenData.width,tokenData.height)*(tokenData.texture.scaleX + tokenData.texture.scaleY)/2, 0.5),
+					size: Math.max(
+						(Math.max(tokenData.width, tokenData.height) *
+							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
+							2,
+						0.5
+					),
 					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
 					label: "",
 			  });
@@ -256,7 +261,12 @@ export class CompanionManager extends FormApplication {
 			return;
 		}
 		if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
-			game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+			// game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+			this.evaluateExpression(
+				game.macros?.getName(AECONSTS.animationFunctions[animation].fn).command,
+				posData,
+				tokenData
+			);
 		} else {
 			AECONSTS.animationFunctions[animation].fn(posData, tokenData);
 		}
@@ -270,22 +280,23 @@ export class CompanionManager extends FormApplication {
 		// 		duplicates: duplicates,
 		// 		assignedActor: this.caster || game.user.character || _token.actor,
 		// 	})) || {};
-        const customTokenData = await this.evaluateExpression(
-            game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
-            {
-                summon: actorToTransform,
-                spellLevel: this.spellLevel || 0,
-                duplicates: duplicates,
-                assignedActor: this.caster || game.user.character || _token.actor
-            }
-        ) || {};
+		const customTokenData =
+			(await this.evaluateExpression(
+				game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
+				{
+					summon: actorToTransform,
+					spellLevel: this.spellLevel || 0,
+					duplicates: duplicates,
+					assignedActor: this.caster || game.user.character || _token.actor,
+				}
+			)) || {};
 
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
-            td ??= {};
-            td.elevation = customTokenData.elevation;
+			td ??= {};
+			td.elevation = customTokenData.elevation;
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
 		// eslint-disable-next-line no-undef
@@ -311,18 +322,18 @@ export class CompanionManager extends FormApplication {
 		else this.maximize();
 	}
 
-    async evaluateExpression(expression, ...args) {
-        if (!expression) return null;
-        const AsyncFunction = (async function () {}).constructor;
-        const fn = new AsyncFunction("args" ,$("<span />", { html: expression }).text());
-        try {
-            return await fn(args);
-        } catch(e) {
-            error("There was an error in your macro syntax. See the console (F12) for details", true);
-            error(e);
-            return undefined;
-        }
-    }
+	async evaluateExpression(expression, ...args) {
+		if (!expression) return null;
+		const AsyncFunction = async function () {}.constructor;
+		const fn = new AsyncFunction("args", $("<span />", { html: expression }).text());
+		try {
+			return await fn(args);
+		} catch (e) {
+			error("There was an error in your macro syntax. See the console (F12) for details", true);
+			error(e);
+			return undefined;
+		}
+	}
 
 	async _onRemoveCompanion(event) {
 		Dialog.confirm({
@@ -599,7 +610,12 @@ export class CompanionManager extends FormApplication {
 		const posData = game?.Levels3DPreview?._active
 			? await this.pickCanvasPosition3D()
 			: await warpgate.crosshairs.show({
-					size: Math.max(Math.max(tokenData.width,tokenData.height)*(tokenData.texture.scaleX + tokenData.texture.scaleY)/2, 0.5),
+					size: Math.max(
+						(Math.max(tokenData.width, tokenData.height) *
+							(tokenData.texture.scaleX + tokenData.texture.scaleY)) /
+							2,
+						0.5
+					),
 					icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
 					label: "",
 			  });
@@ -618,7 +634,12 @@ export class CompanionManager extends FormApplication {
 		// }
 
 		if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
-			game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+			// game.macros.getName(AECONSTS.animationFunctions[animation].fn).execute(posData, tokenData);
+			this.evaluateExpression(
+				game.macros?.getName(AECONSTS.animationFunctions[animation].fn).command,
+				posData,
+				tokenData
+			);
 		} else {
 			AECONSTS.animationFunctions[animation].fn(posData, tokenData);
 		}
@@ -632,21 +653,22 @@ export class CompanionManager extends FormApplication {
 		// 		duplicates: duplicates,
 		// 		assignedActor: this.caster || game.user.character || _token.actor,
 		// 	})) || {};
-        const customTokenData = await this.evaluateExpression(
-            game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
-            {
-                summon: actorToTransform,
-                spellLevel: this.spellLevel || 0,
-                duplicates: duplicates,
-                assignedActor: this.caster || game.user.character || _token.actor
-            }
-        ) || {};
+		const customTokenData =
+			(await this.evaluateExpression(
+				game.macros.getName(`AE_Companion_Macro(${actorToTransform.name})`)?.command,
+				{
+					summon: actorToTransform,
+					spellLevel: this.spellLevel || 0,
+					duplicates: duplicates,
+					assignedActor: this.caster || game.user.character || _token.actor,
+				}
+			)) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
 		tokenData.elevation = customTokenData.elevation;
 		tokenData.actorId = actorToTransform.id;
 		Hooks.on("preCreateToken", (tokenDoc, td) => {
-            td ??= {};
-            td.elevation = customTokenData.elevation;
+			td ??= {};
+			td.elevation = customTokenData.elevation;
 			tokenDoc.updateSource({ elevation: customTokenData.elevation });
 		});
 		// eslint-disable-next-line no-undef
