@@ -377,7 +377,9 @@ export class CompanionManager extends FormApplication {
 		if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
 			const pack = game.packs.get(currentCompendium);
 			if (pack) {
-				await pack.getIndex();
+				if (!pack.indexed) {
+					await pack.getIndex();
+				}
 				for (const entityComp of pack.index) {
 					const actorComp = await pack.getDocument(entityComp._id);
 					if (actorComp) {
