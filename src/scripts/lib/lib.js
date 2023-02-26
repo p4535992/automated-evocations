@@ -280,93 +280,129 @@ export function retrieveActorFromToken(sourceToken) {
 	}
 	return actor;
 }
+export async function uuidToDocument(uuid, createOnWorld) {
+	const parts = uuid.split(".");
+	let result = null;
+	if (parts[0] === "Compendium") {
+		const pack = game["packs"].get(parts[1] + "." + parts[2]);
+		if (pack !== undefined) {
+			result = await pack.getDocument(parts[3]);
+		}
+		// MOD 4535992
+		// Create actor from compendium
+		if (result && createOnWorld && (game.user?.isGM || should_I_run_this(result))) {
+			// Create actor from compendium
+			const collection = game.collections.get(pack.documentName);
+			const id = result.id;
+			result = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
+		}
+		// END MOD 4535992
+	} else {
+		result = await fromUuid(uuid);
+	}
+	if (result === null) {
+		error(`Document Not Found for uuid ${uuid}`);
+		result = null;
+	}
+	return result;
+}
 export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
-    let actorToTransformLi = null;
-    if (!aId && !aName) {
-        return null;
-    }
-    if (aUuid) {
-        //@ts-ignore
-        actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
-        if (aUuid.toLowerCase().includes("compendium")) {
-            if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
-                const packId = aUuid.replace("Compendium.", "").replace("." + aId, "");
-                const pack = game.packs.get(packId);
-                if (pack) {
-                    if (!pack.indexed) {
-                        await pack.getIndex();
-                    }
-                    // If the actor is found in the index, return it by exact ID
-                    if (pack.index.get(aId)) {
-                        actorToTransformLi = await pack.getDocument(aId);
-                    }
-                    // If not found, search for the actor by name
-                    if (!actorToTransformLi) {
-                        for (const entityComp of pack.index) {
-                            const actorComp = await pack.getDocument(entityComp._id);
-                            if (actorComp.id === aId || actorComp.name === aName) {
-                                actorToTransformLi = actorComp.toObject();
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        actorToTransformLi = actorToTransformLi.toObject();
-                    }
-                }
-                // Create actor from compendium
-                // const collection = <any>game.collections.get(pack.documentName);
-                // const id = <string>actorToTransformLi.id; // li.data("document-id");
-                // actorToTransformLi = <Actor>await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-            }
-        }
-        if (actorToTransformLi) {
-            return actorToTransformLi;
-        }
-    }
-    actorToTransformLi = game.actors?.contents.find((a) => {
-        return a.id === aId || a.name === aName;
-    });
-    if (!actorToTransformLi &&
-        currentCompendium &&
-        currentCompendium != "none" &&
-        currentCompendium != "nonenodelete") {
-        const pack = game.packs.get(currentCompendium);
-        if (pack) {
-            if (!pack.indexed) {
-                await pack.getIndex();
-            }
-            // If the actor is found in the index, return it by exact ID
-            if (pack.index.get(aId)) {
-                actorToTransformLi = await pack.getDocument(aId);
-            }
-            // If not found, search for the actor by name
-            if (!actorToTransformLi) {
-                for (const entityComp of pack.index) {
-                    const actorComp = await pack.getDocument(entityComp._id);
-                    if (actorComp.id === aId || actorComp.name === aName) {
-                        actorToTransformLi = actorComp.toObject();
-                        break;
-                    }
-                }
-            }
-            else {
-                actorToTransformLi = actorToTransformLi.toObject();
-            }
-        }
-        // if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
-        // 	// Create actor from compendium
-        // 	const collection = <any>game.collections.get(pack.documentName);
-        // 	const id = actorToTransformLi.id; // li.data("document-id");
-        // 	actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-        // }
-    }
-    if (!actorToTransformLi) {
-        actorToTransformLi = game.actors?.contents.find((a) => {
-            return a.id === aId || a.name === aName;
-        });
-    }
-    return actorToTransformLi;
+	let actorToTransformLi = null;
+	if (!aUuid && !aId && !aName) {
+		warn(`No reference is been found please check out the debug`);
+		return null;
+	}
+	if (aUuid) {
+		actorToTransformLi = await uuidToDocument(aUuid, createOnWorld);
+		if (actorToTransformLi) {
+			return actorToTransformLi;
+		}
+	}
+	if (aUuid) {
+		//@ts-ignore
+		actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
+		if (aUuid.toLowerCase().includes("compendium")) {
+			if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
+				const packId = aUuid.replace("Compendium.", "").replace("." + aId, "");
+				const pack = game.packs.get(packId);
+				if (pack) {
+					if (!pack.indexed) {
+						await pack.getIndex();
+					}
+					// If the actor is found in the index, return it by exact ID
+					if (pack.index.get(aId)) {
+						actorToTransformLi = await pack.getDocument(aId);
+					}
+					// If not found, search for the actor by name
+					if (!actorToTransformLi) {
+						for (const entityComp of pack.index) {
+							const actorComp = await pack.getDocument(entityComp._id);
+							if (actorComp.id === aId || actorComp.name === aName) {
+								actorToTransformLi = actorComp.toObject();
+								break;
+							}
+						}
+					} else {
+						actorToTransformLi = actorToTransformLi.toObject();
+					}
+				}
+				// Create actor from compendium
+				if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
+					// Create actor from compendium
+					const collection = game.collections.get(pack.documentName);
+					const id = actorToTransformLi.id; // li.data("document-id");
+					actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
+				}
+			}
+		}
+		if (actorToTransformLi) {
+			return actorToTransformLi;
+		}
+	}
+	actorToTransformLi = game.actors?.contents.find((a) => {
+		return a.id === aId || a.name === aName;
+	});
+	if (
+		!actorToTransformLi &&
+		currentCompendium &&
+		currentCompendium != "none" &&
+		currentCompendium != "nonenodelete"
+	) {
+		const pack = game.packs.get(currentCompendium);
+		if (pack) {
+			if (!pack.indexed) {
+				await pack.getIndex();
+			}
+			// If the actor is found in the index, return it by exact ID
+			if (pack.index.get(aId)) {
+				actorToTransformLi = await pack.getDocument(aId);
+			}
+			// If not found, search for the actor by name
+			if (!actorToTransformLi) {
+				for (const entityComp of pack.index) {
+					const actorComp = await pack.getDocument(entityComp._id);
+					if (actorComp.id === aId || actorComp.name === aName) {
+						actorToTransformLi = actorComp.toObject();
+						break;
+					}
+				}
+			} else {
+				actorToTransformLi = actorToTransformLi.toObject();
+			}
+		}
+		// if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
+		// 	// Create actor from compendium
+		// 	const collection = <any>game.collections.get(pack.documentName);
+		// 	const id = actorToTransformLi.id; // li.data("document-id");
+		// 	actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
+		// }
+	}
+	if (!actorToTransformLi) {
+		actorToTransformLi = game.actors?.contents.find((a) => {
+			return a.id === aId || a.name === aName;
+		});
+	}
+	return actorToTransformLi;
 }
 
 export async function rollFromString(rollString, actor) {
