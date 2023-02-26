@@ -287,7 +287,7 @@ export class CompanionManager extends FormApplication {
 					summon: actorToTransform,
 					spellLevel: this.spellLevel || 0,
 					duplicates: duplicates,
-					assignedActor: this.caster || game.user.character || _token.actor,
+					assignedActor: this.caster || game.user.character || _token?.actor || this.actor,
 				}
 			)) || {};
 
@@ -662,7 +662,7 @@ export class CompanionManager extends FormApplication {
 					summon: actorToTransform,
 					spellLevel: this.spellLevel || 0,
 					duplicates: duplicates,
-					assignedActor: this.caster || game.user.character || _token.actor,
+					assignedActor: this.caster || game.user.character || _token?.actor || this.actor,
 				}
 			)) || {};
 		customTokenData.elevation = posData.z ?? _token?.document?.elevation ?? 0;
