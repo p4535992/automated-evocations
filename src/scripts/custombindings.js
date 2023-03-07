@@ -53,8 +53,8 @@ export class AutomatedEvocationsCustomBindings extends FormApplication {
 		// 	this.render(true);
 		// });
 		html.on("change submit", "input, select", async (event) => {
-            this.saveData(true);
-        });
+			this.saveData(true);
+		});
 	}
 }
 
@@ -120,9 +120,9 @@ export class AutomatedEvocationsCustomBindingsConfig extends FormApplication {
 		// 	await game.settings.set(AECONSTS.MN, "customautospells", newBindings);
 		// 	this.render(true);
 		// });
-        html.on("change submit", "input, select", async (event) => {
-            this.saveData(true);
-        });
+		html.on("change submit", "input, select", async (event) => {
+			this.saveData(true);
+		});
 	}
 
 	async saveData(render = true) {
