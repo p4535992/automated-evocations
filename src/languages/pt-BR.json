@@ -6,6 +6,14 @@
 				"edit": "Editar",
 				"delete": "Excluir",
 				"creaturename": "Nome da criatura"
+			},
+			"bindingstitle": "Editar vinculações personalizadas",
+			"add": "Adicionar vinculação",
+			"bindingtitle": "Editar vinculação",
+			"sett": {
+				"label": "Configurar vinculações personalizadas",
+				"name": "Editar vinculações personalizadas",
+				"hint": "Configurar feitiço de vinculação personalizada"
 			}
 		},
 		"pick3d": "Clique num ponto na Tela 3D para Invocar.",
