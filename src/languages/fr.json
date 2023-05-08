@@ -1,0 +1,121 @@
+{
+	"AE": {
+		"pick3d": "Cliquer à un endroit sur le canvas 3D pour Invoquer.",
+		"dialogs": {
+			"companionManager": {
+				"title": "Gestionnaire de compagnon",
+				"confirm": {
+					"title": "Supprimer le compagnon",
+					"content": "<p>Êtes-vous sûr de vouloir supprimer ce compagnon ?</p>"
+				}
+			},
+			"random": "Aléatoire",
+			"ordered": "Ordonné",
+			"selectcompendium": "Choisissez un compendium",
+			"deleteall": "Effacer tout",
+			"storeonactor": "Ranger sur l'Acteur",
+			"none": "Aucun",
+			"nonenodelete": "Aucun mais ne pas effacer les acteurs chargés"
+		},
+		"actorSheetBtn": "Compagnons",
+		"animations": {
+			"fire": "Feu",
+			"air": "Air",
+			"lightning": "Foudre",
+			"water": "Eau",
+			"energy1": "Énergie",
+			"magic1": "Magie",
+			"heart": "Doki-Doki",
+			"music": "Crescendo",
+			"fourelements": "Quatre éléments",
+			"darkness": "Ténèbres",
+			"music2": "Accord",
+			"ice1": "Glace",
+			"magic2": "Invocation",
+			"lightning2": "Tempête"
+		},
+		"custombindings": {
+			"tt": {
+				"spellname": "Nom du sort",
+				"edit": "Éditer",
+				"delete": "Effacer",
+				"creaturename": "Nom de la créature"
+			},
+			"bindingtitle": "Éditer les touches liées",
+			"add": "Ajouter touche liée",
+			"sett": {
+				"label": "Configurer les touches liées personnalisées",
+				"name": "Touches liées personnalisées",
+				"hint": "Configurer les touches liées des sorts personnalisés"
+			},
+			"bindingstitle": "Éditer les touches liées personnalisées"
+		},
+		"settings": {
+			"debug": {
+				"hint": " ",
+				"title": "Activer la recherche des anomalies",
+				"name": "Activer la recherche des anomalies",
+				"label": "Imprime les messages d'anomalies dans la console"
+			},
+			"storeonactor": {
+				"title": "Stocker les compagnons sur l'Acteur",
+				"hint": "Ranger les compagnons sur l'acteur au lieu du jeton par défaut."
+			},
+			"enableautomations": {
+				"title": "Activer les automatisations",
+				"hint": "Activer le système d'automatisation du compagnon au lancement du sort."
+			},
+			"autoclose": {
+				"title": "Fermer automatiquement",
+				"hint": "Fermer automatiquement la fenêtre du compagnon après l'invocation."
+			},
+			"hidebutton": {
+				"title": "Cacher le bouton Compagnon",
+				"hint": "Cacher le bouton compagnon sur la feuille de personnage."
+			},
+			"disableSettingsForNoGM": {
+				"title": "Désactiver les réglages du dialogue de l'invocation, sauf pour le MJ",
+				"hint": "Désactiver les réglages (tel que l'option compendium, stocker sur l'acteur, effacer tous les boutons, le type d'animation et le nombre de créatures) du dialogue d'invocation et bloquer le déposer d'acteurs pour les joueurs non MJ."
+			},
+			"restrictOwned": {
+				"title": "Seulement sur les acteurs possédés",
+				"hint": "Restreindre la liste de compagnon pour uniquement montrer les acteurs compagnons."
+			},
+			"restrictOnlyGM": {
+				"title": "Seul le MJ peut voir le bouton Compagnon",
+				"hint": "Restreindre la liste de compagnon au seul MJ"
+			},
+			"removeLabelSheetHeader": {
+				"title": "Retirer l'étiquette du bouton de l'en-tête de la feuille",
+				"hint": "Retirer le bouton de l'en-tête de la feuille est pratique pour les petits écrans et les tablettes"
+			},
+			"hudColumn": {
+				"title": "Colonne du HUD",
+				"hint": "Sur quelle colonne du HUD placer le bouton"
+			},
+			"hudTopBottom": {
+				"title": "HUD Haut/Bas",
+				"hint": "Où placer le bouton sur la colonne"
+			},
+			"hudEnable": {
+				"title": "Activer la fonctionnalité du HUD du jeton",
+				"hint": "Éviter le rendu du gestionnaire de compagnon pour une invocation rapide lorsque vous cliquez sur le bouton du HUD. Toutes les entités avec un 'type d'invocation par défaut' défini dans la configuration du token/acteur, vous permettront d'éviter le rendu du gestionnaire de compagnons, ce qui peut être très pratique pour les combats rapides ; il y a deux options 'aléatoire' et 'ordonné' et vous ne pouvez pas activer les deux. Rappelez-vous que vous devez posséder le jeton pour voir le bouton du HUD"
+			},
+			"hudColorButton": {
+				"title": "Couleur du bouton de la fonction HUD",
+				"hint": "Choisissez la couleur à utiliser pour le bouton du HUD"
+			},
+			"reset": {
+				"title": "Remettre les réglages par défaut",
+				"name": "Remettre les réglages par défaut",
+				"label": "Remettre les réglages par défaut",
+				"hint": "Cela remettra tous les réglages sur les réglages par défaut du système du jeu actif."
+			}
+		},
+		"groups": {
+			"elemental": "Élémentaire",
+			"magical": "Magique",
+			"z-none": "Autre"
+		}
+	}
+}
