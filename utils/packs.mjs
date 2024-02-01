@@ -13,13 +13,13 @@ import { compilePack, extractPack } from "@foundryvtt/foundryvtt-cli";
  * base 5e system folder.
  * @type {string}
  */
-const PACK_DEST = "./src/packs";
+const PACK_DEST = "packs";
 
 /**
  * Folder where source JSON files should be located relative to the 5e system folder.
  * @type {string}
  */
-const PACK_SRC = "./src/packs/_source";
+const PACK_SRC = "packs/_source";
 
 
 // eslint-disable-next-line
@@ -214,18 +214,19 @@ async function extractPacks(packName, entryName) {
   entryName = entryName?.toLowerCase();
 
   // Load module.json.
-  const module = JSON.parse(fs.readFileSync("./src/module.json", { encoding: "utf8" })); // MOD 4535992 /src/module.json instead ./system.json and rename system to module
+  const module = JSON.parse(fs.readFileSync("./module.json", { encoding: "utf8" })); // MOD 4535992 /src/module.json instead ./system.json and rename system to module
 
   // Determine which source packs to process.
   const packs = module.packs.filter(p => !packName || p.name === packName);
 
   for ( const packInfo of packs ) {
     const dest = path.join(PACK_SRC, packInfo.name);
-    logger.info(`Extracting pack ${packInfo.name} on ${dest}`);
+    const packInfoPath = packInfo.path; // MOD 4535992
+    logger.info(`Extracting pack ${packInfo.name} from ${packInfoPath} to ${dest}`);
 
     const folders = {};
     const containers = {};
-    await extractPack(packInfo.path, dest, {
+    await extractPack(packInfoPath, dest, {
       log: false, transformEntry: e => {
         if ( e._key.startsWith("!folders") ) folders[e._id] = { name: slugify(e.name), folder: e.folder };
         else if ( e.type === "container" ) containers[e._id] = {
@@ -249,7 +250,7 @@ async function extractPacks(packName, entryName) {
       if ( folder ) c.path = path.join(folder.path, c.path);
     });
 
-    await extractPack(packInfo.path, dest, {
+    await extractPack(packInfoPath, dest, {
       log: true, transformEntry: entry => {
         if ( entryName && (entryName !== entry.name.toLowerCase()) ) return false;
         cleanPackEntry(entry);
