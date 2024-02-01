@@ -1,14 +1,15 @@
 import API from "./api.js";
 import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import { error, log, retrieveActorFromData, rollFromString, should_I_run_this, warn } from "./lib/lib.js";
+import Logger from "./lib/Logger.js";
+import { retrieveActorFromData, rollFromString, should_I_run_this } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
   constructor(actor) {
     super();
     if (!actor) {
-      throw error(`You must pass the actor reference`);
+      throw Logger.error(`You must pass the actor reference`);
     }
     this.actor = actor;
   }
@@ -168,7 +169,7 @@ export class CompanionManager extends FormApplication {
   async _onDrop(event) {
     const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     if (disable) {
-      warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
+      Logger.warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
       return;
     }
 
@@ -212,7 +213,7 @@ export class CompanionManager extends FormApplication {
       );
       this.saveData();
     } else {
-      warn(`No actor founded for the token with id/name '${data}'`, true);
+      Logger.warn(`No actor founded for the token with id/name '${data}'`, true);
     }
   }
 
@@ -245,7 +246,7 @@ export class CompanionManager extends FormApplication {
       actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
     }
     if (!actorToTransform) {
-      warn(
+      Logger.warn(
         `The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
         true
       );
@@ -384,7 +385,7 @@ export class CompanionManager extends FormApplication {
       posData: posData,
       summonedTokens: tokens,
     };
-    console.log("Automated Evocations Summoning:", postSummon);
+    Logger.log("Automated Evocations Summoning:", postSummon);
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
@@ -447,8 +448,8 @@ export class CompanionManager extends FormApplication {
     try {
       return await fn(args);
     } catch (e) {
-      error("There was an error in your macro syntax. See the console (F12) for details", true);
-      error(e);
+      Logger.error("There was an error in your macro syntax. See the console (F12) for details", true);
+      Logger.error(e);
       return undefined;
     }
   }
@@ -536,7 +537,7 @@ export class CompanionManager extends FormApplication {
         const aExplicitName = companion.explicitname;
         const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
         if (!actorToTransformLi) {
-          warn(`No actor founded for the token with id/name '${companion.name}'`, true);
+          Logger.warn(`No actor founded for the token with id/name '${companion.name}'`, true);
           continue;
         }
         if (!namesAlreadyImportedFromCompendium.includes(companion.name)) {
@@ -648,7 +649,7 @@ export class CompanionManager extends FormApplication {
     // const isStoreonactor = this.element.parent().find('.companion-storeonactor').val() === 'true' ?? false;
     const currentCompendium = this.element.parent().find(".companion-selectcompendium").val();
     if (isRandom && isOrdered) {
-      warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
+      Logger.warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
     }
     if (
       currentCompendium &&
@@ -659,7 +660,7 @@ export class CompanionManager extends FormApplication {
       // Reference a Compendium pack by it's callection ID
       const pack = game.packs.find((p) => p.collection === currentCompendium);
       if (!pack) {
-        error(`No pack is found with id '${currentCompendium}'`, true);
+        Logger.error(`No pack is found with id '${currentCompendium}'`, true);
       } else {
         if (!pack.indexed) {
           await pack.getIndex();
@@ -732,7 +733,7 @@ export class CompanionManager extends FormApplication {
       actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
     }
     if (!actorToTransform) {
-      warn(
+      Logger.warn(
         `The actor you try to summon not exists anymore, please set up again the actor on the companion manager`,
         true
       );
@@ -772,7 +773,7 @@ export class CompanionManager extends FormApplication {
     // Get the target actor
     // const sourceActor = actorToTransform;
     // if (!sourceActor) {
-    // 	warn(`No target actor is been found`);
+    // 	Logger.warn(`No target actor is been found`);
     // 	return;
     // }
 
@@ -873,7 +874,7 @@ export class CompanionManager extends FormApplication {
       posData: posData,
       summonedTokens: tokens,
     };
-    console.log("Automated Evocations Summoning:", postSummon);
+    Logger.log("Automated Evocations Summoning:", postSummon);
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
@@ -916,7 +917,7 @@ export class SimpleCompanionManager extends CompanionManager {
       if (actorToTransformLi) {
         this.element.find("#companion-list").append(await this.generateLi(summon, actorToTransformLi));
       } else {
-        warn(`No actor founded for the token with id/name '${summon.name}'`, true);
+        Logger.warn(`No actor founded for the token with id/name '${summon.name}'`, true);
       }
     }
 
@@ -928,7 +929,7 @@ export class SimpleCompanionManager extends CompanionManager {
   async _onDrop(event) {
     const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     if (disable) {
-      warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
+      Logger.warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
     }
   }
 

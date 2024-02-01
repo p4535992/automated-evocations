@@ -1,6 +1,7 @@
 import API from "../api.js";
 import { EvocationsVariantFlags } from "../automatedEvocationsVariantModels.js";
 import CONSTANTS from "../constants.js";
+import Logger from "./Logger.js";
 
 // =============================
 // Module Generic function
@@ -41,68 +42,12 @@ export function isGMConnected() {
 export function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-// export let debugEnabled = 0;
-// 0 = none, warnings = 1, debug = 2, all = 3
-export function debug(msg, args = "") {
-  if (game.settings.get(CONSTANTS.MODULE_ID, "debug")) {
-    console.log(`DEBUG | ${CONSTANTS.MODULE_ID} | ${msg}`, args);
-  }
-  return msg;
-}
-export function log(message) {
-  message = `${CONSTANTS.MODULE_ID} | ${message}`;
-  console.log(message.replace("<br>", "\n"));
-  return message;
-}
-export function notify(message) {
-  message = `${CONSTANTS.MODULE_ID} | ${message}`;
-  ui.notifications?.notify(message);
-  console.log(message.replace("<br>", "\n"));
-  return message;
-}
-export function info(info, notify = false) {
-  info = `${CONSTANTS.MODULE_ID} | ${info}`;
-  if (notify) ui.notifications?.info(info);
-  console.log(info.replace("<br>", "\n"));
-  return info;
-}
-export function warn(warning, notify = false) {
-  warning = `${CONSTANTS.MODULE_ID} | ${warning}`;
-  if (notify) ui.notifications?.warn(warning);
-  console.warn(warning.replace("<br>", "\n"));
-  return warning;
-}
-export function error(error, notify = true) {
-  error = `${CONSTANTS.MODULE_ID} | ${error}`;
-  if (notify) ui.notifications?.error(error);
-  return new Error(error.replace("<br>", "\n"));
-}
-export function timelog(message) {
-  warn(Date.now(), message);
-}
-export const i18n = (key) => {
-  return game.i18n.localize(key)?.trim();
-};
-export const i18nFormat = (key, data = {}) => {
-  return game.i18n.format(key, data)?.trim();
-};
-// export const setDebugLevel = (debugText: string): void => {
-//   debugEnabled = { none: 0, warn: 1, debug: 2, all: 3 }[debugText] || 0;
-//   // 0 = none, warnings = 1, debug = 2, all = 3
-//   if (debugEnabled >= 3) CONFIG.debug.hooks = true;
-// };
-export function dialogWarning(message, icon = "fas fa-exclamation-triangle") {
-  return `<p class="${CONSTANTS.MODULE_ID}-dialog">
-          <i style="font-size:3rem;" class="${icon}"></i><br><br>
-          <strong style="font-size:1.2rem;">${CONSTANTS.MODULE_ID}</strong>
-          <br><br>${message}
-      </p>`;
-}
+
 export function cleanUpString(stringToCleanUp) {
   // regex expression to match all non-alphanumeric characters in string
   const regex = /[^A-Za-z0-9]/g;
   if (stringToCleanUp) {
-    return i18n(stringToCleanUp).replace(regex, "").toLowerCase();
+    return Logger.i18n(stringToCleanUp).replace(regex, "").toLowerCase();
   } else {
     return stringToCleanUp;
   }
@@ -137,7 +82,7 @@ export async function renderAutomatedEvocationsVariantHud(app, html, hudToken) {
   }
   const actor = retrieveActorFromToken(sourceToken);
   if (!actor) {
-    // warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
+    // Logger.warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
     return;
   }
 
@@ -164,7 +109,7 @@ function addToEvocationsVariantButton(html, sourceToken) {
 
   const actor = retrieveActorFromToken(sourceToken);
   if (!actor) {
-    // warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
+    // Logger.warn(`No actor founded on canvas with token '${sourceToken.id}'`, true);
     return;
   }
   const random = actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.RANDOM) ?? false;
@@ -177,10 +122,10 @@ function addToEvocationsVariantButton(html, sourceToken) {
         if (targetToken) {
           API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
         } else {
-          warn(`No token is founded checkout the logs`, true);
+          Logger.warn(`No token is founded checkout the logs`, true);
         }
       } else {
-        warn(`No actor is founded checkout the logs`, true);
+        Logger.warn(`No actor is founded checkout the logs`, true);
       }
     }
   });
@@ -301,7 +246,7 @@ export async function uuidToDocument(uuid, createOnWorld) {
     result = await fromUuid(uuid);
   }
   if (result === null) {
-    error(`Document Not Found for uuid ${uuid}`);
+    Logger.error(`Document Not Found for uuid ${uuid}`);
     result = null;
   }
   return result;
@@ -309,7 +254,7 @@ export async function uuidToDocument(uuid, createOnWorld) {
 export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
   let actorToTransformLi = null;
   if (!aUuid && !aId && !aName) {
-    warn(`No reference is been found please check out the debug`);
+    Logger.warn(`No reference is been found please check out the debug`);
     return null;
   }
   if (aUuid) {
@@ -427,7 +372,7 @@ export async function rollFromString(rollString, actor) {
         myresult = parseInt(eval(roll.result));
       }
       if (!is_real_number(myresult)) {
-        warn(`The formula '${formula}' doesn't return a number we set the default 1`);
+        Logger.warn(`The formula '${formula}' doesn't return a number we set the default 1`);
         myvalue = 1;
       } else {
         myvalue = myresult;
@@ -449,7 +394,7 @@ export async function rollFromString(rollString, actor) {
         myresult = parseInt(eval(roll.result));
       }
       if (!is_real_number(myresult)) {
-        warn(`The formula '${formula}' doesn't return a number we set the default 1`);
+        Logger.warn(`The formula '${formula}' doesn't return a number we set the default 1`);
         myvalue = 1;
       } else {
         myvalue = myresult;
@@ -471,7 +416,7 @@ export async function rollFromString(rollString, actor) {
  * @returns
  */
 export async function transferPermissionsActorInner(sourceActor, targetActor, externalUserId) {
-  // if (!game.user.isGM) throw new Error("You do not have the ability to configure permissions.");
+  // if (!game.user.isGM) throw new Logger.error("You do not have the ability to configure permissions.");
 
   // let sourceActor = //actor to copy the permissions from
   // let targetActor = //actor to copy the permissions to

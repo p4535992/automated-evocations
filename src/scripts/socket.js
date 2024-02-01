@@ -1,11 +1,10 @@
 import CONSTANTS from "./constants.js";
 import API from "./api.js";
-import { debug } from "./lib/lib.js";
-import { setSocket } from "../automated-evocations-variant.js";
+import Logger from "./lib/Logger.js";
 
 export let automatedEvocationsVariantSocket;
 export function registerSocket() {
-  debug("Registered automatedEvocationsVariantSocket");
+  Logger.debug("Registered automatedEvocationsVariantSocket");
   if (automatedEvocationsVariantSocket) {
     return automatedEvocationsVariantSocket;
   }
@@ -31,6 +30,6 @@ export function registerSocket() {
   );
 
   // Basic
-  setSocket(automatedEvocationsVariantSocket);
+  game.modules.get(CONSTANTS.MODULE_ID).socket = automatedEvocationsVariantSocket;
   return automatedEvocationsVariantSocket;
 }

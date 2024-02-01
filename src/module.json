@@ -94,12 +94,12 @@
     {
       "name": "Automated Evocations Variant",
       "sorting": "m",
-      "color": "#cd2c1e",
+      "color": "#7FFFD4",
       "packs": ["aemacros", "aeactors"]
     }
   ],
   "scripts": [],
-  "esmodules": ["automated-evocations-variant.js"],
+  "esmodules": ["module.js"],
   "styles": ["styles/comapnionmanager.css", "styles/spellconfig.css"],
   "compatibility": {
     "minimum": 11,

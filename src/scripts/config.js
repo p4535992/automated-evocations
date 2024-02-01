@@ -1,4 +1,3 @@
-import { setApi } from "../automated-evocations-variant.js";
 import API from "./api.js";
 import { dnd5eCreateChatMessage, pf2eCreateChatMessage } from "./autoevocations/automatedevocations.js";
 import { dnd5eCustomautospells } from "./autoevocations/dnd5e.js";
@@ -6,7 +5,8 @@ import { pf2eCustomautospells } from "./autoevocations/pf2e.js";
 import { CompanionManager } from "./companionmanager.js";
 import CONSTANTS from "./constants.js";
 import { AutomatedEvocationsCustomBindings } from "./custombindings.js";
-import { i18n, renderAutomatedEvocationsVariantHud } from "./lib/lib.js";
+import Logger from "./lib/Logger.js";
+import { renderAutomatedEvocationsVariantHud } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { registerSocket } from "./socket.js";
 
@@ -187,7 +187,7 @@ export const initHooks = () => {
 };
 
 export const setupHooks = () => {
-  setApi(API);
+  game.modules.get(CONSTANTS.MODULE_ID).api = API;
 };
 
 // Hooks.once("ready", async function () {
@@ -196,7 +196,7 @@ export const readyHooks = async () => {
     AECONSTS.animationFunctions,
     game.settings.get(AECONSTS.MN, "customanimations")
   );
-  console.log("Automated Evocations: Animation Functions Loaded - ", AECONSTS.animationFunctions);
+  Logger.log("Automated Evocations: Animation Functions Loaded - ", AECONSTS.animationFunctions);
   let sortedAnims = Object.keys(AECONSTS.animationFunctions).sort();
   for (let k of sortedAnims) {
     const group = AECONSTS.animationFunctions[k].group || "z-none";

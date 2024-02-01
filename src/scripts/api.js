@@ -1,21 +1,15 @@
 // import { ANIMATIONS } from "./animations.js";
 import { EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
-import {
-  error,
-  retrieveActorFromData,
-  retrieveActorFromToken,
-  transferPermissionsActorInner,
-  wait,
-  warn,
-} from "./lib/lib.js";
+import { retrieveActorFromData, retrieveActorFromToken, transferPermissionsActorInner, wait } from "./lib/lib.js";
 import { CompanionManager } from "./companionmanager.js";
 import AECONSTS from "./main.js";
+import Logger from "./lib/Logger.js";
 
 const API = {
   async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-      throw error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
+      throw Logger.error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
     }
     const [sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
     const result = await this.invokeEvocationsVariantManagerFromActor(
@@ -51,7 +45,7 @@ const API = {
   },
   async invokeEvocationsVariantManagerArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-      throw error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
+      throw Logger.error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
     }
     const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
     const result = await this.invokeEvocationsVariantManager(
@@ -74,12 +68,12 @@ const API = {
       return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
     });
     if (!sourceToken) {
-      warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
+      Logger.warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
       return;
     }
     const actor = retrieveActorFromToken(sourceToken);
     if (!actor) {
-      warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
+      Logger.warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
       return;
     }
     this._invokeEvocationsVariantManagerInner(
@@ -160,7 +154,7 @@ const API = {
       scene.deleteEmbeddedDocuments("Token", tokensToDelete);
     } else {
       if (isRandom && isOrdered) {
-        warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
+        Logger.warn(`Attention you can't enable the 'ordered' and the 'random' both at the same time`);
         return;
       }
       if (isRandom) {
@@ -201,7 +195,7 @@ const API = {
   async cleanUpTokenSelected() {
     const tokens = canvas.tokens?.controlled;
     if (!tokens || tokens.length === 0) {
-      warn(`No tokens are selected`, true);
+      Logger.warn(`No tokens are selected`, true);
       return;
     }
     for (const token of tokens) {
@@ -213,10 +207,10 @@ const API = {
             const senseOrConditionValue = p[key];
             await token.document.unsetFlag(CONSTANTS.MODULE_ID, senseOrConditionIdKey);
           }
-          info(`Cleaned up token '${token.name}'`, true);
+          Logger.info(`Cleaned up token '${token.name}'`, true);
         }
       } else {
-        warn(`No token found on the canvas for id '${token.id}'`, true);
+        Logger.warn(`No token found on the canvas for id '${token.id}'`, true);
       }
     }
     for (const token of tokens) {
@@ -228,16 +222,16 @@ const API = {
             const senseOrConditionValue = p[key];
             await token.actor.unsetFlag(CONSTANTS.MODULE_ID, senseOrConditionIdKey);
           }
-          info(`Cleaned up actor '${token.name}'`, true);
+          Logger.info(`Cleaned up actor '${token.name}'`, true);
         }
       } else {
-        warn(`No token found on the canvas for id '${token.id}'`, true);
+        Logger.warn(`No token found on the canvas for id '${token.id}'`, true);
       }
     }
   },
   async getSummonInfoArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-      throw error("getSummonInfoArr | inAttributes must be of type array");
+      throw Logger.error("getSummonInfoArr | inAttributes must be of type array");
     }
     const [args, spellLevel] = inAttributes;
     const result = await this.getSummonInfo(args, spellLevel);
@@ -259,13 +253,13 @@ const API = {
         },
       };
     } else {
-      warn(`The method 'getSummonInfo' is not supported for the system '${game.system.id}'`, true);
+      Logger.warn(`The method 'getSummonInfo' is not supported for the system '${game.system.id}'`, true);
       return undefined;
     }
   },
   async retrieveAndPrepareActorArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
-      throw error("retrieveAndPrepareActorArr | inAttributes must be of type array");
+      throw Logger.error("retrieveAndPrepareActorArr | inAttributes must be of type array");
     }
     const [aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
     const result = await this.retrieveAndPrepareActor(
@@ -297,8 +291,8 @@ const API = {
     try {
       return await fn(args);
     } catch (e) {
-      error("There was an error in your macro syntax. See the console (F12) for details", true);
-      error(e);
+      Logger.error("There was an error in your macro syntax. See the console (F12) for details", true);
+      Logger.error(e);
       return undefined;
     }
   },

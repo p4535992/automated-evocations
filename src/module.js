@@ -13,14 +13,14 @@
 // Import TypeScript modules
 import { preloadTemplates } from "./scripts/preloadTemplates.js";
 import { initHooks, readyHooks, setupHooks } from "./scripts/config.js";
-import { log } from "./scripts/lib/lib.js";
 
 import CONSTANTS from "./scripts/constants.js";
+import Logger from "./scripts/lib/Logger.js";
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
 Hooks.once("init", async () => {
-  log(`${CONSTANTS.MODULE_ID} | Initializing ${CONSTANTS.MODULE_ID}`);
+  Logger.log(`${CONSTANTS.MODULE_ID} | Initializing ${CONSTANTS.MODULE_ID}`);
   // Register custom module settings
   // registerSettings();
   // Assign custom classes and constants here
@@ -44,50 +44,17 @@ Hooks.once("setup", function () {
 Hooks.once("ready", () => {
   // Do anything once the module is ready
   if (!game.modules.get("sequencer")?.active && game.user?.isGM) {
-    error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'sequencer' module.`, true);
+    Logger.error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'sequencer' module.`, true);
     return;
   }
   if (!game.modules.get("warpgate")?.active && game.user?.isGM) {
-    error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'warpgate' module.`, true);
+    Logger.error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'warpgate' module.`, true);
     return;
   }
   if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
-    error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'socketlib' module.`, true);
+    Logger.error(`The '${CONSTANTS.MODULE_ID}' module requires to install and activate the 'socketlib' module.`, true);
     return;
   }
 
   readyHooks();
 });
-
-/**
- * Initialization helper, to set API.
- * @param api to set to game module.
- */
-export function setApi(api) {
-  const data = game.modules.get(CONSTANTS.MODULE_ID);
-  data.api = api;
-}
-/**
- * Returns the set API.
- * @returns Api from games module.
- */
-export function getApi() {
-  const data = game.modules.get(CONSTANTS.MODULE_ID);
-  return data.api;
-}
-/**
- * Initialization helper, to set Socket.
- * @param socket to set to game module.
- */
-export function setSocket(socket) {
-  const data = game.modules.get(CONSTANTS.MODULE_ID);
-  data.socket = socket;
-}
-/*
- * Returns the set socket.
- * @returns Socket from games module.
- */
-export function getSocket() {
-  const data = game.modules.get(CONSTANTS.MODULE_ID);
-  return data.socket;
-}
