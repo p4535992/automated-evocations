@@ -1,6 +1,6 @@
 {
 	"id": "automated-evocations-variant",
-	"title": "Automated Evocations - Companion Manager Variant",
+	"title": "Automated Evocations Variant - Companion Manager",
 	"description": "A user interface to manage companions with summoning animations and automated summoning for spells",
 	"version": "1.6.16",
 	"authors": [
@@ -75,7 +75,7 @@
 		{
 			"name": "aemacros",
 			"label": "Automated Evocations Macros",
-			"path": "packs/macros.db",
+			"path": "packs/aemacros",
 			"type": "Macro",
 			"private": false,
 			"module": "automated-evocations-variant"
@@ -83,13 +83,24 @@
 		{
 			"name": "aeactors",
 			"label": "Automated Evocations Summons",
-			"path": "packs/actors.db",
+			"path": "packs/aeactors",
 			"type": "Actor",
 			"private": false,
 			"module": "automated-evocations-variant",
 			"system": "dnd5e"
 		}
 	],
+    "packFolders": [
+        {
+          "name": "Automated Evocations Variant",
+          "sorting": "m",
+          "color": "#cd2c1e",
+          "packs": [
+            "aemacros",
+            "aeactors"
+          ]
+        }
+    ],
 	"scripts": [],
 	"esmodules": ["automated-evocations-variant.js"],
 	"styles": ["styles/comapnionmanager.css", "styles/spellconfig.css"],
