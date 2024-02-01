@@ -1,3 +1,4 @@
+import CONSTANTS from "../constants.js";
 import AECONSTS from "../main.js";
 
 // Hooks.once("ready", async function () {
@@ -128,5 +129,6 @@ export const pf2eCustomautospells = async function () {
     game.automatedevocations[game.system.id],
     game.settings.get(AECONSTS.MN, "customautospells")
   );
+  Hooks.callAll(`${CONSTANTS.MODULE_NAME}.pf2e.ready`);
   // });
 };

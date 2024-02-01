@@ -157,6 +157,14 @@ export class CompanionManager extends FormApplication {
     });
   }
 
+  _canDragDrop() {
+    return true;
+  }
+
+  _canDragStart() {
+    return true;
+  }
+
   async _onDrop(event) {
     const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
     if (disable) {
@@ -179,13 +187,16 @@ export class CompanionManager extends FormApplication {
       }
     }
     if (!data.type === "Actor") return;
-    // this.element.find('#companion-list').append(this.generateLi({ id: actor.id }));
+    // //const actor = await fromUuid(data.uuid)
+    // this.element.find("#companion-list").append(await this.generateLi({
+    //     id: data.uuid
+    // }));
     // this.saveData();
     const actorId = data.id;
     const actorToTransformLi = await retrieveActorFromData(data.uuid, actorId, "", "", false);
     if (actorToTransformLi) {
       this.element.find("#companion-list").append(
-        this.generateLi(
+        await this.generateLi(
           {
             uuid: actorToTransformLi.uuid,
             id: actorToTransformLi.id,
@@ -240,9 +251,8 @@ export class CompanionManager extends FormApplication {
       );
       return;
     }
-    // const duplicates = parseInt(
-    // 	$(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val()
-    // );
+    // const actor = game.actors.get(aId) || (await fromUuid(aId));
+    // const duplicates = $(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val();
     const duplicates = await rollFromString(
       $(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val(),
       this.actor
@@ -261,6 +271,9 @@ export class CompanionManager extends FormApplication {
     // 			icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
     // 			label: "",
     // 	  });
+    if (this.range) {
+      this.drawRange(this.range);
+    }
     const posData = await warpgate.crosshairs.show({
       size: Math.max(
         (Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) / 2,
@@ -269,6 +282,7 @@ export class CompanionManager extends FormApplication {
       icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
       label: "",
     });
+    this.clearRange();
     if (!posData || posData.cancelled) {
       this.maximize();
       return;
@@ -304,14 +318,53 @@ export class CompanionManager extends FormApplication {
     customTokenData.elevation = posData?.flags?.levels?.elevation ?? _token?.document?.elevation ?? 0;
     customTokenData.elevation = parseFloat(customTokenData.elevation);
     tokenData.elevation = customTokenData.elevation;
-    tokenData.actorId = actorToTransform.id;
+    let isCompendiumActor = false;
+    if (!tokenData.actor) {
+      isCompendiumActor = true;
+      tokenData.updateSource({
+        actorId: Array.from(game.actors).find((a) => !a.prototypeToken?.actorLink)?.id || actorToTransform.id,
+      });
+    } else if (actorToTransform) {
+      tokenData.updateSource({
+        actorId: actorToTransform.id,
+      });
+    }
     Hooks.on("preCreateToken", (tokenDoc, td) => {
       td ??= {};
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({ elevation: customTokenData.elevation });
     });
-    // eslint-disable-next-line no-undef
-    warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
+    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.preCreateToken`, {
+      tokenData: tokenData,
+      customTokenData: customTokenData,
+      posData: posData,
+      actor: actorToTransform,
+      spellLevel: this.spellLevel || 0,
+      duplicates: duplicates,
+      assignedActor: this.caster || game.user.character || _token.actor,
+    });
+
+    const tokens = await warpgate.spawnAt(
+      {
+        x: posData.x,
+        y: posData.y,
+      },
+      tokenData,
+      customTokenData || {},
+      {},
+      {
+        duplicates,
+      }
+    );
+    if (tokens.length && isCompendiumActor) {
+      for (const t of tokens) {
+        const tokenDocument = canvas.tokens.get(t).document;
+        await tokenDocument.update({
+          delta: actorToTransform.toObject(),
+        });
+      }
+    }
+
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
     if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
       const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
@@ -320,7 +373,8 @@ export class CompanionManager extends FormApplication {
     } else {
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
     }
-    log("Automated Evocations Summoning:", {
+
+    const postSummon = {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
       duplicates: duplicates,
@@ -328,9 +382,62 @@ export class CompanionManager extends FormApplication {
       summon: actorToTransform,
       tokenData: tokenData,
       posData: posData,
-    });
+      summonedTokens: tokens,
+    };
+    console.log("Automated Evocations Summoning:", postSummon);
+    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
+  }
+
+  async drawRange() {
+    const token = _token;
+    if (!token) return;
+    this.rangeData = {
+      token,
+    };
+    const rangeGraphics = new PIXI.Graphics();
+    rangeGraphics
+      .lineStyle(1, 0x000000, 1)
+      .beginFill(0x000000, 0.1)
+      .drawCircle(0, 0, this.range * (canvas.scene.dimensions.size / canvas.scene.dimensions.distance))
+      .endFill();
+    if (this.image) {
+      const texture = this.image ? await loadTexture(this.image) : null;
+      //create a matrix so that the texture is centered and fills the circle
+      const matrix = new PIXI.Matrix();
+      matrix.translate(-texture.width / 2, -texture.height / 2);
+      matrix.scale(
+        (2 * this.range * (canvas.scene.dimensions.size / canvas.scene.dimensions.distance)) / texture.width,
+        (2 * this.range * (canvas.scene.dimensions.size / canvas.scene.dimensions.distance)) / texture.height
+      );
+      rangeGraphics
+        .beginTextureFill({
+          texture: texture,
+          matrix,
+          alpha: 0.3,
+        })
+        .drawCircle(0, 0, this.range * (canvas.scene.dimensions.size / canvas.scene.dimensions.distance))
+        .endFill();
+    }
+
+    rangeGraphics.position.set(
+      (canvas.scene.dimensions.size * token.document.width) / 2,
+      (canvas.scene.dimensions.size * token.document.height) / 2
+    );
+    rangeGraphics.zIndex = -100;
+
+    //add as first child so that it is behind the token
+    token.addChildAt(rangeGraphics, 0);
+
+    this.rangeData.graphics = rangeGraphics;
+  }
+
+  async clearRange() {
+    if (!this.rangeData) return;
+    this.rangeData.token.removeChild(this.rangeData.graphics);
+    this.rangeData.graphics.destroy();
+    delete this.rangeData;
   }
 
   async evaluateExpression(expression, ...args) {
@@ -402,7 +509,7 @@ export class CompanionManager extends FormApplication {
               return a.id === actorComp.id || a.name === actorComp.name;
             });
             if (companionDataTmp) {
-              this.element.find("#companion-list").append(this.generateLi(companionDataTmp, actorComp));
+              this.element.find("#companion-list").append(await this.generateLi(companionDataTmp, actorComp));
               namesAlreadyImportedFromCompendium.push(actorComp.name);
             } else {
               const companiondata = {
@@ -413,7 +520,7 @@ export class CompanionManager extends FormApplication {
                 defaultsummontype: "",
                 compendiumid: currentCompendium,
               };
-              this.element.find("#companion-list").append(this.generateLi(companiondata, actorComp));
+              this.element.find("#companion-list").append(await this.generateLi(companiondata, actorComp));
               namesAlreadyImportedFromCompendium.push(actorComp.name);
             }
           }
@@ -433,14 +540,17 @@ export class CompanionManager extends FormApplication {
           continue;
         }
         if (!namesAlreadyImportedFromCompendium.includes(companion.name)) {
-          this.element.find("#companion-list").append(this.generateLi(companion, actorToTransformLi));
+          this.element.find("#companion-list").append(await this.generateLi(companion, actorToTransformLi));
         }
-        // this.element.find('#companion-list').append(this.generateLi(companion));
+        // this.element.find('#companion-list').append(await this.generateLi(companion));
       }
     }
   }
 
-  generateLi(data, actorToTransformLi) {
+  async generateLi(data, actorToTransformLi) {
+    // const actor = game.actors.get(data.id) || game.actors.getName(data.id) || (await fromUuid(data.id));
+    // if (!actor) return "";
+    // const uuid = actor.uuid;
     if (!actorToTransformLi) {
       return "";
     }
@@ -580,6 +690,10 @@ export class CompanionManager extends FormApplication {
     await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM, isRandom);
     await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED, isOrdered);
     // await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR, isStoreonactor);
+    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.saveCompanionData`, {
+      actor: this.actor,
+      data: data,
+    });
   }
 
   close(noSave = false) {
@@ -693,14 +807,53 @@ export class CompanionManager extends FormApplication {
     customTokenData.elevation = posData?.flags?.levels?.elevation ?? _token?.document?.elevation ?? 0;
     customTokenData.elevation = parseFloat(customTokenData.elevation);
     tokenData.elevation = customTokenData.elevation;
-    tokenData.actorId = actorToTransform.id;
+    let isCompendiumActor = false;
+    if (!tokenData.actor) {
+      isCompendiumActor = true;
+      tokenData.updateSource({
+        actorId: Array.from(game.actors).find((a) => !a.prototypeToken?.actorLink)?.id || actorToTransform.id,
+      });
+    } else if (actorToTransform) {
+      tokenData.updateSource({
+        actorId: actorToTransform.id,
+      });
+    }
     Hooks.on("preCreateToken", (tokenDoc, td) => {
       td ??= {};
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({ elevation: customTokenData.elevation });
     });
-    // eslint-disable-next-line no-undef
-    warpgate.spawnAt({ x: posData.x, y: posData.y }, tokenData, customTokenData || {}, {}, { duplicates });
+    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.preCreateToken`, {
+      tokenData: tokenData,
+      customTokenData: customTokenData,
+      posData: posData,
+      actor: actorToTransform,
+      spellLevel: this.spellLevel || 0,
+      duplicates: duplicates,
+      assignedActor: this.caster || game.user.character || _token.actor,
+    });
+
+    const tokens = await warpgate.spawnAt(
+      {
+        x: posData.x,
+        y: posData.y,
+      },
+      tokenData,
+      customTokenData || {},
+      {},
+      {
+        duplicates,
+      }
+    );
+    if (tokens.length && isCompendiumActor) {
+      for (const t of tokens) {
+        const tokenDocument = canvas.tokens.get(t).document;
+        await tokenDocument.update({
+          delta: actorToTransform.toObject(),
+        });
+      }
+    }
+
     await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
     if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
       const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
@@ -709,7 +862,8 @@ export class CompanionManager extends FormApplication {
     } else {
       await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
     }
-    log("Automated Evocations Summoning:", {
+
+    const postSummon = {
       assignedActor: this.caster || game?.user?.character || _token?.actor,
       spellLevel: this.spellLevel || 0,
       duplicates: duplicates,
@@ -717,7 +871,10 @@ export class CompanionManager extends FormApplication {
       summon: actorToTransform,
       tokenData: tokenData,
       posData: posData,
-    });
+      summonedTokens: tokens,
+    };
+    console.log("Automated Evocations Summoning:", postSummon);
+    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
   }
@@ -738,16 +895,18 @@ export class CompanionManager extends FormApplication {
 }
 
 export class SimpleCompanionManager extends CompanionManager {
-  constructor(summonData, spellLevel, actor) {
+  constructor(summonData, spellLevel, actor, range, image) {
     super();
     this.caster = actor;
     this.summons = summonData;
     this.spellLevel = spellLevel;
+    this.range = range;
+    this.image = image;
   }
 
   async activateListeners(html) {
     for (let summon of this.summons) {
-      // this.element.find('#companion-list').append(this.generateLi(summon));
+      // this.element.find('#companion-list').append(await this.generateLi(summon));
       const aUuid = summon.uuid;
       const aId = summon.id;
       const aName = summon.name;
@@ -755,7 +914,7 @@ export class SimpleCompanionManager extends CompanionManager {
       const aExplicitName = summon.explicitname;
       const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
       if (actorToTransformLi) {
-        this.element.find("#companion-list").append(this.generateLi(summon, actorToTransformLi));
+        this.element.find("#companion-list").append(await this.generateLi(summon, actorToTransformLi));
       } else {
         warn(`No actor founded for the token with id/name '${summon.name}'`, true);
       }

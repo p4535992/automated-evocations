@@ -6,7 +6,6 @@ const AECONSTS = {
   animationFunctions: {
     fire: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/fire_spiral_CIRCLE_01.webm`)
@@ -18,6 +17,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/fire_earth_explosion_CIRCLE_01.webm`)
@@ -29,6 +29,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1000,
@@ -36,7 +37,6 @@ const AECONSTS = {
     },
     air: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_infinity_RECTANGLE_01.webm`)
@@ -47,6 +47,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_portal_CIRCLE_01.webm`)
@@ -58,6 +59,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_puff_CIRCLE_01.webm`)
@@ -69,6 +71,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1650,
@@ -76,7 +79,6 @@ const AECONSTS = {
     },
     lightning: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/ring_CIRCLE_01.webm`)
@@ -88,6 +90,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/electric_blast_01.webm`)
@@ -100,6 +103,7 @@ const AECONSTS = {
               0.35
           )
           .repeats(6, 100, 170, 250, 320, 400)
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1650,
@@ -107,7 +111,6 @@ const AECONSTS = {
     },
     lightning2: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/LightningBall_01_Regular_Blue_400x400.webm`)
@@ -119,6 +122,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/LightningStrike_01a_800x800.webm`)
@@ -128,8 +132,10 @@ const AECONSTS = {
           .scale(
             ((Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) /
               2) *
-              0.55
+              0.55 *
+              2
           )
+          .elevation(tokenData.elevation)
           .wait(750)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Impact_12_Regular_Blue_400x400.webm`)
@@ -141,6 +147,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1650,
@@ -148,7 +155,6 @@ const AECONSTS = {
     },
     water: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/water_blast_RAY_01.webm`)
@@ -161,6 +167,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .wait(500)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/create_water_CIRCLE_01.webm`)
@@ -172,6 +179,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1000,
@@ -179,7 +187,6 @@ const AECONSTS = {
     },
     ice1: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(
@@ -198,6 +205,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(650)
           .effect()
           .file(
@@ -210,6 +218,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1500,
@@ -217,7 +226,6 @@ const AECONSTS = {
     },
     darkness: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Whirlwind_01_BlueGrey_01_400x400.webm`)
@@ -234,6 +242,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(950)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Darkness_01_Black_600x600.webm`)
@@ -250,6 +259,7 @@ const AECONSTS = {
               2) *
               0.45
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1500,
@@ -257,7 +267,6 @@ const AECONSTS = {
     },
     energy1: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/energy_spark_CIRCLE_01.webm`)
@@ -270,6 +279,7 @@ const AECONSTS = {
               2) *
               0.15
           )
+          .elevation(tokenData.elevation)
           .wait(500)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/energy_pulse_yellow_CIRCLE.webm`)
@@ -280,6 +290,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 650,
@@ -287,7 +298,6 @@ const AECONSTS = {
     },
     magic1: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/magic_explosion_symbol_CIRCLE.webm`)
@@ -298,6 +308,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1150,
@@ -305,7 +316,6 @@ const AECONSTS = {
     },
     magic2: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Conjuration_01_Yellow_Circle_800x800.webm`)
@@ -322,6 +332,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(650)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Explosion_02_Blue_400x400.webm`)
@@ -332,6 +343,7 @@ const AECONSTS = {
               2) *
               0.55
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 820,
@@ -339,7 +351,6 @@ const AECONSTS = {
     },
     heart: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/heart_red_SQUARE.webm`)
@@ -349,26 +360,26 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 400,
     },
     music: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/music_RECTANGLE.webm`)
           .belowTokens()
           .randomRotation()
-          .atLocation(template)
-          .randomOffset()
+          .atLocation(template, { randomOffset: true })
           .repeats(6, 150, 225, 375, 460, 520)
           .scale(
             ((Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) /
               2) *
               0.65
           )
+          .elevation(tokenData.elevation)
           .wait(900)
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/magic_symbol_SQUARE_05.webm`)
@@ -379,13 +390,13 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 1350,
     },
     music2: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(
@@ -399,6 +410,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .wait(100)
           .effect()
           .file(
@@ -410,13 +422,13 @@ const AECONSTS = {
               2) *
               0.45
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 600,
     },
     fourelements: {
       fn: async (template, tokenData) => {
-        // eslint-disable-next-line no-undef
         await new Sequence()
           .effect()
           .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/four_element_strike_SQUARE_01.webm`)
@@ -427,6 +439,7 @@ const AECONSTS = {
               2) *
               0.35
           )
+          .elevation(tokenData.elevation)
           .play();
       },
       time: 700,

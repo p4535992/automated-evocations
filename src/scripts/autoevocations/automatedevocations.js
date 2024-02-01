@@ -17,9 +17,12 @@ export const dnd5eCreateChatMessage = async function (chatMessage) {
     const actor = token?.actor ?? game.actors.get(actorId);
     if (!actor) return;
     const spellName = actor?.items?.get(itemId)?.name;
+    const spellItem = actor?.items?.get(itemId);
 
     let system = game.automatedevocations[game.system.id];
-    if (!system) return;
+    if (!system) {
+      return;
+    }
     if (system[spellName]) {
       //attempt to get spell level
       let summonData = [];
@@ -39,7 +42,9 @@ export const dnd5eCreateChatMessage = async function (chatMessage) {
       new SimpleCompanionManager(
         summonData,
         spellLevel,
-        canvas.tokens.get(chatMessage?.data?.speaker?.token)?.actor
+        canvas.tokens.get(chatMessage?.data?.speaker?.token)?.actor,
+        spellItem?.system?.range?.value,
+        spellItem?.img
       ).render(true);
     }
   } catch (e) {

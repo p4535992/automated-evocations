@@ -463,6 +463,13 @@ export async function rollFromString(rollString, actor) {
   return myvalue;
 }
 
+/**
+ * TODO make this better
+ * @param {*} sourceActor
+ * @param {*} targetActor
+ * @param {*} externalUserId
+ * @returns
+ */
 export async function transferPermissionsActorInner(sourceActor, targetActor, externalUserId) {
   // if (!game.user.isGM) throw new Error("You do not have the ability to configure permissions.");
 
@@ -489,7 +496,10 @@ export async function transferPermissionsActorInner(sourceActor, targetActor, ex
   );
 }
 
-//this method is on the actor, so "this" is the actor document
+/**
+ * TODO make this better
+ * this method is on the actor, so "this" is the actor document
+ */
 function _getHandPermission(actor, externalUserId) {
   const handPermission = duplicate(actor.ownership); // actor.permission
   for (const key of Object.keys(handPermission)) {

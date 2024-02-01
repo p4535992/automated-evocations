@@ -1,3 +1,4 @@
+import CONSTANTS from "../constants.js";
 import AECONSTS from "../main.js";
 
 // Hooks.once("ready", async function () {
@@ -86,10 +87,16 @@ export const dnd5eCustomautospells = async function () {
       ],
       "Conjure Animals": (data) => {
         let multiplier = 1;
-        if (system.level >= 5) multiplier = 2;
-        if (system.level >= 7) multiplier = 3;
+        if (data.level >= 5) multiplier = 2;
+        if (data.level >= 7) multiplier = 3;
         let beasts = game.actors
-          .filter((a) => a.system.details.type?.value == "beast" && a.system.details.cr <= 2)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "beast" &&
+              a.system.details.cr <= 2
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -110,7 +117,13 @@ export const dnd5eCustomautospells = async function () {
       },
       "Conjure Celestial": (data) => {
         let celestials = game.actors
-          .filter((a) => a.system.details.type?.value == "celestial" && a.system.details.cr <= 4)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "celestial" &&
+              a.system.details.cr <= 4
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -125,7 +138,13 @@ export const dnd5eCustomautospells = async function () {
       },
       "Conjure Elemental": (data) => {
         let elementals = game.actors
-          .filter((a) => a.system.details.type?.value == "elemental" && a.system.details.cr <= system.level)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "elemental" &&
+              a.system.details.cr <= data.level
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -140,7 +159,13 @@ export const dnd5eCustomautospells = async function () {
       },
       "Conjure Fey": (data) => {
         let feys = game.actors
-          .filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= system.level)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "fey" &&
+              a.system.details.cr <= data.level
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -155,10 +180,16 @@ export const dnd5eCustomautospells = async function () {
       },
       "Conjure Minor Elementals": (data) => {
         let multiplier = 1;
-        if (system.level >= 6) multiplier = 2;
-        if (system.level >= 8) multiplier = 3;
+        if (data.level >= 6) multiplier = 2;
+        if (data.level >= 8) multiplier = 3;
         let elementals = game.actors
-          .filter((a) => a.system.details.type?.value == "elemental" && a.system.details.cr <= 2)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "elemental" &&
+              a.system.details.cr <= 2
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -180,10 +211,16 @@ export const dnd5eCustomautospells = async function () {
       },
       "Conjure Woodland Beings": (data) => {
         let multiplier = 1;
-        if (system.level >= 6) multiplier = 2;
-        if (system.level >= 8) multiplier = 3;
+        if (data.level >= 6) multiplier = 2;
+        if (data.level >= 8) multiplier = 3;
         let feys = game.actors
-          .filter((a) => a.system.details.type?.value == "fey" && a.system.details.cr <= system.level)
+          .filter(
+            (a) =>
+              a.type === "npc" &&
+              !a.prototypeToken.actorLink &&
+              a.system.details.type?.value == "fey" &&
+              a.system.details.cr <= data.level
+          )
           .sort((a, b) => {
             return a.system.details.cr < b.system.details.cr ? 1 : -1;
           });
@@ -203,7 +240,7 @@ export const dnd5eCustomautospells = async function () {
         return creatures;
       },
       "Animate Dead": (data) => {
-        let multiplier = 1 + (system.level - 3) * 2;
+        let multiplier = 1 + (data.level - 3) * 2;
         return [
           {
             creature: "Skeleton",
@@ -216,8 +253,8 @@ export const dnd5eCustomautospells = async function () {
         ];
       },
       "Create Undead": (data) => {
-        let multiplier = system.level - 3;
-        if (system.level == 8) {
+        let multiplier = data.level - 3;
+        if (data.level == 8) {
           return [
             {
               creature: "Ghoul",
@@ -233,7 +270,7 @@ export const dnd5eCustomautospells = async function () {
             },
           ];
         }
-        if (system.level == 9) {
+        if (data.level == 9) {
           return [
             {
               creature: "Ghoul",
@@ -329,5 +366,6 @@ export const dnd5eCustomautospells = async function () {
     game.automatedevocations[game.system.id],
     game.settings.get(AECONSTS.MN, "customautospells")
   );
+  Hooks.callAll(`${CONSTANTS.MODULE_NAME}.dnd5e.ready`);
   // });
 };

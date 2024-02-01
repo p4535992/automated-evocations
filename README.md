@@ -225,7 +225,7 @@ const template = args[0]
 const tokenData = args[1]
 await new Sequence()
 .effect()
-    .file("modules/automated-evocations/assets/animations/energy_spark_CIRCLE_01.webm")
+    .file("modules/automated-evocations-variant/assets/animations/energy_spark_CIRCLE_01.webm")
     .belowTokens()
     .randomRotation()
     .atLocation(template)
@@ -234,7 +234,7 @@ await new Sequence()
     .scale(Math.max(tokenData.width,tokenData.height)*tokenData.scale*0.15)
 .wait(500)
 .effect()
-    .file("modules/automated-evocations/assets/animations/energy_pulse_yellow_CIRCLE.webm")
+    .file("modules/automated-evocations-variant/assets/animations/energy_pulse_yellow_CIRCLE.webm")
     .belowTokens()
     .atLocation(template)
     .scale(Math.max(tokenData.width,tokenData.height)*(tokenData.texture.scaleX + tokenData.texture.scaleY)/2*0.35)
@@ -276,6 +276,20 @@ the actions on the hud button are of two types left click and right click.
 
 **NOTE: you can't have both ordered and random**
 **NOTE: Remember you must own the token for see the HUD button**
+
+## Hooks
+
+TODO Documentation
+
+automated-evocations-variant.preCreateToken
+
+automated-evocations-variant.postSummon
+
+automated-evocations-variant.saveCompanionData
+
+automated-evocations-variant.pf2e.ready
+
+automated-evocations-variant.dnd5e.ready
 
 ## Api
 
