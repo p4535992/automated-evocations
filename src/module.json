@@ -1,155 +1,152 @@
 {
-	"id": "automated-evocations-variant",
-	"title": "Automated Evocations Variant - Companion Manager",
-	"description": "A user interface to manage companions with summoning animations and automated summoning for spells",
-	"version": "1.6.16",
-	"authors": [
-		{
-			"name": "p4535992",
-			"url": "https://github.com/p4535992",
-			"discord": "",
-			"twitter": "",
-			"patreon": "p4535992",
-			"github": "p4535992",
-			"ko-fi": "",
-			"reddit": "",
-			"email": ""
-		}
-	],
-	"type": "module",
-	"socket": true,
-	"includes": [
-		"./assets/**",
-		"./lang/**",
-		"./languages/**",
-		"./scripts/**",
-		"./styles/**",
-		"./templates/**",
-		"./module.json",
-		"./README.md",
-		"./icons/**",
-		"./packs/**"
-	],
-	"media": [
-		{
-			"type": "icon",
-			"location": ""
-		},
-		{
-			"type": "cover",
-			"location": ""
-		},
-		{
-			"type": "screenshot",
-			"location": ""
-		}
-	],
-	"languages": [
-		{
-			"lang": "en",
-			"name": "English",
-			"path": "languages/en.json"
-		},
-		{
-			"lang": "de",
-			"name": "Deutsch (German)",
-			"path": "languages/de.json"
-		},
-		{
-			"lang": "fr",
-			"name": "Français (French)",
-			"path": "languages/fr.json"
-		},
-		{
-			"lang": "ja",
-			"name": "日本語",
-			"path": "languages/ja.json"
-		},
-		{
-			"lang": "pt-BR",
-			"name": "Português (Brasil)",
-			"path": "languages/pt-BR.json"
-		}
-	],
-	"packs": [
-		{
-			"name": "aemacros",
-			"label": "Automated Evocations Macros",
-			"path": "packs/aemacros",
-			"type": "Macro",
-			"private": false,
-			"module": "automated-evocations-variant"
-		},
-		{
-			"name": "aeactors",
-			"label": "Automated Evocations Summons",
-			"path": "packs/aeactors",
-			"type": "Actor",
-			"private": false,
-			"module": "automated-evocations-variant",
-			"system": "dnd5e"
-		}
-	],
-    "packFolders": [
-        {
-          "name": "Automated Evocations Variant",
-          "sorting": "m",
-          "color": "#cd2c1e",
-          "packs": [
-            "aemacros",
-            "aeactors"
-          ]
-        }
+  "id": "automated-evocations-variant",
+  "title": "Automated Evocations Variant - Companion Manager",
+  "description": "A user interface to manage companions with summoning animations and automated summoning for spells",
+  "version": "1.7.0",
+  "authors": [
+    {
+      "name": "p4535992",
+      "url": "https://github.com/p4535992",
+      "discord": "",
+      "twitter": "",
+      "patreon": "p4535992",
+      "github": "p4535992",
+      "ko-fi": "",
+      "reddit": "",
+      "email": ""
+    }
+  ],
+  "type": "module",
+  "socket": true,
+  "includes": [
+    "./assets/**",
+    "./lang/**",
+    "./languages/**",
+    "./scripts/**",
+    "./styles/**",
+    "./templates/**",
+    "./module.json",
+    "./README.md",
+    "./icons/**",
+    "./packs/**"
+  ],
+  "media": [
+    {
+      "type": "icon",
+      "location": ""
+    },
+    {
+      "type": "cover",
+      "location": ""
+    },
+    {
+      "type": "screenshot",
+      "location": ""
+    }
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json"
+    },
+    {
+      "lang": "de",
+      "name": "Deutsch (German)",
+      "path": "languages/de.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français (French)",
+      "path": "languages/fr.json"
+    },
+    {
+      "lang": "ja",
+      "name": "日本語",
+      "path": "languages/ja.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "languages/pt-BR.json"
+    }
+  ],
+  "packs": [
+    {
+      "name": "aemacros",
+      "label": "Automated Evocations Macros",
+      "path": "packs/aemacros",
+      "type": "Macro",
+      "private": false,
+      "module": "automated-evocations-variant"
+    },
+    {
+      "name": "aeactors",
+      "label": "Automated Evocations Summons",
+      "path": "packs/aeactors",
+      "type": "Actor",
+      "private": false,
+      "module": "automated-evocations-variant",
+      "system": "dnd5e"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Automated Evocations Variant",
+      "sorting": "m",
+      "color": "#cd2c1e",
+      "packs": ["aemacros", "aeactors"]
+    }
+  ],
+  "scripts": [],
+  "esmodules": ["automated-evocations-variant.js"],
+  "styles": ["styles/comapnionmanager.css", "styles/spellconfig.css"],
+  "compatibility": {
+    "minimum": 11,
+    "verified": 11,
+    "maximum": 11
+  },
+  "manifestPlusVersion": "1.2.1",
+  "url": "https://github.com/p4535992/foundryvtt-automated-evocations-variant",
+  "manifest": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/releases/latest/download/module.json",
+  "download": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/releases/latest/download/module.zip",
+  "readme": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/blob/1.7.0/README.md",
+  "changelog": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/blob/1.7.0/changelog.md",
+  "bugs": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues",
+  "allowBugReporter": true,
+  "relationships": {
+    "systems": [],
+    "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+        "compatibility": {}
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/develop/module.json",
+        "compatibility": {}
+      },
+      {
+        "id": "sequencer",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "warpgate",
+        "type": "module",
+        "manifest": "https://github.com/trioderegion/warpgate/releases/latest/download/module.json",
+        "compatibility": {}
+      }
     ],
-	"scripts": [],
-	"esmodules": ["automated-evocations-variant.js"],
-	"styles": ["styles/comapnionmanager.css", "styles/spellconfig.css"],
-	"compatibility": {
-		"minimum": 10,
-		"verified": 10,
-		"maximum": 10
-	},
-	"manifestPlusVersion": "1.2.1",
-	"url": "https://github.com/p4535992/foundryvtt-automated-evocations-variant",
-	"manifest": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/releases/latest/download/module.json",
-	"download": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/releases/latest/download/module.zip",
-	"readme": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/blob/v1.6.16/README.md",
-	"changelog": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/blob/v1.6.16/changelog.md",
-	"bugs": "https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues",
-	"allowBugReporter": true,
-	"relationships": {
-		"systems": [],
-		"requires": [
-			{
-				"id": "lib-wrapper",
-				"type": "module",
-				"manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
-				"compatibility": {}
-			},
-			{
-				"id": "socketlib",
-				"type": "module",
-				"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/develop/module.json",
-				"compatibility": {}
-			},
-			{
-				"id": "sequencer",
-				"type": "module",
-				"compatibility": {}
-			},
-			{
-				"id": "warpgate",
-				"type": "module",
-				"manifest": "https://github.com/trioderegion/warpgate/releases/latest/download/module.json",
-				"compatibility": {}
-			}
-		],
-		"conflicts": [
-			{
-				"id": "automated-evocations",
-				"type": "module",
-				"reason": "The module 'Automated Evocations (Variant Fork)' can be used together with 'Automated Evocations', it is only not recommended because they are two modules that do the exact same things, for more details see README"
-			}
-		]
-	}
+    "conflicts": [
+      {
+        "id": "automated-evocations",
+        "type": "module",
+        "reason": "The module 'Automated Evocations (Variant Fork)' can be used together with 'Automated Evocations', it is only not recommended because they are two modules that do the exact same things, for more details see README"
+      }
+    ]
+  }
 }
