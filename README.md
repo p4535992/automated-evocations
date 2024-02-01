@@ -277,166 +277,77 @@ the actions on the hud button are of two types left click and right click.
 **NOTE: you can't have both ordered and random**
 **NOTE: Remember you must own the token for see the HUD button**
 
-# API
+## Api
 
-###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager(sourceTokenIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+All informations about the api can be found here [API](./wiki/api/api.md)
 
-Invoke the summoned companion manager feature from macro
+# Build
 
-**Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
+## Install all packages
 
-| Param | Type | Description | Default |
-| --- | --- | --- | --- |
-| sourceTokenIdOrName | <code>string</code> | The id or the name of the token (not the actor) | <code>undefined</code> |
-| removeEvocationsVariant | <code>boolean</code> | This action should delete the summoned token if the current token is present on the scene | <code>false</code> |
-| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this summon companion | <code>false</code> |
-| random | <code>boolean</code> | The 'random' feature is enabled for this summon companion | <code>false</code> |
-| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the summon companion action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
-
-**NOTE:** If both 'random' and 'ordered' are false the standard dialog will be rendered.
-
-**Examples**:
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain')`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', true)`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false)`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false)`
-
-```
-let sequence = new Sequence()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
-        .atLocation(tokenD)
-        .scale(0.35)
-    .wait(1000)
-        .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
-        .atLocation(tokenD)
-        .reachTowards({
-            x: tokenD.center.x + canvas.grid.size*5,
-            y: tokenD.center.y
-        })
-    .wait(100)
-    .animation()
-        .on(tokenD)
-        .teleportTo({
-            x: tokenD.x + canvas.grid.size*5,
-            y: tokenD.y
-        })
-        .waitUntilFinished()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
-        .atLocation(tokenD)
-        .scale(0.5)
-
-game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
+```bash
+npm install
 ```
 
-###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor(sourceActorIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+### dev
 
-Invoke the summoned companion manager feature from macro
+`dev` will let you develop you own code with hot reloading on the browser
 
-**Returns**: <code>Promise.&lt;void&gt;</code> - A empty promise
-
-| Param | Type | Description | Default |
-| --- | --- | --- | --- |
-| sourceActorIdOrName | <code>string</code> | The id or the name of the actor (not the token) | <code>undefined</code> |
-| removeEvocationsVariant | <code>boolean</code> | This action should delete the summoned token if the current token is present on the scene | <code>false</code> |
-| ordered | <code>boolean</code> | The 'ordered' feature is enabled for this summon companion | <code>false</code> |
-| random | <code>boolean</code> | The 'random' feature is enabled for this summon companion | <code>false</code> |
-| animationExternal | <code>{ sequence:Sequence, timeToWait:number }</code> | Advanced: Use your personal sequence animation and the time needed to wait before the summon companion action, checkout the [Sequencer module](https://github.com/fantasycalendar/FoundryVTT-Sequencer) for more information  | <code>undefined</code> |
-
-**NOTE:** If both 'random' and 'ordered' are false the standard dialog will be rendered.
-
-**Examples**:
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain')`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', true)`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false)`
-
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false)`
-
-```
-let sequence = new Sequence()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
-        .atLocation(tokenD)
-        .scale(0.35)
-    .wait(1000)
-        .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
-        .atLocation(tokenD)
-        .reachTowards({
-            x: tokenD.center.x + canvas.grid.size*5,
-            y: tokenD.center.y
-        })
-    .wait(100)
-    .animation()
-        .on(tokenD)
-        .teleportTo({
-            x: tokenD.x + canvas.grid.size*5,
-            y: tokenD.y
-        })
-        .waitUntilFinished()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
-        .atLocation(tokenD)
-        .scale(0.5)
-
-game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
+```bash
+npm run dev
 ```
 
-### Macro to clean up flags on token and actor
+### build
 
-####  async game.modules.get('automated-evocations-variant').api.cleanUpTokenSelected() ⇒ <code>Promise.&lt;void&gt;</code>
+`build` will build and set up a symlink between `dist` and your `dataPath`.
 
-**Examples**:
-
-`game.modules.get('automated-evocations-variant').api.cleanUpTokenSelected()`
-
-### Other macro on API
-
-`game.modules.get('automated-evocations-variant').api.getSummonInfo(args, spellLevel)`
-
-## Integration with socketLib
-
-
-```
-let sequence = new Sequence()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electrivity_blast_CIRCLE.webm")
-        .atLocation(tokenD)
-        .scale(0.35)
-    .wait(1000)
-        .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/lightning_bolt_RECTANGLE_05.webm")
-        .atLocation(tokenD)
-        .reachTowards({
-            x: tokenD.center.x + canvas.grid.size*5,
-            y: tokenD.center.y
-        })
-    .wait(100)
-    .animation()
-        .on(tokenD)
-        .teleportTo({
-            x: tokenD.x + canvas.grid.size*5,
-            y: tokenD.y
-        })
-        .waitUntilFinished()
-    .effect()
-        .file("modules/animated-spell-effects-cartoon/spell-effects/cartoon/electricity/electric_ball_CIRCLE_06.webm")
-        .atLocation(tokenD)
-        .scale(0.5)
-
-game.modules.get('automated-evocations-variant').socket.executeAsGM('invokeEvocationsVariantManager',['Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100}]);
+```bash
+npm run build
 ```
 
-# Credits \ License
+### build:watch
+
+`build:watch` will build and watch for changes, rebuilding automatically.
+
+```bash
+npm run build:watch
+```
+
+### prettier-format
+
+`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc)
+
+```bash
+npm run-script prettier-format
+```
+
+### lint
+
+`lint` launch the eslint process based on the configuration [here](./.eslintrc.json)
+
+```bash
+npm run-script lint
+```
+
+### lint:fix
+
+`lint:fix` launch the eslint process with the fix argument
+
+```bash
+npm run-script lint:fix
+```
+
+## [Changelog](./changelog.md)
+
+## Issues
+
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
+## License
+
+This package is under the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+# Credits
 
 ## PF2E Support
 TomChristoffer#6777
@@ -463,80 +374,6 @@ This module is used for the spawning https://github.com/trioderegion/warpgate
 ## Game Icons
 
 Some images used are from https://game-icons.net/
-
-# Build
-
-## Install all packages
-
-```bash
-npm install
-```
-## npm build scripts
-
-### build
-
-will build the code and copy all necessary assets into the dist folder and make a symlink to install the result into your foundry data; create a
-`foundryconfig.json` file with your Foundry Data path.
-
-```json
-{
-  "dataPath": "~/.local/share/FoundryVTT/"
-}
-```
-
-`build` will build and set up a symlink between `dist` and your `dataPath`.
-
-```bash
-npm run-script build
-```
-
-### NOTE:
-
-You don't need to build the `foundryconfig.json` file you can just copy the content of the `dist` folder on the module folder under `modules` of Foundry
-
-### build:watch
-
-`build:watch` will build and watch for changes, rebuilding automatically.
-
-```bash
-npm run-script build:watch
-```
-
-### clean
-
-`clean` will remove all contents in the dist folder (but keeps the link from build:install).
-
-```bash
-npm run-script clean
-```
-
-### prettier-format
-
-`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc.js)
-
-```bash
-npm run-script prettier-format
-```
-
-### package
-
-`package` generates a zip file containing the contents of the dist folder generated previously with the `build` command. Useful for those who want to manually load the module or want to create their own release
-
-```bash
-npm run-script package
-```
-
-## [Changelog](./changelog.md)
-
-## Issues
-
-Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
-
-## License
-
-This package is under the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
-
-
 
 
 
