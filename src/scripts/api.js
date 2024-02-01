@@ -99,22 +99,22 @@ const API = {
     random,
     animationExternal = undefined
   ) {
-    const listEvocationsVariants = actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+    const listEvocationsVariants = actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS) || [];
     let isOrdered = ordered;
     let isRandom = random;
-    if (!ordered && actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED)) {
-      isOrdered = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
+    if (!ordered && actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.ORDERED)) {
+      isOrdered = actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.ORDERED) ?? false;
     }
-    if (!random && actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM)) {
-      isRandom = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
+    if (!random && actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.RANDOM)) {
+      isRandom = actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.RANDOM) ?? false;
     }
-    let lastElement = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT) ?? actor.name;
+    let lastElement = actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.LAST_ELEMENT) ?? actor.name;
 
     const tokenDataToTransform = await actor.getTokenData();
 
     if (removeEvocationsVariant) {
       // implemented a dismiss companion but is work only for the same name
-      const evokeds = actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+      const evokeds = actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS) || [];
       const tokensToDelete = [];
       for (const evoked of evokeds) {
         const posDatas =
@@ -154,8 +154,8 @@ const API = {
           }
         }
       }
-      await actor?.unsetFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT);
-      await actor?.unsetFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS);
+      await actor?.unsetFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.LAST_ELEMENT);
+      await actor?.unsetFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS);
       const scene = game.scenes.current;
       scene.deleteEmbeddedDocuments("Token", tokensToDelete);
     } else {
@@ -206,12 +206,12 @@ const API = {
     }
     for (const token of tokens) {
       if (token && token.document) {
-        if (getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`)) {
-          const p = getProperty(token.document, `flags.${CONSTANTS.MODULE_NAME}`);
+        if (getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}`)) {
+          const p = getProperty(token.document, `flags.${CONSTANTS.MODULE_ID}`);
           for (const key in p) {
             const senseOrConditionIdKey = key;
             const senseOrConditionValue = p[key];
-            await token.document.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+            await token.document.unsetFlag(CONSTANTS.MODULE_ID, senseOrConditionIdKey);
           }
           info(`Cleaned up token '${token.name}'`, true);
         }
@@ -221,12 +221,12 @@ const API = {
     }
     for (const token of tokens) {
       if (token && token.actor) {
-        if (getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`)) {
-          const p = getProperty(token.actor, `flags.${CONSTANTS.MODULE_NAME}`);
+        if (getProperty(token.actor, `flags.${CONSTANTS.MODULE_ID}`)) {
+          const p = getProperty(token.actor, `flags.${CONSTANTS.MODULE_ID}`);
           for (const key in p) {
             const senseOrConditionIdKey = key;
             const senseOrConditionValue = p[key];
-            await token.actor.unsetFlag(CONSTANTS.MODULE_NAME, senseOrConditionIdKey);
+            await token.actor.unsetFlag(CONSTANTS.MODULE_ID, senseOrConditionIdKey);
           }
           info(`Cleaned up actor '${token.name}'`, true);
         }

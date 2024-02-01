@@ -18,7 +18,7 @@ export class CompanionManager extends FormApplication {
       ...super.defaultOptions,
       title: game.i18n.localize("AE.dialogs.companionManager.title"),
       id: "companionManager",
-      template: `modules/${CONSTANTS.MODULE_NAME}/templates/companionmanager.hbs`,
+      template: `modules/${CONSTANTS.MODULE_ID}/templates/companionmanager.hbs`,
       resizable: true,
       width: 300,
       height: window.innerHeight > 400 ? 400 : window.innerHeight - 100,
@@ -58,15 +58,15 @@ export class CompanionManager extends FormApplication {
       return;
     }
     const data = super.getData();
-    data.random = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM) ?? false;
-    data.ordered = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED) ?? false;
-    // const storeOnActorFlag = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR);
+    data.random = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.RANDOM) ?? false;
+    data.ordered = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.ORDERED) ?? false;
+    // const storeOnActorFlag = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.STORE_ON_ACTOR);
     // data.storeonactor =
     //     storeOnActorFlag != null && storeOnActorFlag != undefined
     //         ? storeOnActorFlag
-    //         : game.settings.get(CONSTANTS.MODULE_NAME, 'storeonactor');
+    //         : game.settings.get(CONSTANTS.MODULE_ID, 'storeonactor');
     // Retrieve compendiums with actor
-    const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? "";
+    const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM) ?? "";
     const compendiumsData = [];
     const compDataNone = {
       id: "",
@@ -91,7 +91,7 @@ export class CompanionManager extends FormApplication {
       }
     }
     data.compendiums = compendiumsData;
-    const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+    const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     data.showoptionstogm = disable ? false : true;
     return data;
   }
@@ -118,21 +118,21 @@ export class CompanionManager extends FormApplication {
       event.originalEvent?.dataTransfer?.setData("text/plain", event.currentTarget.dataset.elid);
     });
     html.on("change", "#companion-selectcompendium", async (event) => {
-      const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? "";
+      const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM) ?? "";
       const changedCompendium = event.currentTarget.value;
       if (changedCompendium != currentCompendium) {
         if (changedCompendium === "nonenodelete") {
-          await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
+          await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
           await this.loadCompanions();
         } else {
           if (changedCompendium) {
             $('li[data-acompendiumid="' + currentCompendium + '"]').remove();
-            await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
+            await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
             await this.loadCompanions();
           } else {
             $("#companion-list").empty();
-            await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS, []);
-            await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
+            await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS, []);
+            await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM, changedCompendium);
             await this.loadCompanions();
           }
         }
@@ -141,7 +141,7 @@ export class CompanionManager extends FormApplication {
     html.on("click", ".companion-deleteall", async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS, []);
+      await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS, []);
       $("#companion-list").empty();
     });
   }
@@ -166,7 +166,7 @@ export class CompanionManager extends FormApplication {
   }
 
   async _onDrop(event) {
-    const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+    const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     if (disable) {
       warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
       return;
@@ -268,7 +268,7 @@ export class CompanionManager extends FormApplication {
     // 					2,
     // 				0.5
     // 			),
-    // 			icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
+    // 			icon: `modules/${CONSTANTS.MODULE_ID}/assets/black-hole-bolas.webp`,
     // 			label: "",
     // 	  });
     if (this.range) {
@@ -279,7 +279,7 @@ export class CompanionManager extends FormApplication {
         (Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) / 2,
         0.5
       ),
-      icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
+      icon: `modules/${CONSTANTS.MODULE_ID}/assets/black-hole-bolas.webp`,
       label: "",
     });
     this.clearRange();
@@ -334,7 +334,7 @@ export class CompanionManager extends FormApplication {
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({ elevation: customTokenData.elevation });
     });
-    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.preCreateToken`, {
+    Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
       tokenData: tokenData,
       customTokenData: customTokenData,
       posData: posData,
@@ -365,13 +365,13 @@ export class CompanionManager extends FormApplication {
       }
     }
 
-    await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
-    if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
-      const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+    await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
+    if (this.actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
+      const arr = this.actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS) || [];
       arr.push(actorToTransform.name);
-      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
+      await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, arr);
     } else {
-      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
+      await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
     }
 
     const postSummon = {
@@ -385,7 +385,7 @@ export class CompanionManager extends FormApplication {
       summonedTokens: tokens,
     };
     console.log("Automated Evocations Summoning:", postSummon);
-    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.postSummon`, postSummon);
+    Hooks.callAll(`${CONSTANTS.MODULE_ID}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
   }
@@ -493,9 +493,9 @@ export class CompanionManager extends FormApplication {
       // DO NOTHING MODULE CONFLICTS
       return;
     }
-    let data = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS) || [];
+    let data = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS) || [];
     const namesAlreadyImportedFromCompendium = [];
-    const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM) ?? "";
+    const currentCompendium = this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM) ?? "";
     if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
       const pack = game.packs.get(currentCompendium);
       if (pack) {
@@ -554,7 +554,7 @@ export class CompanionManager extends FormApplication {
     if (!actorToTransformLi) {
       return "";
     }
-    const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+    const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     const restricted = game.settings.get(AECONSTS.MN, "restrictOwned");
     if (restricted && !actorToTransformLi.isOwner) return "";
     let $li = $(`
@@ -654,7 +654,7 @@ export class CompanionManager extends FormApplication {
       currentCompendium &&
       currentCompendium != "none" &&
       currentCompendium != "nonenodelete" &&
-      currentCompendium != this.actor.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPENDIUM)
+      currentCompendium != this.actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPENDIUM)
     ) {
       // Reference a Compendium pack by it's callection ID
       const pack = game.packs.find((p) => p.collection === currentCompendium);
@@ -686,11 +686,11 @@ export class CompanionManager extends FormApplication {
     //   ? await this.actor.setFlag(AECONSTS.MN, 'companions', data)
     //   : game.user.setFlag(AECONSTS.MN, 'companions', data);
 
-    await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.COMPANIONS, data);
-    await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.RANDOM, isRandom);
-    await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.ORDERED, isOrdered);
-    // await this.actor.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.STORE_ON_ACTOR, isStoreonactor);
-    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.saveCompanionData`, {
+    await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS, data);
+    await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.RANDOM, isRandom);
+    await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.ORDERED, isOrdered);
+    // await this.actor.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.STORE_ON_ACTOR, isStoreonactor);
+    Hooks.callAll(`${CONSTANTS.MODULE_ID}.saveCompanionData`, {
       actor: this.actor,
       data: data,
     });
@@ -751,7 +751,7 @@ export class CompanionManager extends FormApplication {
     // 					2,
     // 				0.5
     // 			),
-    // 			icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
+    // 			icon: `modules/${CONSTANTS.MODULE_ID}/assets/black-hole-bolas.webp`,
     // 			label: "",
     // 	  });
     const posData = await warpgate.crosshairs.show({
@@ -759,7 +759,7 @@ export class CompanionManager extends FormApplication {
         (Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) / 2,
         0.5
       ),
-      icon: `modules/${CONSTANTS.MODULE_NAME}/assets/black-hole-bolas.webp`,
+      icon: `modules/${CONSTANTS.MODULE_ID}/assets/black-hole-bolas.webp`,
       label: "",
     });
     if (posData.cancelled) {
@@ -823,7 +823,7 @@ export class CompanionManager extends FormApplication {
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({ elevation: customTokenData.elevation });
     });
-    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.preCreateToken`, {
+    Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
       tokenData: tokenData,
       customTokenData: customTokenData,
       posData: posData,
@@ -854,13 +854,13 @@ export class CompanionManager extends FormApplication {
       }
     }
 
-    await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
-    if (this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
-      const arr = this.actor?.getFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS) || [];
+    await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.LAST_ELEMENT, actorToTransform.name);
+    if (this.actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, actorToTransform.name)) {
+      const arr = this.actor?.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS) || [];
       arr.push(actorToTransform.name);
-      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, arr);
+      await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, arr);
     } else {
-      await this.actor?.setFlag(CONSTANTS.MODULE_NAME, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
+      await this.actor?.setFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.EVOKEDS, [actorToTransform.name]);
     }
 
     const postSummon = {
@@ -874,7 +874,7 @@ export class CompanionManager extends FormApplication {
       summonedTokens: tokens,
     };
     console.log("Automated Evocations Summoning:", postSummon);
-    Hooks.callAll(`${CONSTANTS.MODULE_NAME}.postSummon`, postSummon);
+    Hooks.callAll(`${CONSTANTS.MODULE_ID}.postSummon`, postSummon);
     if (game.settings.get(AECONSTS.MN, "autoclose")) this.close();
     else this.maximize();
   }
@@ -926,7 +926,7 @@ export class SimpleCompanionManager extends CompanionManager {
   }
 
   async _onDrop(event) {
-    const disable = game.settings.get(CONSTANTS.MODULE_NAME, "disableSettingsForNoGM") && !game.user?.isGM;
+    const disable = game.settings.get(CONSTANTS.MODULE_ID, "disableSettingsForNoGM") && !game.user?.isGM;
     if (disable) {
       warn(`Can't drop any actor while settings 'disableSettingsForNoGM' is enabled`, true);
     }

@@ -366,6 +366,6 @@ export const dnd5eCustomautospells = async function () {
     game.automatedevocations[game.system.id],
     game.settings.get(AECONSTS.MN, "customautospells")
   );
-  Hooks.callAll(`${CONSTANTS.MODULE_NAME}.dnd5e.ready`);
+  Hooks.callAll(`${CONSTANTS.MODULE_ID}.dnd5e.ready`);
   // });
 };

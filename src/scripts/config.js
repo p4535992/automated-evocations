@@ -127,7 +127,7 @@ export const initHooks = () => {
     type: Boolean,
     default: true,
   });
-  game.settings.register(CONSTANTS.MODULE_NAME, "hudEnable", {
+  game.settings.register(CONSTANTS.MODULE_ID, "hudEnable", {
     name: game.i18n.localize(`AE.settings.hudEnable.title`),
     hint: game.i18n.localize(`AE.settings.hudEnable.hint`),
     scope: "client",
@@ -136,7 +136,7 @@ export const initHooks = () => {
     default: true,
   });
   /** Which column should the button be placed on */
-  game.settings.register(CONSTANTS.MODULE_NAME, "hudColumn", {
+  game.settings.register(CONSTANTS.MODULE_ID, "hudColumn", {
     name: game.i18n.localize(`AE.settings.hudColumn.title`),
     hint: game.i18n.localize(`AE.settings.hudColumn.hint`),
     scope: "client",
@@ -149,7 +149,7 @@ export const initHooks = () => {
     },
   });
   /** Whether the button should be placed on the top or bottom of the column */
-  game.settings.register(CONSTANTS.MODULE_NAME, "hudTopBottom", {
+  game.settings.register(CONSTANTS.MODULE_ID, "hudTopBottom", {
     name: game.i18n.localize(`AE.settings.hudTopBottom.title`),
     hint: game.i18n.localize(`AE.settings.hudTopBottom.hint`),
     scope: "client",
@@ -161,7 +161,7 @@ export const initHooks = () => {
       Bottom: "Bottom",
     },
   });
-  game.settings.register(CONSTANTS.MODULE_NAME, "hudColorButton", {
+  game.settings.register(CONSTANTS.MODULE_ID, "hudColorButton", {
     name: game.i18n.localize(`AE.settings.hudColorButton.title`),
     hint: game.i18n.localize(`AE.settings.hudColorButton.hint`),
     scope: "client",
@@ -172,7 +172,7 @@ export const initHooks = () => {
 
   // ========================================================================
 
-  game.settings.register(CONSTANTS.MODULE_NAME, "debug", {
+  game.settings.register(CONSTANTS.MODULE_ID, "debug", {
     name: `AE.settings.debug.name`,
     hint: `AE.settings.debug.hint`,
     scope: "client",
@@ -262,7 +262,7 @@ export const readyHooks = async () => {
   });
 
   Hooks.on("renderActorSheet", async function (actorSheet, htmlElement, actorObject) {
-    const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, "hudColorButton") ?? "#7fffd4";
+    const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_ID, "hudColorButton") ?? "#7fffd4";
     if (htmlElement.find(".open-cm").length > 0) {
       htmlElement.find(".open-cm .fa-cat")[0].style.color = `${settingHudColorButton}`;
       htmlElement.find(".open-cm .fa-cat")[0].style.textShadow = `0 0 8px ${settingHudColorButton}`;
@@ -270,9 +270,9 @@ export const readyHooks = async () => {
   });
 
   Hooks.on("renderTokenHUD", (app, html, data) => {
-    if (game.settings.get(CONSTANTS.MODULE_NAME, "hudEnable")) {
+    if (game.settings.get(CONSTANTS.MODULE_ID, "hudEnable")) {
       renderAutomatedEvocationsVariantHud(app, html, data);
-      const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, "hudColorButton") ?? "#7fffd4";
+      const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_ID, "hudColorButton") ?? "#7fffd4";
       if (html.find(".control-icon.automated-evocations-variant .fa-cat").length > 0) {
         html.find(".control-icon.automated-evocations-variant .fa-cat")[0].style.color = `${settingHudColorButton}`;
         html.find(
@@ -284,8 +284,8 @@ export const readyHooks = async () => {
 
   Hooks.on("renderSettingsConfig", (app, html, data) => {
     // Add colour pickers to the Configure Game Settings: Module Settings menu
-    const nameHudColorButton = `${CONSTANTS.MODULE_NAME}.hudColorButton`;
-    const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_NAME, "hudColorButton") ?? "#7fffd4";
+    const nameHudColorButton = `${CONSTANTS.MODULE_ID}.hudColorButton`;
+    const settingHudColorButton = game.settings.get(CONSTANTS.MODULE_ID, "hudColorButton") ?? "#7fffd4";
     $("<input>")
       .attr("type", "color")
       .attr("data-edit", nameHudColorButton)

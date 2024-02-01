@@ -129,6 +129,6 @@ export const pf2eCustomautospells = async function () {
     game.automatedevocations[game.system.id],
     game.settings.get(AECONSTS.MN, "customautospells")
   );
-  Hooks.callAll(`${CONSTANTS.MODULE_NAME}.pf2e.ready`);
+  Hooks.callAll(`${CONSTANTS.MODULE_ID}.pf2e.ready`);
   // });
 };

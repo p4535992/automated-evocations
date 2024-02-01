@@ -11,7 +11,7 @@ export function registerSocket() {
   }
   //@ts-ignore
   // eslint-disable-next-line no-undef
-  automatedEvocationsVariantSocket = socketlib.registerModule(CONSTANTS.MODULE_NAME);
+  automatedEvocationsVariantSocket = socketlib.registerModule(CONSTANTS.MODULE_ID);
   /**
    * Automated EvocationsVariant sockets
    */

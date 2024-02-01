@@ -1,14 +1,14 @@
 import CONSTANTS from "./constants.js";
 
 const AECONSTS = {
-  MN: CONSTANTS.MODULE_NAME,
+  MN: CONSTANTS.MODULE_ID,
   animations: {},
   animationFunctions: {
     fire: {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/fire_spiral_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/fire_spiral_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -20,7 +20,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/fire_earth_explosion_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/fire_earth_explosion_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -39,7 +39,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_infinity_RECTANGLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/air_infinity_RECTANGLE_01.webm`)
           .belowTokens()
           .atLocation(template)
           .scale(
@@ -50,7 +50,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_portal_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/air_portal_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -62,7 +62,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/air_puff_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/air_puff_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -81,7 +81,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/ring_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/ring_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -93,7 +93,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/electric_blast_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/electric_blast_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -113,7 +113,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/LightningBall_01_Regular_Blue_400x400.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/LightningBall_01_Regular_Blue_400x400.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -125,7 +125,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/LightningStrike_01a_800x800.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/LightningStrike_01a_800x800.webm`)
           .atLocation(template)
           .repeats(3, 100, 400, 600)
           .randomizeMirrorX()
@@ -138,7 +138,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(750)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Impact_12_Regular_Blue_400x400.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/Impact_12_Regular_Blue_400x400.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -157,7 +157,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/water_blast_RAY_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/water_blast_RAY_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -170,7 +170,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(500)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/create_water_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/create_water_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template)
@@ -190,7 +190,7 @@ const AECONSTS = {
         await new Sequence()
           .effect()
           .file(
-            `modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/SnowflakeBurst_01_Regular_BlueWhite_Burst_600x600.webm`
+            `modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/SnowflakeBurst_01_Regular_BlueWhite_Burst_600x600.webm`
           )
           .belowTokens()
           .fadeIn(500, { ease: "easeOutCubic", delay: 500 })
@@ -209,7 +209,7 @@ const AECONSTS = {
           .wait(650)
           .effect()
           .file(
-            `modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/IceSpikesRadialBurst_01_Regular_White_1000x1000.webm`
+            `modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/IceSpikesRadialBurst_01_Regular_White_1000x1000.webm`
           )
           .randomRotation()
           .atLocation(template)
@@ -228,7 +228,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Whirlwind_01_BlueGrey_01_400x400.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/Whirlwind_01_BlueGrey_01_400x400.webm`)
           .belowTokens()
           .fadeIn(500, { ease: "easeOutCubic", delay: 500 })
           .fadeOut(1500)
@@ -245,7 +245,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(950)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Darkness_01_Black_600x600.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/Darkness_01_Black_600x600.webm`)
           .randomRotation()
           .fadeIn(500, { ease: "easeOutCubic", delay: 500 })
           .fadeOut(1500)
@@ -269,7 +269,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/energy_spark_CIRCLE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/energy_spark_CIRCLE_01.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template, { randomOffset: true })
@@ -282,7 +282,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(500)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/energy_pulse_yellow_CIRCLE.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/energy_pulse_yellow_CIRCLE.webm`)
           .belowTokens()
           .atLocation(template)
           .scale(
@@ -300,7 +300,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/magic_explosion_symbol_CIRCLE.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/magic_explosion_symbol_CIRCLE.webm`)
           .belowTokens()
           .atLocation(template)
           .scale(
@@ -318,7 +318,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Conjuration_01_Yellow_Circle_800x800.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/Conjuration_01_Yellow_Circle_800x800.webm`)
           .belowTokens()
           .fadeIn(500, { ease: "easeOutCubic", delay: 500 })
           .fadeOut(1500)
@@ -335,7 +335,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(650)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/Explosion_02_Blue_400x400.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/Explosion_02_Blue_400x400.webm`)
           .randomRotation()
           .atLocation(template)
           .scale(
@@ -353,7 +353,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/heart_red_SQUARE.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/heart_red_SQUARE.webm`)
           .atLocation(template)
           .scale(
             ((Math.max(tokenData.width, tokenData.height) * (tokenData.texture.scaleX + tokenData.texture.scaleY)) /
@@ -369,7 +369,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/music_RECTANGLE.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/music_RECTANGLE.webm`)
           .belowTokens()
           .randomRotation()
           .atLocation(template, { randomOffset: true })
@@ -382,7 +382,7 @@ const AECONSTS = {
           .elevation(tokenData.elevation)
           .wait(900)
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/magic_symbol_SQUARE_05.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/magic_symbol_SQUARE_05.webm`)
           .belowTokens()
           .atLocation(template)
           .scale(
@@ -400,7 +400,7 @@ const AECONSTS = {
         await new Sequence()
           .effect()
           .file(
-            `modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/OutPulse_01_Regular_BlueWhite_Burst_600x600.webm`
+            `modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/OutPulse_01_Regular_BlueWhite_Burst_600x600.webm`
           )
           .belowTokens()
           .atLocation(template)
@@ -414,7 +414,7 @@ const AECONSTS = {
           .wait(100)
           .effect()
           .file(
-            `modules/${CONSTANTS.MODULE_NAME}/assets/animations/JB2A/BardicInspiration_01_Regular_GreenOrange_400x400.webm`
+            `modules/${CONSTANTS.MODULE_ID}/assets/animations/JB2A/BardicInspiration_01_Regular_GreenOrange_400x400.webm`
           )
           .atLocation(template)
           .scale(
@@ -431,7 +431,7 @@ const AECONSTS = {
       fn: async (template, tokenData) => {
         await new Sequence()
           .effect()
-          .file(`modules/${CONSTANTS.MODULE_NAME}/assets/animations/four_element_strike_SQUARE_01.webm`)
+          .file(`modules/${CONSTANTS.MODULE_ID}/assets/animations/four_element_strike_SQUARE_01.webm`)
           .atLocation(template)
           .belowTokens()
           .scale(
