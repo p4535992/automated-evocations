@@ -793,4 +793,55 @@ export class RetrieveHelpers {
     }
     return targetTmp.path;
   }
+
+  static getTokenSync(target, ignoreError = false, ignoreName = true) {
+    let targetTmp = target;
+    if (!targetTmp) {
+      throw Logger.error(`Token is undefined`, true, targetTmp);
+    }
+    if (targetTmp instanceof Token) {
+      return targetTmp;
+    }
+    // This is just a patch for compatibility with others modules
+    if (targetTmp.document) {
+      targetTmp = targetTmp.document;
+    }
+    if (targetTmp.uuid) {
+      targetTmp = targetTmp.uuid;
+    }
+
+    if (targetTmp instanceof Token) {
+      return targetTmp;
+    }
+    if (RetrieveHelpers.stringIsUuid(targetTmp)) {
+      targetTmp = fromUuidSync(targetTmp);
+    } else {
+      targetTmp = canvas.tokens?.placeables.find((t) => {
+        return t.id === sourceToken;
+      });
+      if (!targetTmp && !ignoreName) {
+        targetTmp = canvas.tokens?.placeables.find((t) => {
+          return t.name === sourceToken;
+        });
+      }
+    }
+    if (!targetTmp) {
+      if (ignoreError) {
+        Logger.warn(`Token is not found`, false, targetTmp);
+        return;
+      } else {
+        throw Logger.error(`Token is not found`, true, targetTmp);
+      }
+    }
+    // Type checking
+    // if (!(targetTmp instanceof Token)) {
+    //   if (ignoreError) {
+    //     Logger.warn(`Invalid Token`, true, targetTmp);
+    //     return;
+    //   } else {
+    //     throw Logger.error(`Invalid Token`, true, targetTmp);
+    //   }
+    // }
+    return targetTmp;
+  }
 }

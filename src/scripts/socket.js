@@ -8,7 +8,7 @@ export function registerSocket() {
   if (automatedEvocationsVariantSocket) {
     return automatedEvocationsVariantSocket;
   }
-  //@ts-ignore
+
   // eslint-disable-next-line no-undef
   automatedEvocationsVariantSocket = socketlib.registerModule(CONSTANTS.MODULE_ID);
   /**
@@ -22,9 +22,9 @@ export function registerSocket() {
   );
   automatedEvocationsVariantSocket.register("cleanUpTokenSelected", (...args) => API.cleanUpTokenSelectedArr(...args));
   automatedEvocationsVariantSocket.register("getSummonInfo", (...args) => API.getSummonInfoArr(...args));
-  automatedEvocationsVariantSocket.register("transferPermissionsActor", (...args) =>
-    API.transferPermissionsActorArr(...args)
-  );
+  //   automatedEvocationsVariantSocket.register("transferPermissionsActor", (...args) =>
+  //     API.transferPermissionsActorArr(...args)
+  //   );
   automatedEvocationsVariantSocket.register("retrieveAndPrepareActor", (...args) =>
     API.retrieveAndPrepareActorArr(...args)
   );

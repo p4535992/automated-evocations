@@ -5,93 +5,55 @@ import { retrieveActorFromData, retrieveActorFromToken, transferPermissionsActor
 import { CompanionManager } from "./companionmanager.js";
 import AECONSTS from "./main.js";
 import Logger from "./lib/Logger.js";
+import { RetrieveHelpers } from "./lib/retrieve-helpers.js";
 
 const API = {
-  async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
-    if (!Array.isArray(inAttributes)) {
-      throw Logger.error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
-    }
-    const [sourceActorIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-    const result = await this.invokeEvocationsVariantManagerFromActor(
-      sourceActorIdOrName,
-      removeEvocationsVariant,
-      ordered,
-      random,
-      animationExternal
-    );
-    return result;
-  },
   async invokeEvocationsVariantManagerFromActor(
-    sourceActorIdOrName,
-    removeEvocationsVariant = false,
-    ordered = false,
-    random = false,
-    animationExternal = undefined
+    sourceActor,
+    { removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined }
   ) {
+    sourceActor = await RetrieveHelpers.getActorAsync(sourceActor, true, false);
     for (const tokenOnCanvas of canvas.tokens?.placeables) {
       const actor = retrieveActorFromToken(tokenOnCanvas);
-      if (actor && (actor.id === sourceActorIdOrName || actor.name === sourceActorIdOrName)) {
-        this._invokeEvocationsVariantManagerInner(
-          tokenOnCanvas,
-          actor,
-          removeEvocationsVariant,
-          ordered,
-          random,
-          animationExternal
-        );
+      const options = {
+        removeEvocationsVariant: removeEvocationsVariant,
+        ordered: ordered,
+        random: random,
+        animationExternal: animationExternal,
+      };
+      if (actor && (actor.id === sourceActor || actor.name === sourceActor)) {
+        this._invokeEvocationsVariantManagerInner(tokenOnCanvas, actor, options);
         break;
       }
     }
   },
-  async invokeEvocationsVariantManagerArr(...inAttributes) {
-    if (!Array.isArray(inAttributes)) {
-      throw Logger.error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
-    }
-    const [sourceTokenIdOrName, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
-    const result = await this.invokeEvocationsVariantManager(
-      sourceTokenIdOrName,
-      removeEvocationsVariant,
-      ordered,
-      random,
-      animationExternal
-    );
-    return result;
-  },
+
   async invokeEvocationsVariantManager(
-    sourceTokenIdOrName,
-    removeEvocationsVariant = false,
-    ordered = false,
-    random = false,
-    animationExternal = undefined
+    sourceToken,
+    { removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined }
   ) {
-    const sourceToken = canvas.tokens?.placeables.find((t) => {
-      return t.id === sourceTokenIdOrName || t.name === sourceTokenIdOrName;
-    });
+    sourceToken = RetrieveHelpers.getTokenSync(sourceToken, true, true);
     if (!sourceToken) {
-      Logger.warn(`No token founded on canvas with id/name '${sourceTokenIdOrName}'`, true);
+      Logger.warn(`No token founded on canvas with id/name`, true, sourceToken);
       return;
     }
     const actor = retrieveActorFromToken(sourceToken);
+    const options = {
+      removeEvocationsVariant: removeEvocationsVariant,
+      ordered: ordered,
+      random: random,
+      animationExternal: animationExternal,
+    };
     if (!actor) {
-      Logger.warn(`No actor founded for the token with id/name '${sourceTokenIdOrName}'`, true);
+      Logger.warn(`No actor founded for the token with id/name `, true, sourceToken);
       return;
     }
-    this._invokeEvocationsVariantManagerInner(
-      sourceToken,
-      actor,
-      removeEvocationsVariant,
-      ordered,
-      random,
-      animationExternal
-    );
+    this._invokeEvocationsVariantManagerInner(sourceToken, actor, options);
   },
   async _invokeEvocationsVariantManagerInner(
     sourceToken,
     actor,
-    removeEvocationsVariant,
-    ordered,
-    random,
-    animationExternal = undefined
+    { removeEvocationsVariant, ordered, random, animationExternal = undefined }
   ) {
     const listEvocationsVariants = actor.getFlag(CONSTANTS.MODULE_ID, EvocationsVariantFlags.COMPANIONS) || [];
     let isOrdered = ordered;
@@ -125,12 +87,10 @@ const API = {
               return posData.name?.toLowerCase().includes(a.name?.toLowerCase());
             });
             if (animationExternal && animationExternal.sequence) {
-              //@ts-ignore
               await animationExternal.sequence.play();
               await wait(animationExternal.timeToWait);
             } else if (animation) {
               if (typeof AECONSTS.animationFunctions[animation].fn == "string") {
-                //@ts-ignore
                 // game.macros
                 // 	?.getName(AECONSTS.animationFunctions[animation].fn)
                 // 	?.execute(posData, tokenDataToTransform);
@@ -188,10 +148,7 @@ const API = {
       }
     }
   },
-  async cleanUpTokenSelectedArr(...inAttributes) {
-    const result = await this.cleanUpTokenSelected();
-    return result;
-  },
+
   async cleanUpTokenSelected() {
     const tokens = canvas.tokens?.controlled;
     if (!tokens || tokens.length === 0) {
@@ -229,14 +186,6 @@ const API = {
       }
     }
   },
-  async getSummonInfoArr(...inAttributes) {
-    if (!Array.isArray(inAttributes)) {
-      throw Logger.error("getSummonInfoArr | inAttributes must be of type array");
-    }
-    const [args, spellLevel] = inAttributes;
-    const result = await this.getSummonInfo(args, spellLevel);
-    return result;
-  },
   getSummonInfo(args, spellLevel) {
     if (game.system.id === "dnd5e") {
       const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
@@ -257,23 +206,7 @@ const API = {
       return undefined;
     }
   },
-  async retrieveAndPrepareActorArr(...inAttributes) {
-    if (!Array.isArray(inAttributes)) {
-      throw Logger.error("retrieveAndPrepareActorArr | inAttributes must be of type array");
-    }
-    const [aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
-    const result = await this.retrieveAndPrepareActor(
-      aUuid,
-      aId,
-      aName,
-      currentCompendium,
-      createOnWorld,
-      sourceActorId,
-      userId
-    );
-    return result.id;
-  },
-  async retrieveAndPrepareActor(aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId) {
+  async retrieveAndPrepareActor({ aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId }) {
     const targetActor = await retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld);
     const sourceActor = await retrieveActorFromData(undefined, sourceActorId, undefined, undefined, false);
     const user = game.users.get(userId);
@@ -295,6 +228,68 @@ const API = {
       Logger.error(e);
       return undefined;
     }
+  },
+
+  // =================================================
+  // SOCKET UTILITIES
+  // =================================================
+
+  async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
+    if (!Array.isArray(inAttributes)) {
+      throw Logger.error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
+    }
+    const [sourceActor, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
+    const options = {
+      removeEvocationsVariant: removeEvocationsVariant,
+      ordered: ordered,
+      random: random,
+      animationExternal: animationExternal,
+    };
+    const result = await this.invokeEvocationsVariantManagerFromActor(sourceActor, options);
+    return result;
+  },
+  async invokeEvocationsVariantManagerArr(...inAttributes) {
+    if (!Array.isArray(inAttributes)) {
+      throw Logger.error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
+    }
+    const [sourceToken, removeEvocationsVariant, ordered, random, animationExternal] = inAttributes;
+    const options = {
+      removeEvocationsVariant: removeEvocationsVariant,
+      ordered: ordered,
+      random: random,
+      animationExternal: animationExternal,
+    };
+    const result = await this.invokeEvocationsVariantManager(sourceToken, options);
+    return result;
+  },
+  async cleanUpTokenSelectedArr(...inAttributes) {
+    const result = await this.cleanUpTokenSelected();
+    return result;
+  },
+  async getSummonInfoArr(...inAttributes) {
+    if (!Array.isArray(inAttributes)) {
+      throw Logger.error("getSummonInfoArr | inAttributes must be of type array");
+    }
+    const [args, spellLevel] = inAttributes;
+    const result = await this.getSummonInfo(args, spellLevel);
+    return result;
+  },
+  async retrieveAndPrepareActorArr(...inAttributes) {
+    if (!Array.isArray(inAttributes)) {
+      throw Logger.error("retrieveAndPrepareActorArr | inAttributes must be of type array");
+    }
+    const [aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
+    const options = {
+      aUuid: aUuid,
+      aId: aId,
+      aName: aName,
+      currentCompendium: currentCompendium,
+      createOnWorld: createOnWorld,
+      sourceActorId: sourceActorId,
+      userId: userId,
+    };
+    const result = await this.retrieveAndPrepareActor(options);
+    return result.id;
   },
 };
 export default API;

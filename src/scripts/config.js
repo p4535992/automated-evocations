@@ -252,7 +252,6 @@ export const readyHooks = async () => {
         }
         if (!token) {
           token = canvas.tokens?.placeables.find((t) => {
-            //@ts-ignore
             return t.document.actorId === actor.id;
           });
         }

@@ -2,15 +2,18 @@ import API from "../api.js";
 import { EvocationsVariantFlags } from "../automatedEvocationsVariantModels.js";
 import CONSTANTS from "../constants.js";
 import Logger from "./Logger.js";
+import { RetrieveHelpers } from "./retrieve-helpers.js";
 
 // =============================
 // Module Generic function
 // =============================
 
-// return true or false if you, the user, should run the scripts on this actor.
-export function should_I_run_this(actor) {
+/**
+ * return true or false if you, the user, should run the scripts on this actor.
+ */
+export function shouldIRunThis(actor) {
   let user;
-  //@ts-ignore
+
   const { OWNER } = CONST.DOCUMENT_OWNERSHIP_LEVELS;
 
   // find a non-GM who is active and owner of the actor.
@@ -32,7 +35,7 @@ export function should_I_run_this(actor) {
   return user === game.user;
 }
 
-export function is_real_number(inNumber) {
+export function isRealNumber(inNumber) {
   return !isNaN(inNumber) && typeof inNumber === "number" && isFinite(inNumber);
 }
 
@@ -120,7 +123,11 @@ function addToEvocationsVariantButton(html, sourceToken) {
       const targetActor = retrieveActorFromToken(targetToken);
       if (targetActor) {
         if (targetToken) {
-          API._invokeEvocationsVariantManagerInner(targetToken, targetActor, false, ordered, random);
+          API._invokeEvocationsVariantManagerInner(targetToken, targetActor, {
+            removeEvocationsVariant: false,
+            ordered: ordered,
+            random: random,
+          });
         } else {
           Logger.warn(`No token is founded checkout the logs`, true);
         }
@@ -134,7 +141,11 @@ function addToEvocationsVariantButton(html, sourceToken) {
       // Do somethign with right click
       const targetActor = retrieveActorFromToken(targetToken);
       if (targetActor) {
-        API._invokeEvocationsVariantManagerInner(targetToken, targetActor, true, ordered, random);
+        API._invokeEvocationsVariantManagerInner(targetToken, targetActor, {
+          removeEvocationsVariant: true,
+          ordered: ordered,
+          random: random,
+        });
       }
     }
   });
@@ -182,26 +193,26 @@ function buildButton(html, tooltip) {
 //     }
 //   });
 // }
-/**
- * Adds a slash icon on top of the icon to signify is active
- * @param {Object} button - The HUD button to add a slash on top of
- */
-function addSlash(button) {
-  const slash = $(`<i class="fas fa-slash" style="position: absolute; color: tomato"></i>`);
-  button.addClass("fa-stack");
-  button.find("i").addClass("fa-stack-1x");
-  slash.addClass("fa-stack-1x");
-  button.append(slash);
-  return button;
-}
-/**
- * Removes the slash icon from the button to signify that it is no longer active
- * @param {Object} button - The button
- */
-function removeSlash(button) {
-  const slash = button.find("i")[1];
-  slash.remove();
-}
+// /**
+//  * Adds a slash icon on top of the icon to signify is active
+//  * @param {Object} button - The HUD button to add a slash on top of
+//  */
+// function addSlash(button) {
+//   const slash = $(`<i class="fas fa-slash" style="position: absolute; color: tomato"></i>`);
+//   button.addClass("fa-stack");
+//   button.find("i").addClass("fa-stack-1x");
+//   slash.addClass("fa-stack-1x");
+//   button.append(slash);
+//   return button;
+// }
+// /**
+//  * Removes the slash icon from the button to signify that it is no longer active
+//  * @param {Object} button - The button
+//  */
+// function removeSlash(button) {
+//   const slash = button.find("i")[1];
+//   slash.remove();
+// }
 export function retrieveActorFromToken(sourceToken) {
   if (!sourceToken.actor) {
     return undefined;
@@ -211,9 +222,8 @@ export function retrieveActorFromToken(sourceToken) {
   //   return sourceToken.actor;
   // }
   let actor = undefined;
-  //@ts-ignore
+
   if (sourceToken.document.actorLink) {
-    //@ts-ignore
     actor = game.actors?.get(sourceToken.document.actorId);
   }
   // DO NOT NEED THIS
@@ -225,32 +235,9 @@ export function retrieveActorFromToken(sourceToken) {
   }
   return actor;
 }
-export async function uuidToDocument(uuid, createOnWorld) {
-  const parts = uuid.split(".");
-  let result = null;
-  if (parts[0] === "Compendium") {
-    const pack = game["packs"].get(parts[1] + "." + parts[2]);
-    if (pack !== undefined) {
-      result = await pack.getDocument(parts[3]);
-    }
-    // MOD 4535992
-    // Create actor from compendium
-    if (result && createOnWorld && (game.user?.isGM || should_I_run_this(result))) {
-      // Create actor from compendium
-      const collection = game.collections.get(pack.documentName);
-      const id = result.id;
-      result = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-    }
-    // END MOD 4535992
-  } else {
-    result = await fromUuid(uuid);
-  }
-  if (result === null) {
-    Logger.error(`Document Not Found for uuid ${uuid}`);
-    result = null;
-  }
-  return result;
-}
+// export async function uuidToDocument(uuid, createOnWorld) {
+//   return retrieveActorFromData(uuid, null, null, null, createOnWorld);
+// }
 export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
   let actorToTransformLi = null;
   if (!aUuid && !aId && !aName) {
@@ -258,89 +245,57 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
     return null;
   }
   if (aUuid) {
-    actorToTransformLi = await uuidToDocument(aUuid, createOnWorld);
+    //actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
+    actorToTransformLi = await RetrieveHelpers.getActorAsync(aUuid, false, false);
     if (actorToTransformLi) {
-      return actorToTransformLi;
-    }
-  }
-  if (aUuid) {
-    //@ts-ignore
-    actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
-    if (aUuid.toLowerCase().includes("compendium")) {
-      if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
-        const packId = aUuid.replace("Compendium.", "").replace("." + aId, "");
-        const pack = game.packs.get(packId);
+      const parts = uuid.split(".");
+      if (parts[0] === "Compendium") {
+        //if (aUuid.toLowerCase().includes("compendium")) {
+        let pack = null;
+        if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
+          pack = game.packs.get(currentCompendium);
+        } else {
+          pack = game.packs.get(parts[1] + "." + parts[2]);
+        }
+        // Create actor from compendium
         if (pack) {
           if (!pack.indexed) {
             await pack.getIndex();
           }
-          // If the actor is found in the index, return it by exact ID
-          if (pack.index.get(aId)) {
-            actorToTransformLi = await pack.getDocument(aId);
-          }
-          // If not found, search for the actor by name
-          if (!actorToTransformLi) {
+          if (createOnWorld && (game.user?.isGM || shouldIRunThis(actorToTransformLi))) {
             for (const entityComp of pack.index) {
               const actorComp = await pack.getDocument(entityComp._id);
-              if (actorComp.id === aId || actorComp.name === aName) {
-                actorToTransformLi = actorComp.toObject();
+              if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
+                // Create actor from compendium
+                const collection = game.collections.get(pack.documentName);
+                const id = ctorComp.id; // parts[3]; //actorToTransformLi.id;
+                actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
                 break;
               }
             }
           } else {
-            actorToTransformLi = actorToTransformLi.toObject();
+            //actorToTransformLi = await pack.getDocument(parts[3]);
+            for (const entityComp of pack.index) {
+              const actorComp = await pack.getDocument(entityComp._id);
+              if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
+                actorToTransformLi = actorComp.toObject();
+                break;
+              }
+            }
           }
-        }
-        // Create actor from compendium
-        if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
-          // Create actor from compendium
-          const collection = game.collections.get(pack.documentName);
-          const id = actorToTransformLi.id; // li.data("document-id");
-          actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-        }
-      }
-    }
-    if (actorToTransformLi) {
-      return actorToTransformLi;
-    }
-  }
-  actorToTransformLi = game.actors?.contents.find((a) => {
-    return a.id === aId || a.name === aName;
-  });
-  if (!actorToTransformLi && currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
-    const pack = game.packs.get(currentCompendium);
-    if (pack) {
-      if (!pack.indexed) {
-        await pack.getIndex();
-      }
-      // If the actor is found in the index, return it by exact ID
-      if (pack.index.get(aId)) {
-        actorToTransformLi = await pack.getDocument(aId);
-      }
-      // If not found, search for the actor by name
-      if (!actorToTransformLi) {
-        for (const entityComp of pack.index) {
-          const actorComp = await pack.getDocument(entityComp._id);
-          if (actorComp.id === aId || actorComp.name === aName) {
-            actorToTransformLi = actorComp.toObject();
-            break;
-          }
+        } else {
+          Logger.warn(`Cannot find a pack from '${aUuid}'`, true);
         }
       } else {
-        actorToTransformLi = actorToTransformLi.toObject();
+        // ACTOR ALREADY FOUNDED
       }
     }
-    // if (actorToTransformLi && createOnWorld && (game.user?.isGM || should_I_run_this(actorToTransformLi))) {
-    // 	// Create actor from compendium
-    // 	const collection = <any>game.collections.get(pack.documentName);
-    // 	const id = actorToTransformLi.id; // li.data("document-id");
-    // 	actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-    // }
   }
-  if (!actorToTransformLi) {
-    actorToTransformLi = game.actors?.contents.find((a) => {
-      return a.id === aId || a.name === aName;
-    });
+  if (!actorToTransformLi && aId) {
+    actorToTransformLi = await RetrieveHelpers.getActorAsync(aId, false, true);
+  }
+  if (!actorToTransformLi && aName) {
+    actorToTransformLi = await RetrieveHelpers.getActorAsync(aName, false, false);
   }
   return actorToTransformLi;
 }
@@ -371,13 +326,13 @@ export async function rollFromString(rollString, actor) {
       } catch (e) {
         myresult = parseInt(eval(roll.result));
       }
-      if (!is_real_number(myresult)) {
+      if (!isRealNumber(myresult)) {
         Logger.warn(`The formula '${formula}' doesn't return a number we set the default 1`);
         myvalue = 1;
       } else {
         myvalue = myresult;
       }
-    } else if (!is_real_number(rollString)) {
+    } else if (!isRealNumber(rollString)) {
       const formula = rollString;
       const data = actor ? actor.getRollData() : {};
       const roll = new Roll(formula, data);
@@ -393,13 +348,13 @@ export async function rollFromString(rollString, actor) {
       } catch (e) {
         myresult = parseInt(eval(roll.result));
       }
-      if (!is_real_number(myresult)) {
+      if (!isRealNumber(myresult)) {
         Logger.warn(`The formula '${formula}' doesn't return a number we set the default 1`);
         myvalue = 1;
       } else {
         myvalue = myresult;
       }
-    } else if (is_real_number(rollString)) {
+    } else if (isRealNumber(rollString)) {
       myvalue = Number(rollString);
     } else {
       myvalue = 0;
@@ -416,10 +371,22 @@ export async function rollFromString(rollString, actor) {
  * @returns
  */
 export async function transferPermissionsActorInner(sourceActor, targetActor, externalUserId) {
-  // if (!game.user.isGM) throw new Logger.error("You do not have the ability to configure permissions.");
-
-  // let sourceActor = //actor to copy the permissions from
-  // let targetActor = //actor to copy the permissions to
+  // this method is on the actor, so "this" is the actor document
+  function _getHandPermission(actor, externalUserId) {
+    const handPermission = duplicate(actor.ownership); // actor.permission
+    for (const key of Object.keys(handPermission)) {
+      //remove any permissions that are not owner
+      if (handPermission[key] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
+        delete handPermission[key];
+      }
+      //set default permission to none/limited/observer
+      handPermission.default = CONST.DOCUMENT_PERMISSION_LEVELS.NONE; // CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER
+    }
+    if (!handPermission[externalUserId] || handPermission[externalUserId] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
+      handPermission[externalUserId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
+    }
+    return handPermission;
+  }
 
   // The important part is the {diff:false, recursive: false},
   // which ensures that any undefined parts of the permissions object
@@ -439,24 +406,4 @@ export async function transferPermissionsActorInner(sourceActor, targetActor, ex
     { ownership: _getHandPermission(sourceActor, externalUserId) },
     { diff: false, recursive: false, noHook: true }
   );
-}
-
-/**
- * TODO make this better
- * this method is on the actor, so "this" is the actor document
- */
-function _getHandPermission(actor, externalUserId) {
-  const handPermission = duplicate(actor.ownership); // actor.permission
-  for (const key of Object.keys(handPermission)) {
-    //remove any permissions that are not owner
-    if (handPermission[key] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
-      delete handPermission[key];
-    }
-    //set default permission to none/limited/observer
-    handPermission.default = CONST.DOCUMENT_PERMISSION_LEVELS.NONE; // CONST.DOCUMENT_PERMISSION_LEVELS.OBSERVER
-  }
-  if (!handPermission[externalUserId] || handPermission[externalUserId] < CONST.DOCUMENT_PERMISSION_LEVELS.OWNER) {
-    handPermission[externalUserId] = CONST.DOCUMENT_PERMISSION_LEVELS.OWNER;
-  }
-  return handPermission;
 }

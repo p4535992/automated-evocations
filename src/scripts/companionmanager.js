@@ -2,7 +2,7 @@ import API from "./api.js";
 import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocationsVariantModels.js";
 import CONSTANTS from "./constants.js";
 import Logger from "./lib/Logger.js";
-import { retrieveActorFromData, rollFromString, should_I_run_this } from "./lib/lib.js";
+import { retrieveActorFromData, rollFromString, shouldIRunThis } from "./lib/lib.js";
 import AECONSTS from "./main.js";
 import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
@@ -230,7 +230,7 @@ export class CompanionManager extends FormApplication {
     const aCompendiumId = event.currentTarget.dataset.acompendiumid;
     const aExplicitName = event.currentTarget.dataset.aexplicitname;
     let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
-    if (actorToTransform && should_I_run_this(actorToTransform)) {
+    if (actorToTransform && shouldIRunThis(actorToTransform)) {
       // DO NOTHING
     } else {
       const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(
@@ -717,7 +717,7 @@ export class CompanionManager extends FormApplication {
     const aCompendiumId = companionData.compendiumid;
     const aExplicitName = companionData.explicitname;
     let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
-    if (actorToTransform && should_I_run_this(actorToTransform)) {
+    if (actorToTransform && shouldIRunThis(actorToTransform)) {
       // DO NOTHING
     } else {
       const actorToTransformId = await automatedEvocationsVariantSocket.executeAsGM(

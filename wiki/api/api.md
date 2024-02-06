@@ -67,7 +67,7 @@ let sequence = new Sequence()
 game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManager('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
 ```
 
-###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor(sourceActorIdOrName: string, removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
+###  async game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor(sourceActorIdOrName: string, {removeEvocationsVariant = false, ordered = false, random = false, animationExternal:{ sequence:Sequence, timeToWait:number }}|undefined = undefined) ⇒ <code>Promise.&lt;void&gt;</code>
 
 Invoke the summoned companion manager feature from macro
 
@@ -87,11 +87,11 @@ Invoke the summoned companion manager feature from macro
 
 `game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain')`
 
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', true)`
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', {removeEvocationsVariant:true})`
 
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false)`
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', {removeEvocationsVariant:false, ordered:false})`
 
-`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false)`
+`game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', {removeEvocationsVariant:false, ordered:false, random:false})`
 
 ```
 let sequence = new Sequence()
@@ -120,7 +120,7 @@ let sequence = new Sequence()
         .atLocation(tokenD)
         .scale(0.5)
 
-game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', false, false, false, { sequence: sequence, timeToWait 1100})
+game.modules.get('automated-evocations-variant').api.invokeEvocationsVariantManagerFromActor('Zruggig Widebrain', {removeEvocationsVariant:false, ordered:false, random:false, animationExternal: { sequence: sequence, timeToWait 1100}})
 ```
 
 ### Macro to clean up flags on token and actor
