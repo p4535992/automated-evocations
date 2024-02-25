@@ -8,6 +8,11 @@ import Logger from "./lib/Logger.js";
 import { RetrieveHelpers } from "./lib/retrieve-helpers.js";
 
 const API = {
+  /**
+   *
+   * @param {*} sourceActor
+   * @param {*} param1
+   */
   async invokeEvocationsVariantManagerFromActor(
     sourceActor,
     { removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined }
@@ -27,7 +32,12 @@ const API = {
       }
     }
   },
-
+  /**
+   *
+   * @param {*} sourceToken
+   * @param {*} param1
+   * @returns
+   */
   async invokeEvocationsVariantManager(
     sourceToken,
     { removeEvocationsVariant = false, ordered = false, random = false, animationExternal = undefined }
@@ -50,6 +60,13 @@ const API = {
     }
     this._invokeEvocationsVariantManagerInner(sourceToken, actor, options);
   },
+  /**
+   *
+   * @param {*} sourceToken
+   * @param {*} actor
+   * @param {*} param2
+   * @returns
+   */
   async _invokeEvocationsVariantManagerInner(
     sourceToken,
     actor,
@@ -149,6 +166,10 @@ const API = {
     }
   },
 
+  /**
+   *
+   * @returns
+   */
   async cleanUpTokenSelected() {
     const tokens = canvas.tokens?.controlled;
     if (!tokens || tokens.length === 0) {
@@ -186,6 +207,12 @@ const API = {
       }
     }
   },
+  /**
+   *
+   * @param {*} args
+   * @param {*} spellLevel
+   * @returns
+   */
   getSummonInfo(args, spellLevel) {
     if (game.system.id === "dnd5e") {
       const spellDC = args[0].assignedActor?.system.attributes.spelldc || 0;
@@ -206,6 +233,11 @@ const API = {
       return undefined;
     }
   },
+  /**
+   *
+   * @param {*} param0
+   * @returns
+   */
   async retrieveAndPrepareActor({ aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId }) {
     const targetActor = await retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld);
     const sourceActor = await retrieveActorFromData(undefined, sourceActorId, undefined, undefined, false);
@@ -217,6 +249,12 @@ const API = {
     }
     return targetActor;
   },
+  /**
+   *
+   * @param {*} expression
+   * @param  {...any} args
+   * @returns
+   */
   async evaluateExpression(expression, ...args) {
     if (!expression) return null;
     const AsyncFunction = async function () {}.constructor;
@@ -234,6 +272,11 @@ const API = {
   // SOCKET UTILITIES
   // =================================================
 
+  /**
+   *
+   * @param  {...any} inAttributes
+   * @returns
+   */
   async invokeEvocationsVariantManagerFromActorArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw Logger.error("invokeEvocationsVariantManagerFromActorArr | inAttributes must be of type array");
@@ -248,6 +291,11 @@ const API = {
     const result = await this.invokeEvocationsVariantManagerFromActor(sourceActor, options);
     return result;
   },
+  /**
+   *
+   * @param  {...any} inAttributes
+   * @returns
+   */
   async invokeEvocationsVariantManagerArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw Logger.error("invokeEvocationsVariantManagerArr | inAttributes must be of type array");
@@ -262,10 +310,20 @@ const API = {
     const result = await this.invokeEvocationsVariantManager(sourceToken, options);
     return result;
   },
+  /**
+   *
+   * @param  {...any} inAttributes
+   * @returns
+   */
   async cleanUpTokenSelectedArr(...inAttributes) {
     const result = await this.cleanUpTokenSelected();
     return result;
   },
+  /**
+   *
+   * @param  {...any} inAttributes
+   * @returns
+   */
   async getSummonInfoArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw Logger.error("getSummonInfoArr | inAttributes must be of type array");
@@ -274,6 +332,11 @@ const API = {
     const result = await this.getSummonInfo(args, spellLevel);
     return result;
   },
+  /**
+   *
+   * @param  {...any} inAttributes
+   * @returns
+   */
   async retrieveAndPrepareActorArr(...inAttributes) {
     if (!Array.isArray(inAttributes)) {
       throw Logger.error("retrieveAndPrepareActorArr | inAttributes must be of type array");

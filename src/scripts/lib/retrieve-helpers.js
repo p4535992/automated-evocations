@@ -1,4 +1,4 @@
-import Logger from "./Logger";
+import Logger from "./Logger.js";
 
 export class RetrieveHelpers {
   /**
@@ -110,7 +110,7 @@ export class RetrieveHelpers {
     // }
     if (!targetTmp) {
       if (ignoreError) {
-        Logger.Logger.warn(`CompendiumCollection is not found`, false, targetTmp);
+        Logger.warn(`CompendiumCollection is not found`, false, targetTmp);
         return;
       } else {
         throw Logger.error(`CompendiumCollection is not found`, true, targetTmp);
