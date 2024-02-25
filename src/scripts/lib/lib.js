@@ -240,6 +240,7 @@ export function retrieveActorFromToken(sourceToken) {
 // }
 export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
   let actorToTransformLi = null;
+  let folderNameSummons = "AEV - Summons"; // TODO transfer to module settings
   if (!aUuid && !aId && !aName) {
     Logger.warn(`No reference is been found please check out the debug`);
     return null;
@@ -262,23 +263,52 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
           if (!pack.indexed) {
             await pack.getIndex();
           }
-          if (createOnWorld && (game.user?.isGM || shouldIRunThis(actorToTransformLi))) {
-            for (const entityComp of pack.index) {
-              const actorComp = await pack.getDocument(entityComp._id);
-              if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
-                // Create actor from compendium
-                const collection = game.collections.get(pack.documentName);
-                const id = actorComp.id;
-                actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
-                break;
-              }
-            }
+          const preparedFolder =
+            game.folders.getName(folderNameSummons) ||
+            (await Folder.create({
+              name: folderNameSummons,
+              type: "Actor",
+              parent: null,
+              color: "#7FFFD4",
+            }));
+          let actorToTransformLiOnFolder = null;
+          if (!actorToTransformLiOnFolder && aId) {
+            actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(aId, true, true);
+          }
+          if (!actorToTransformLiOnFolder && aName) {
+            actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(aName, true, false);
+          }
+          if (actorToTransformLiOnFolder) {
+            actorToTransformLi = actorToTransformLiOnFolder;
           } else {
-            for (const entityComp of pack.index) {
-              const actorComp = await pack.getDocument(entityComp._id);
-              if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
-                actorToTransformLi = actorComp.toObject();
-                break;
+            if (createOnWorld && (game.user?.isGM || shouldIRunThis(actorToTransformLi))) {
+              for (const entityComp of pack.index) {
+                const actorComp = await pack.getDocument(entityComp._id);
+                if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
+                  // Create actor from compendium
+                  const collection = game.collections.get(pack.documentName);
+                  const id = actorComp.id;
+
+                  actorToTransformLi = await collection.importFromCompendium(
+                    pack,
+                    id,
+                    {
+                      folder: preparedFolder,
+                    },
+                    {
+                      renderSheet: false,
+                    }
+                  );
+                  break;
+                }
+              }
+            } else {
+              for (const entityComp of pack.index) {
+                const actorComp = await pack.getDocument(entityComp._id);
+                if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
+                  actorToTransformLi = actorComp.toObject();
+                  break;
+                }
               }
             }
           }
