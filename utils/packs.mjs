@@ -7,7 +7,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { compilePack, extractPack } from "@foundryvtt/foundryvtt-cli";
 
-const BASE_FULL_PATH_MODULE = "D:/FOUNDRYVTT11/Data/Data/modules/automated-evocations-variant/"; // MOD 4535992
+//const BASE_FULL_PATH_MODULE = "D:/FOUNDRYVTT11/Data/Data/modules/automated-evocations-variant/"; // MOD 4535992
+const BASE_FULL_PATH_MODULE = "D:/GITFOUNDRYVTT/foundryvtt-automated-evocations-variant/src/";
 const MODULE_JSON_FULL_PATH = BASE_FULL_PATH_MODULE + "module.json"; // MOD 4535992
 
 /**

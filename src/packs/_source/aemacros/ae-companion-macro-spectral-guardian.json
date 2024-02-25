@@ -1,0 +1,28 @@
+{
+  "name": "AE_Companion_Macro(Spectral Guardian)",
+  "type": "script",
+  "author": "URgs0MORGSiJAyV8",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Guardian of Faith\": {\n        \"system.description.value\": `Any creature hostile to you that moves to a space within 10 feet of the guardian for the first time on their turn must succeed on a Dexterity saving throw (DC ${summon.dc}). The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage.`,\n        \"system.save.dc\": summon.dc\n      }\n    }\n  }\n}",
+  "folder": null,
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.2.2",
+    "coreVersion": "11.305",
+    "createdTime": 1690380230062,
+    "modifiedTime": 1690381277508,
+    "lastModifiedBy": "packsebuilder0000"
+  },
+  "_id": "DFIqi3kVXrYZ8S7y",
+  "sort": 0,
+  "_key": "!macros!DFIqi3kVXrYZ8S7y"
+}

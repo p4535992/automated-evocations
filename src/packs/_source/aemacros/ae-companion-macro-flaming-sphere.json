@@ -1,0 +1,28 @@
+{
+  "name": "AE_Companion_Macro(Flaming Sphere)",
+  "type": "script",
+  "author": "URgs0MORGSiJAyV8",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 2);\nconst flamingSphere = {\n  sphere: [`${summon.level + 2}d6`, 'fire'],\n}\nreturn {\n  embedded: {\n    Item: {\n      \"Flaming Sphere\": {\n        \"system.description.value\": `Any creature that ends its turn within 5 feet of the sphere, or has the sphere rammed into it, must make a Dexterity saving throw (DC ${summon.dc}). The creature takes ${flamingSphere.sphere[0]} ${flamingSphere.sphere[1]} damage on a failed save, or half as much damage on a successful one.`,\n        \"system.save.dc\": summon.dc,\n        \"system.damage.parts\":[flamingSphere.sphere]\n      }\n    }\n  }\n}",
+  "folder": null,
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.2.2",
+    "coreVersion": "11.305",
+    "createdTime": 1690380230062,
+    "modifiedTime": 1690382885670,
+    "lastModifiedBy": "packsebuilder0000"
+  },
+  "_id": "fcSQc5Xf5w7HiqjN",
+  "sort": 0,
+  "_key": "!macros!fcSQc5Xf5w7HiqjN"
+}

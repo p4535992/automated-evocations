@@ -1,0 +1,28 @@
+{
+  "name": "AE_Companion_Macro(Phantom Watchdog)",
+  "type": "script",
+  "author": "URgs0MORGSiJAyV8",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Bite\": {\n        \"system.description.value\": `The hound bites one creature or object within 5 feet of it. The hound's attack bonus is equal to your spellcasting modifier + your proficiency bonus (+${summon.attack.ms}). On a hit, it deals 4d8 piercing damage.`,\n        \"system.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
+  "folder": null,
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.2.2",
+    "coreVersion": "11.305",
+    "createdTime": 1690380230062,
+    "modifiedTime": 1690381276764,
+    "lastModifiedBy": "packsebuilder0000"
+  },
+  "_id": "z5CFHKH4XzXITTGU",
+  "sort": 100000,
+  "_key": "!macros!z5CFHKH4XzXITTGU"
+}

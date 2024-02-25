@@ -1,0 +1,28 @@
+{
+  "name": "AE_Companion_Macro(Arcane Sword)",
+  "type": "script",
+  "author": "URgs0MORGSiJAyV8",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 7);\nreturn {\n  embedded: {\n    Item: {\n      \"Arcane Sword\": {\n        \"data.description.value\": `Make a melee spell attack (+${summon.attack.ms}) against a target of your choice within 5 feet of the sword. On a hit, the target takes 3d10 force damage.`,\n        \"data.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
+  "folder": null,
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.2.2",
+    "coreVersion": "11.305",
+    "createdTime": 1690380230062,
+    "modifiedTime": 1690381276764,
+    "lastModifiedBy": "packsebuilder0000"
+  },
+  "_id": "UqmyflpdBL41t5gk",
+  "sort": 200000,
+  "_key": "!macros!UqmyflpdBL41t5gk"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Store Companions On Global for Actor",
+  "type": "script",
+  "author": "Cspu3pxFr7tu7SU7",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "//Sets the companions storage to Global on the actor for the selected token\n\n_token.actor.setFlag(AECONSTS.MN,\"isLocal\", false)",
+  "folder": null,
+  "sort": 500000,
+  "flags": {
+    "advanced-macros": {
+      "runAsGM": false
+    }
+  },
+  "_id": "fgkB9WyDmBEBoMmt",
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "dnd5e",
+    "systemVersion": "2.2.2",
+    "coreVersion": "11.305",
+    "createdTime": null,
+    "modifiedTime": 1690381276764,
+    "lastModifiedBy": "packsebuilder0000"
+  },
+  "_key": "!macros!fgkB9WyDmBEBoMmt"
+}
