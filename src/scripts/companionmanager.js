@@ -263,6 +263,7 @@ export class CompanionManager extends FormApplication {
     const tokenData = await actorToTransform.getTokenData({
       elevation: _token?.data?.elevation ?? 0,
       name: aExplicitName ? aExplicitName : actorToTransform.name,
+      img: actorToTransform.img,
     });
     // eslint-disable-next-line no-undef
     // const posData = game?.Levels3DPreview?._active
@@ -341,6 +342,7 @@ export class CompanionManager extends FormApplication {
       tokenDoc.updateSource({
         elevation: customTokenData.elevation,
         name: aExplicitName ? aExplicitName : tokenDoc.name,
+        img: actorToTransform.img,
       });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
@@ -834,6 +836,7 @@ export class CompanionManager extends FormApplication {
       tokenDoc.updateSource({
         elevation: customTokenData.elevation,
         name: aExplicitName ? aExplicitName : tokenDoc.name,
+        img: actorToTransform.img,
       });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {

@@ -4,7 +4,7 @@
   "author": "URgs0MORGSiJAyV8",
   "img": "icons/svg/dice-target.svg",
   "scope": "global",
-  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 2);\nconst spiritualWeapon = {\n  slash: [`${Math.floor(summon.level / 2) + 1}d8 + ${summon.modifier}`, 'force'],\n}\n\nreturn {\n  embedded: {\n    Item: {\n      \"Slash\": {\n        \"system.description.value\": `The weapon strikes one creature within 5 feet of it. Make a melee spell attack for the weapon using your game statistics (+${summon.attack.ms}). On a hit, the target takes ${spiritualWeapon.slash[0]} ${spiritualWeapon.slash[1]} damage.`,\n        \"system.attackBonus\": summon.attack.ms,\n        \"system.damage.parts\":[spiritualWeapon.slash]\n      }\n    }\n  }\n}",
+  "command": "const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 2);\nconst spiritualWeapon = {\n  slash: [`${Math.floor(summon.level / 2) + 1}d8 + ${summon.modifier}`, 'force'],\n}\n\nreturn {\n  embedded: {\n    Item: {\n      \"Slash\": {\n        \"system.description.value\": `The weapon strikes one creature within 5 feet of it. Make a melee spell attack for the weapon using your game statistics (+${summon.attack.ms}). On a hit, the target takes ${spiritualWeapon.slash[0]} ${spiritualWeapon.slash[1]} damage.`,\n        \"system.attackBonus\": summon.attack.ms,\n        \"system.damage.parts\":[spiritualWeapon.slash]\n      }\n    }\n  }\n}",
   "folder": null,
   "flags": {
     "advanced-macros": {

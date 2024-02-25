@@ -4,7 +4,7 @@
   "author": "URgs0MORGSiJAyV8",
   "img": "icons/svg/dice-target.svg",
   "scope": "global",
-  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Guardian of Faith\": {\n        \"system.description.value\": `Any creature hostile to you that moves to a space within 10 feet of the guardian for the first time on their turn must succeed on a Dexterity saving throw (DC ${summon.dc}). The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage.`,\n        \"system.save.dc\": summon.dc\n      }\n    }\n  }\n}",
+  "command": "const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Guardian of Faith\": {\n        \"system.description.value\": `Any creature hostile to you that moves to a space within 10 feet of the guardian for the first time on their turn must succeed on a Dexterity saving throw (DC ${summon.dc}). The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage.`,\n        \"system.save.dc\": summon.dc\n      }\n    }\n  }\n}",
   "folder": null,
   "flags": {
     "advanced-macros": {

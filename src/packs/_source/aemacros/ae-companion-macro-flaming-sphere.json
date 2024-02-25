@@ -4,7 +4,7 @@
   "author": "URgs0MORGSiJAyV8",
   "img": "icons/svg/dice-target.svg",
   "scope": "global",
-  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 2);\nconst flamingSphere = {\n  sphere: [`${summon.level + 2}d6`, 'fire'],\n}\nreturn {\n  embedded: {\n    Item: {\n      \"Flaming Sphere\": {\n        \"system.description.value\": `Any creature that ends its turn within 5 feet of the sphere, or has the sphere rammed into it, must make a Dexterity saving throw (DC ${summon.dc}). The creature takes ${flamingSphere.sphere[0]} ${flamingSphere.sphere[1]} damage on a failed save, or half as much damage on a successful one.`,\n        \"system.save.dc\": summon.dc,\n        \"system.damage.parts\":[flamingSphere.sphere]\n      }\n    }\n  }\n}",
+  "command": "const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 2);\nconst flamingSphere = {\n  sphere: [`${summon.level + 2}d6`, 'fire'],\n}\nreturn {\n  embedded: {\n    Item: {\n      \"Flaming Sphere\": {\n        \"system.description.value\": `Any creature that ends its turn within 5 feet of the sphere, or has the sphere rammed into it, must make a Dexterity saving throw (DC ${summon.dc}). The creature takes ${flamingSphere.sphere[0]} ${flamingSphere.sphere[1]} damage on a failed save, or half as much damage on a successful one.`,\n        \"system.save.dc\": summon.dc,\n        \"system.damage.parts\":[flamingSphere.sphere]\n      }\n    }\n  }\n}",
   "folder": null,
   "flags": {
     "advanced-macros": {

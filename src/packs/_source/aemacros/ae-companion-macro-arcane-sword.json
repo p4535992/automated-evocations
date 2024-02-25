@@ -4,7 +4,7 @@
   "author": "URgs0MORGSiJAyV8",
   "img": "icons/svg/dice-target.svg",
   "scope": "global",
-  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 7);\nreturn {\n  embedded: {\n    Item: {\n      \"Arcane Sword\": {\n        \"data.description.value\": `Make a melee spell attack (+${summon.attack.ms}) against a target of your choice within 5 feet of the sword. On a hit, the target takes 3d10 force damage.`,\n        \"data.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
+  "command": "const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 7);\nreturn {\n  embedded: {\n    Item: {\n      \"Arcane Sword\": {\n        \"data.description.value\": `Make a melee spell attack (+${summon.attack.ms}) against a target of your choice within 5 feet of the sword. On a hit, the target takes 3d10 force damage.`,\n        \"data.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
   "folder": null,
   "flags": {
     "advanced-macros": {

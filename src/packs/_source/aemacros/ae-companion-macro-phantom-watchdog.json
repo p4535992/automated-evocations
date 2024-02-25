@@ -4,7 +4,7 @@
   "author": "URgs0MORGSiJAyV8",
   "img": "icons/svg/dice-target.svg",
   "scope": "global",
-  "command": "const summon = CompanionManager.api.dnd5e.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Bite\": {\n        \"system.description.value\": `The hound bites one creature or object within 5 feet of it. The hound's attack bonus is equal to your spellcasting modifier + your proficiency bonus (+${summon.attack.ms}). On a hit, it deals 4d8 piercing damage.`,\n        \"system.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
+  "command": "const summon = game.modules.get('automated-evocations-variant').api.getSummonInfo(args, 4);\nreturn {\n  embedded: {\n    Item: {\n      \"Bite\": {\n        \"system.description.value\": `The hound bites one creature or object within 5 feet of it. The hound's attack bonus is equal to your spellcasting modifier + your proficiency bonus (+${summon.attack.ms}). On a hit, it deals 4d8 piercing damage.`,\n        \"system.attackBonus\": summon.attack.ms,\n      }\n    }\n  }\n}",
   "folder": null,
   "flags": {
     "advanced-macros": {
