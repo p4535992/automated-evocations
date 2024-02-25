@@ -7,19 +7,21 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { compilePack, extractPack } from "@foundryvtt/foundryvtt-cli";
 
+const BASE_FULL_PATH_MODULE = "D:/FOUNDRYVTT11/Data/Data/modules/automated-evocations-variant/"; // MOD 4535992
+const MODULE_JSON_FULL_PATH = BASE_FULL_PATH_MODULE + "module.json"; // MOD 4535992
 
 /**
  * Folder where the compiled compendium packs should be located relative to the
- * base 5e system folder.
+ * base module folder.
  * @type {string}
  */
-const PACK_DEST = "packs";
+const PACK_DEST = BASE_FULL_PATH_MODULE + "packs";
 
 /**
- * Folder where source JSON files should be located relative to the 5e system folder.
+ * Folder where source JSON files should be located relative to the module folder.
  * @type {string}
  */
-const PACK_SRC = "packs/_source";
+const PACK_SRC = BASE_FULL_PATH_MODULE + "packs/_source";
 
 
 // eslint-disable-next-line
@@ -214,14 +216,14 @@ async function extractPacks(packName, entryName) {
   entryName = entryName?.toLowerCase();
 
   // Load module.json.
-  const module = JSON.parse(fs.readFileSync("./module.json", { encoding: "utf8" })); // MOD 4535992 /src/module.json instead ./system.json and rename system to module
+  const module = JSON.parse(fs.readFileSync(MODULE_JSON_FULL_PATH, { encoding: "utf8" })); // MOD 4535992 /src/module.json instead ./system.json and rename system to module
 
   // Determine which source packs to process.
   const packs = module.packs.filter(p => !packName || p.name === packName);
 
   for ( const packInfo of packs ) {
     const dest = path.join(PACK_SRC, packInfo.name);
-    const packInfoPath = packInfo.path; // MOD 4535992
+    const packInfoPath = path.join(PACK_DEST, packInfo.name); // MOD 4535992
     logger.info(`Extracting pack ${packInfo.name} from ${packInfoPath} to ${dest}`);
 
     const folders = {};

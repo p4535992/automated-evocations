@@ -248,9 +248,9 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
     //actorToTransformLi = await Actor.implementation.fromDropData({ type: "Actor", uuid: aUuid });
     actorToTransformLi = await RetrieveHelpers.getActorAsync(aUuid, false, false);
     if (actorToTransformLi) {
-      const parts = uuid.split(".");
+      const parts = actorToTransformLi.uuid.split(".");
+      // If the uuid is from a compendium
       if (parts[0] === "Compendium") {
-        //if (aUuid.toLowerCase().includes("compendium")) {
         let pack = null;
         if (currentCompendium && currentCompendium != "none" && currentCompendium != "nonenodelete") {
           pack = game.packs.get(currentCompendium);
@@ -268,13 +268,12 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
               if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
                 // Create actor from compendium
                 const collection = game.collections.get(pack.documentName);
-                const id = ctorComp.id; // parts[3]; //actorToTransformLi.id;
+                const id = actorComp.id;
                 actorToTransformLi = await collection.importFromCompendium(pack, id, {}, { renderSheet: false });
                 break;
               }
             }
           } else {
-            //actorToTransformLi = await pack.getDocument(parts[3]);
             for (const entityComp of pack.index) {
               const actorComp = await pack.getDocument(entityComp._id);
               if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {

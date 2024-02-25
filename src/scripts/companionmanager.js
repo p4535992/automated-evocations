@@ -3,6 +3,7 @@ import { EvocationsVariantData, EvocationsVariantFlags } from "./automatedEvocat
 import CONSTANTS from "./constants.js";
 import Logger from "./lib/Logger.js";
 import { retrieveActorFromData, rollFromString, shouldIRunThis } from "./lib/lib.js";
+import { RetrieveHelpers } from "./lib/retrieve-helpers.js";
 import AECONSTS from "./main.js";
 import { automatedEvocationsVariantSocket } from "./socket.js";
 export class CompanionManager extends FormApplication {
@@ -223,6 +224,7 @@ export class CompanionManager extends FormApplication {
       return;
     }
     this.minimize();
+    const _token = RetrieveHelpers.getTokenSync(this.actor);
     const animation = $(event.currentTarget.parentElement.parentElement).find(".anim-dropdown").val();
     const aName = event.currentTarget.dataset.aname;
     const aUuid = event.currentTarget.dataset.auuid;
@@ -258,7 +260,10 @@ export class CompanionManager extends FormApplication {
       $(event.currentTarget.parentElement.parentElement).find("#companion-number-val").val(),
       this.actor
     );
-    const tokenData = await actorToTransform.getTokenData({ elevation: _token?.data?.elevation ?? 0 });
+    const tokenData = await actorToTransform.getTokenData({
+      elevation: _token?.data?.elevation ?? 0,
+      name: aExplicitName ? aExplicitName : actorToTransform.name,
+    });
     // eslint-disable-next-line no-undef
     // const posData = game?.Levels3DPreview?._active
     // 	? await this.pickCanvasPosition3D()
@@ -333,7 +338,10 @@ export class CompanionManager extends FormApplication {
     Hooks.on("preCreateToken", (tokenDoc, td) => {
       td ??= {};
       td.elevation = customTokenData.elevation;
-      tokenDoc.updateSource({ elevation: customTokenData.elevation });
+      tokenDoc.updateSource({
+        elevation: customTokenData.elevation,
+        name: aExplicitName ? aExplicitName : tokenDoc.name,
+      });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
       tokenData: tokenData,
@@ -392,6 +400,7 @@ export class CompanionManager extends FormApplication {
   }
 
   async drawRange() {
+    const _token = RetrieveHelpers.getTokenSync(this.actor);
     const token = _token;
     if (!token) return;
     this.rangeData = {
@@ -481,7 +490,7 @@ export class CompanionManager extends FormApplication {
 
   async _onChangeExplicitName(event) {
     const explicitName = event.currentTarget.parentElement.dataset.aexplicitname;
-    // Tretrieve attribute data-aexplicitname on the warpgate button
+    // retrieve attribute data-aexplicitname on the warpgate button
     $(
       event.currentTarget.parentElement.find(".warpgate-btn").each(function () {
         $(this).attr("data-aexplicitname", explicitName);
@@ -822,7 +831,10 @@ export class CompanionManager extends FormApplication {
     Hooks.on("preCreateToken", (tokenDoc, td) => {
       td ??= {};
       td.elevation = customTokenData.elevation;
-      tokenDoc.updateSource({ elevation: customTokenData.elevation });
+      tokenDoc.updateSource({
+        elevation: customTokenData.elevation,
+        name: aExplicitName ? aExplicitName : tokenDoc.name,
+      });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
       tokenData: tokenData,

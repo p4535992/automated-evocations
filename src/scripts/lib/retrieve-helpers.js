@@ -802,6 +802,26 @@ export class RetrieveHelpers {
     if (targetTmp instanceof Token) {
       return targetTmp;
     }
+    if (targetTmp instanceof TokenDocument) {
+      targetTmp = targetTmp?.object ?? targetTmp;
+      return targetTmp;
+    }
+    if (targetTmp instanceof Actor) {
+      if (targetTmp.token) {
+        targetTmp = canvas.tokens.get(targetTmp.token);
+      } else {
+        targetTmp = targetTmp.prototypeToken;
+      }
+      if (!targetTmp) {
+        if (ignoreError) {
+          Logger.warn(`Token is not found`, false, targetTmp);
+          return;
+        } else {
+          throw Logger.error(`Token is not found`, true, targetTmp);
+        }
+      }
+      return targetTmp;
+    }
     // This is just a patch for compatibility with others modules
     if (targetTmp.document) {
       targetTmp = targetTmp.document;
@@ -809,7 +829,6 @@ export class RetrieveHelpers {
     if (targetTmp.uuid) {
       targetTmp = targetTmp.uuid;
     }
-
     if (targetTmp instanceof Token) {
       return targetTmp;
     }
@@ -817,11 +836,11 @@ export class RetrieveHelpers {
       targetTmp = fromUuidSync(targetTmp);
     } else {
       targetTmp = canvas.tokens?.placeables.find((t) => {
-        return t.id === sourceToken;
+        return t.id === target;
       });
       if (!targetTmp && !ignoreName) {
         targetTmp = canvas.tokens?.placeables.find((t) => {
-          return t.name === sourceToken;
+          return t.name === target;
         });
       }
     }
@@ -832,6 +851,10 @@ export class RetrieveHelpers {
       } else {
         throw Logger.error(`Token is not found`, true, targetTmp);
       }
+    }
+    targetTmp = targetTmp?.token ?? targetTmp;
+    if (targetTmp instanceof TokenDocument) {
+      targetTmp = targetTmp?.object ?? targetTmp;
     }
     // Type checking
     // if (!(targetTmp instanceof Token)) {
