@@ -6,23 +6,26 @@ import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { compilePack, extractPack } from "@foundryvtt/foundryvtt-cli";
+import { fileURLToPath } from "url";
 
-//const BASE_FULL_PATH_MODULE = "D:/FOUNDRYVTT11/Data/Data/modules/automated-evocations-variant/"; // MOD 4535992
-const BASE_FULL_PATH_MODULE = "D:/GITFOUNDRYVTT/foundryvtt-automated-evocations-variant/src/";
-const MODULE_JSON_FULL_PATH = BASE_FULL_PATH_MODULE + "module.json"; // MOD 4535992
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const BASE_FULL_PATH_MODULE = path.resolve(path.join(path.resolve(__dirname, '..'),"src"));
+const MODULE_JSON_FULL_PATH = path.join(BASE_FULL_PATH_MODULE,"module.json"); // MOD 4535992
 
 /**
  * Folder where the compiled compendium packs should be located relative to the
  * base module folder.
  * @type {string}
  */
-const PACK_DEST = BASE_FULL_PATH_MODULE + "packs";
+const PACK_DEST = path.join(BASE_FULL_PATH_MODULE,"packs");
 
 /**
  * Folder where source JSON files should be located relative to the module folder.
  * @type {string}
  */
-const PACK_SRC = BASE_FULL_PATH_MODULE + "packs/_source";
+const PACK_SRC = path.join(BASE_FULL_PATH_MODULE,"packs/_source");
 
 
 // eslint-disable-next-line

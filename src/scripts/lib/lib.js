@@ -20,7 +20,8 @@ export function shouldIRunThis(actor) {
   user = game.users?.find((i) => {
     const a = !i.isGM;
     const b = i.active;
-    const c = actor.testUserPermission(i, OWNER);
+    // const c = actor.testUserPermission(i, OWNER);
+    const c = actor.isOwner;
     return a && b && c;
   });
   if (user) {
@@ -238,7 +239,9 @@ export function retrieveActorFromToken(sourceToken) {
 // export async function uuidToDocument(uuid, createOnWorld) {
 //   return retrieveActorFromData(uuid, null, null, null, createOnWorld);
 // }
-export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld) {
+export async function retrieveActorFromData(aUuid, aId, aNameTmp, currentCompendium, createOnWorld, aExplicitNameTmp) {
+  let aName = aNameTmp; //+ " ("+game.user.name+")";
+  let aExplicitName = aExplicitNameTmp; //+ " ("+game.user.name+")";
   let actorToTransformLi = null;
   let folderNameSummons = "AEV - Summons"; // TODO transfer to module settings
   if (!aUuid && !aId && !aName) {
@@ -271,12 +274,19 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
               parent: null,
               color: "#7FFFD4",
             }));
+          const actorsOnFolder = game.folders.getName(folderNameSummons).contents || [];
+
           let actorToTransformLiOnFolder = null;
           if (!actorToTransformLiOnFolder && aId) {
             actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(aId, true, true);
           }
-          if (!actorToTransformLiOnFolder && aName) {
-            actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(aName, true, false);
+          if (!actorToTransformLiOnFolder && actorsOnFolder.find((a) => a.name === aName)) {
+            const myId = actorsOnFolder.find((a) => a.name === aName).id;
+            actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(myId, true, true);
+          }
+          if (!actorToTransformLiOnFolder && actorsOnFolder.find((a) => a.name === aExplicitName)) {
+            const myId = actorsOnFolder.find((a) => a.name === aExplicitName).id;
+            actorToTransformLiOnFolder = await RetrieveHelpers.getActorAsync(myId, true, true);
           }
           if (actorToTransformLiOnFolder) {
             actorToTransformLi = actorToTransformLiOnFolder;
@@ -284,16 +294,20 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
             if (createOnWorld && (game.user?.isGM || shouldIRunThis(actorToTransformLi))) {
               for (const entityComp of pack.index) {
                 const actorComp = await pack.getDocument(entityComp._id);
-                if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
+                if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aNameTmp) {
                   // Create actor from compendium
                   const collection = game.collections.get(pack.documentName);
-                  const id = actorComp.id;
-
+                  const myId = actorComp.id;
+                  const myName = actorComp.name; //+ " ("+game.user.name+")";
                   actorToTransformLi = await collection.importFromCompendium(
                     pack,
-                    id,
+                    myId,
                     {
                       folder: preparedFolder,
+                      name: aExplicitName ? aExplicitName : myName,
+                      prototypeToken: {
+                        name: aExplicitName ? aExplicitName : myName,
+                      },
                     },
                     {
                       renderSheet: false,
@@ -306,7 +320,15 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
               for (const entityComp of pack.index) {
                 const actorComp = await pack.getDocument(entityComp._id);
                 if (actorComp.id === parts[3] || actorComp.id === aId || actorComp.name === aName) {
-                  actorToTransformLi = actorComp.toObject();
+                  const myId = actorComp.id;
+                  const myName = actorComp.name; //+ " ("+game.user.name+")";
+                  actorToTransformLi = foundry.utils.mergeObject(actorComp.toObject(), {
+                    folder: preparedFolder,
+                    name: aExplicitName ? aExplicitName : myName,
+                    prototypeToken: {
+                      name: aExplicitName ? aExplicitName : myName,
+                    },
+                  });
                   break;
                 }
               }
@@ -323,8 +345,11 @@ export async function retrieveActorFromData(aUuid, aId, aName, currentCompendium
   if (!actorToTransformLi && aId) {
     actorToTransformLi = await RetrieveHelpers.getActorAsync(aId, false, true);
   }
-  if (!actorToTransformLi && aName) {
-    actorToTransformLi = await RetrieveHelpers.getActorAsync(aName, false, false);
+  // if (!actorToTransformLi && aName) {
+  //   actorToTransformLi = await RetrieveHelpers.getActorAsync(aName, false, false);
+  // }
+  if (!actorToTransformLi) {
+    Logger.error("Cannot find  the actor", true, aUuid, aId, aName, aExplicitName);
   }
   return actorToTransformLi;
 }

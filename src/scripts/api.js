@@ -238,9 +238,18 @@ const API = {
    * @param {*} param0
    * @returns
    */
-  async retrieveAndPrepareActor({ aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId }) {
-    const targetActor = await retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld);
-    const sourceActor = await retrieveActorFromData(undefined, sourceActorId, undefined, undefined, false);
+  async retrieveAndPrepareActor({
+    aUuid,
+    aId,
+    aName,
+    aExplicitName,
+    currentCompendium,
+    createOnWorld,
+    sourceActorId,
+    userId,
+  }) {
+    const targetActor = await retrieveActorFromData(aUuid, aId, aName, currentCompendium, createOnWorld, aExplicitName);
+    const sourceActor = await retrieveActorFromData(undefined, sourceActorId, undefined, undefined, false, "");
     const user = game.users.get(userId);
     if (!user.isGM && game.user?.isGM) {
       if (sourceActor && targetActor) {
@@ -341,11 +350,12 @@ const API = {
     if (!Array.isArray(inAttributes)) {
       throw Logger.error("retrieveAndPrepareActorArr | inAttributes must be of type array");
     }
-    const [aUuid, aId, aName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
+    const [aUuid, aId, aName, aExplicitName, currentCompendium, createOnWorld, sourceActorId, userId] = inAttributes;
     const options = {
       aUuid: aUuid,
       aId: aId,
       aName: aName,
+      aExplicitName: aExplicitName,
       currentCompendium: currentCompendium,
       createOnWorld: createOnWorld,
       sourceActorId: sourceActorId,

@@ -1,4 +1,8 @@
-## 1.6.16
+### 1.7.0
+
+- Rewrite the code
+
+### 1.6.16
 
 - Synced with upstream branch
 - Try to fix : https://github.com/p4535992/foundryvtt-automated-evocations-variant/issues/13

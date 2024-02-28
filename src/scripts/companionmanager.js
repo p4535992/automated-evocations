@@ -195,7 +195,7 @@ export class CompanionManager extends FormApplication {
     // }));
     // this.saveData();
     const actorId = data.id;
-    const actorToTransformLi = await retrieveActorFromData(data.uuid, actorId, "", "", false);
+    const actorToTransformLi = await retrieveActorFromData(data.uuid, actorId, "", "", false, "");
     if (actorToTransformLi) {
       this.element.find("#companion-list").append(
         await this.generateLi(
@@ -231,7 +231,7 @@ export class CompanionManager extends FormApplication {
     const aId = event.currentTarget.dataset.aid;
     const aCompendiumId = event.currentTarget.dataset.acompendiumid;
     const aExplicitName = event.currentTarget.dataset.aexplicitname;
-    let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
+    let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true, aExplicitName);
     if (actorToTransform && shouldIRunThis(actorToTransform)) {
       // DO NOTHING
     } else {
@@ -240,12 +240,20 @@ export class CompanionManager extends FormApplication {
         aUuid,
         aId,
         aName,
+        aExplicitName,
         aCompendiumId,
         true,
         this.actor.id,
         game.user?.id
       );
-      actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
+      actorToTransform = await retrieveActorFromData(
+        undefined,
+        actorToTransformId,
+        undefined,
+        undefined,
+        false,
+        aExplicitName
+      );
     }
     if (!actorToTransform) {
       Logger.warn(
@@ -262,8 +270,8 @@ export class CompanionManager extends FormApplication {
     );
     const tokenData = await actorToTransform.getTokenData({
       elevation: _token?.data?.elevation ?? 0,
-      name: aExplicitName ? aExplicitName : actorToTransform.name,
-      img: actorToTransform.img,
+      // name: aExplicitName ? aExplicitName : actorToTransform.name,
+      // img: actorToTransform.img,
     });
     // eslint-disable-next-line no-undef
     // const posData = game?.Levels3DPreview?._active
@@ -341,8 +349,8 @@ export class CompanionManager extends FormApplication {
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({
         elevation: customTokenData.elevation,
-        name: aExplicitName ? aExplicitName : tokenDoc.name,
-        img: actorToTransform.img,
+        // name: aExplicitName ? aExplicitName : tokenDoc.name,
+        // img: actorToTransform.img,
       });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
@@ -484,7 +492,14 @@ export class CompanionManager extends FormApplication {
     const actorName = event.currentTarget.parentElement.dataset.aname;
     const aCompendiumId = event.currentTarget.dataset.acompendiumid;
     const aExplicitName = event.currentTarget.dataset.aexplicitname;
-    const actorFromTransform = await retrieveActorFromData(actorUuid, actorId, actorName, aCompendiumId, false);
+    const actorFromTransform = await retrieveActorFromData(
+      actorUuid,
+      actorId,
+      actorName,
+      aCompendiumId,
+      false,
+      aExplicitName
+    );
     if (actorFromTransform) {
       actorFromTransform.sheet?.render(true);
     }
@@ -546,7 +561,7 @@ export class CompanionManager extends FormApplication {
         const aName = companion.name;
         const aCompendiumId = companion.compendiumid;
         const aExplicitName = companion.explicitname;
-        const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
+        const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false, aExplicitName);
         if (!actorToTransformLi) {
           Logger.warn(`No actor founded for the token with id/name '${companion.name}'`, true);
           continue;
@@ -727,7 +742,7 @@ export class CompanionManager extends FormApplication {
     const aName = companionData.name;
     const aCompendiumId = companionData.compendiumid;
     const aExplicitName = companionData.explicitname;
-    let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true);
+    let actorToTransform = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, true, aExplicitName);
     if (actorToTransform && shouldIRunThis(actorToTransform)) {
       // DO NOTHING
     } else {
@@ -736,12 +751,20 @@ export class CompanionManager extends FormApplication {
         aUuid,
         aId,
         aName,
+        aExplicitName,
         aCompendiumId,
         true,
         this.actor.id,
         game.user?.id
       );
-      actorToTransform = await retrieveActorFromData(undefined, actorToTransformId, undefined, undefined, false);
+      actorToTransform = await retrieveActorFromData(
+        undefined,
+        actorToTransformId,
+        undefined,
+        undefined,
+        false,
+        aExplicitName
+      );
     }
     if (!actorToTransform) {
       Logger.warn(
@@ -835,8 +858,8 @@ export class CompanionManager extends FormApplication {
       td.elevation = customTokenData.elevation;
       tokenDoc.updateSource({
         elevation: customTokenData.elevation,
-        name: aExplicitName ? aExplicitName : tokenDoc.name,
-        img: actorToTransform.img,
+        // name: aExplicitName ? aExplicitName : tokenDoc.name,
+        // img: actorToTransform.img,
       });
     });
     Hooks.callAll(`${CONSTANTS.MODULE_ID}.preCreateToken`, {
@@ -928,7 +951,7 @@ export class SimpleCompanionManager extends CompanionManager {
       const aName = summon.name;
       const aCompendiumId = summon.compendiumid;
       const aExplicitName = summon.explicitname;
-      const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false);
+      const actorToTransformLi = await retrieveActorFromData(aUuid, aId, aName, aCompendiumId, false, aExplicitName);
       if (actorToTransformLi) {
         this.element.find("#companion-list").append(await this.generateLi(summon, actorToTransformLi));
       } else {
